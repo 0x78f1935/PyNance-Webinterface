@@ -27,3 +27,6 @@ class ViewManager(object):
 
         from backend.views.api.symbols import SymbolsApiView
         SymbolsApiView.register(self.server, route_base=f'/{self.prefix}/{self.version}/symbols')
+
+        from backend.views.api.candlesticks import CandleSticksApiView
+        CandleSticksApiView.register(self.server, route_base=f'/{self.prefix}/{self.version}/candlesticks')

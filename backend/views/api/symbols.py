@@ -22,10 +22,10 @@ class SymbolsApiView(FlaskView):
         frmt = request.args.get('format')
         if frmt == 'coins': model = [i.asset for i in BalanceModel.query.all()]
         elif frmt == 'tickers':
-            tickers = pynance.get(f'{pynance.endpoint}/api/v3/ticker/bookTicker', signed=False, data={})
+            tickers = pynance.ticker.book_ticker()
             if tickers.isSucces: model = [i['symbol'] for i in tickers.json]
         elif frmt == 'all':
-            tickers = pynance.get(f'{pynance.endpoint}/api/v3/ticker/bookTicker', signed=False, data={})
+            tickers = pynance.ticker.book_ticker()
             if tickers.isSucces: model = [i['symbol'] for i in tickers.json]
             model += [i.asset for i in BalanceModel.query.all()]
         return jsonify(list(sorted(model))), 200

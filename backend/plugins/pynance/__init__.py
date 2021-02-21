@@ -1,5 +1,8 @@
 from backend.plugins.pynance.exceptions import BinanceAPIException
 from backend.plugins.pynance.response import Response
+from backend.plugins.pynance.candlesticks import CandleSticks
+from backend.plugins.pynance.wallet import Wallet
+from backend.plugins.pynance.tickers import Tickers
 from operator import itemgetter
 import requests
 import time
@@ -9,6 +12,9 @@ import hashlib
 
 class PyNane(object):
     def __init__(self, app=None):
+        self.candlesticks = CandleSticks(self)
+        self.wallet = Wallet(self)
+        self.ticker = Tickers(self)
         if app is not None:
             self.init_app(app)
     
@@ -100,7 +106,7 @@ class PyNane(object):
             del(kwargs['data'])
 
         self.response = getattr(self.session, method)(endpoint, **kwargs)
-        print(self.response.url)
+        print(f'Weight: {self.response.headers["x-mbx-used-weight"]}')
         return self.handle_response()
     
     def get(self, endpoint, signed=False, **kwargs):

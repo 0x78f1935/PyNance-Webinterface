@@ -5,8 +5,15 @@
 </template>
 
 <script>
+    import { price } from './utils';
+
     export default {
-        name: 'global-footer'
+        name: 'global-footer',
+        methods: {
+            format_price(amount) {
+                return price(amount, this.$store.getters.metrics);
+            }
+        },
     }
 </script>
 

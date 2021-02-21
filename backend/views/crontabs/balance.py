@@ -10,7 +10,7 @@ class BalanceCrontabView(FlaskView):
     decorators = [ ]
 
     def get(self):
-        response = pynance.get(f'{pynance.endpoint}/api/v3/account', signed=True, data={})
+        response = pynance.wallet.balance()
         for item in response.json['balances']:
             model = BalanceModel.query.filter(BalanceModel.asset == item['asset']).first()
             if(model is None):

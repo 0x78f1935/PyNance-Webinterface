@@ -14,7 +14,7 @@
         props: {
             frmt: {
                 type: String,
-                default: 'coins'
+                default: 'tickers'
             },
         },
         created () {

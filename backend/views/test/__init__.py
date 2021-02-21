@@ -25,8 +25,10 @@ class TestPageView(FlaskView):
         #         db.session.commit()
         #     model.update_data(item)
 
-        balance = pynance.get(f'{pynance.endpoint}/api/v3/account', signed=True, data={})
+        balance = pynance.wallet.balance()
 
-        tickers = pynance.get(f'{pynance.endpoint}/api/v3/ticker/bookTicker', signed=False, data={})
+        tickers = pynance.ticker.book_ticker()
+
+        candlestick = pynance.candlesticks.symbol("LTCBTC", "1m")
 
         return jsonify('success!'), 200
