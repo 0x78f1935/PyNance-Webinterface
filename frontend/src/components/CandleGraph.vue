@@ -22,7 +22,7 @@
 
         <v-card-text class="pt-0">
             <div class="title font-weight-light mb-2">
-                {{ evaluate }}
+                {{ $t(evaluate) }}
             </div>
             <v-divider class="my-2"></v-divider>
 
@@ -39,10 +39,6 @@
     export default {
         name: 'candle-graph',
         props: {
-            updateCandles: { // When True it will fetch the data. to prevent being rate limited
-                type: Boolean,
-                default: false
-            },
             evaluate: {
                 type: String,
                 required: true
@@ -50,14 +46,6 @@
             card: {
                 type: Boolean,
                 default: false
-            }
-        },
-        created () {
-            if(this.$props.updateCandles == true) {
-                setInterval(
-                    () => { this.$store.dispatch('get_candlesticks') },
-                    1000
-                )
             }
         },
         computed: {

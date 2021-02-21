@@ -41,6 +41,12 @@ export default {
   name: 'Home',
   components: {
     CandleGraph
-  }
+  },
+  created () {
+    setInterval(
+        () => { this.$store.dispatch('get_candlesticks') },
+        1000
+    )
+  },
 }
 </script>
