@@ -6,17 +6,20 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    darkmode: false,
+    darkmode: true,
     symbol: "BTC",
+    metrics: "EUR",
     symbols: [],
   },
   getters: {
     darkmode: state => { return state.darkmode; },
+    metrics: state => { return state.metrics; },
     symbol: state => { return state.symbol; },
     symbols: state => { return state.symbols; },
   },
   mutations: {
     SET_DARKMODE(state, value) { state.darkmode = value; },
+    SET_METRICS(state, value) { state.metrics = value},
     SET_SYMBOL(state, value) { state.symbol = value;},
     SET_SYMBOLS(state, value) { state.symbols = value;},
   },

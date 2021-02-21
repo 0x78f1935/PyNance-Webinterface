@@ -1,7 +1,6 @@
 <template>
     <v-autocomplete
         auto-select-first
-        clearable
         :items="symbols"
         :hint="hint"
         label="Current Symbol"

@@ -1,5 +1,5 @@
 <template>
-    <v-switch v-model="toggle_darkmode" hide-details :color="color"></v-switch>
+    <v-switch v-model="toggle_darkmode" hide-details :color="color" :label="label"></v-switch>
 </template>
 
 <script>
@@ -10,6 +10,10 @@
                 type: String,
                 default: "indigo darken-3"
             },
+            label: {
+                type: String,
+                default: "",
+            }
         },
         computed: {
             toggle_darkmode: {
