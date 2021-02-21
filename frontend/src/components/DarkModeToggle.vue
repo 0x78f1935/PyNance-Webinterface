@@ -14,8 +14,8 @@
         computed: {
             toggle_darkmode: {
                 get() {return this.$store.getters.darkmode; },
-                set() {
-                    this.$store.commit('toggle_darkmode');
+                set(value) {
+                    this.$store.commit('SET_DARKMODE', value);
                     this.$vuetify.theme.dark = this.$store.getters.darkmode;
                 }
             },
