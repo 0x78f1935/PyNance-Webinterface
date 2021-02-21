@@ -24,7 +24,7 @@ export default new Vuex.Store({
     SET_METRICS(state, value) { state.metrics = value},
     SET_SYMBOL(state, value) { state.symbol = value;},
     SET_SYMBOLS(state, value) { state.symbols = value;},
-    SET_CANDLESTICKS(state, value) {state.candlesticks = value},
+    SET_CANDLESTICKS(state, value) { state.candlesticks = value; },
   },
   actions: {
     get_symbols({ commit }, format) {

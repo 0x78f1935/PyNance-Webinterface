@@ -1,61 +1,85 @@
 <template>
-    <v-card
-        v-if="card"
-        class="mt-4 mx-auto"
-        max-width="600"
-    >
-        <v-sheet
-            class="v-sheet--offset mx-auto"
-            color="cyan"
-            elevation="12"
-            max-width="calc(100% - 32px)"
-        >
-            <v-sparkline
-                :label="evaluate"
-                :value="candledata"
-                auto-draw
-                color="white"
-                line-width="2"
-                padding="16"
-            ></v-sparkline>
-        </v-sheet>
-
-        <v-card-text class="pt-0">
-            <div class="title font-weight-light mb-2">
-                {{ $t(evaluate) }}
-            </div>
-            <v-divider class="my-2"></v-divider>
-
-        </v-card-text>
-    </v-card>
-    <v-sparkline
-        v-else
-        :value="candledata"
-        auto-draw
-    ></v-sparkline>
+    <b-container v-if="this.$store.getters.candlesticks.length">
+        <apexchart 
+            :series="seriesEntries"
+            :options="charOptions"
+            width="100%"
+            height="280px"
+        ></apexchart>
+    </b-container>
 </template>
 
 <script>
     export default {
         name: 'candle-graph',
         props: {
-            evaluate: {
-                type: String,
-                required: true
-            },
             card: {
                 type: Boolean,
                 default: false
             }
         },
-        computed: {
-            candledata() {
-                return this.$store.getters.candlesticks.map(x => parseFloat(x[this.$props.evaluate])*100000000)
+        data() {
+            return {
+                charData: [],
+                charOptions: {
+                    chart: {
+                        type: 'candlestick',
+                        height: 350,
+                        zoom: {
+                            enabled: false,
+                            type: 'x',  
+                            autoScaleYaxis: false,
+                            zoomedArea: {
+                                fill: {
+                                    color: '#90CAF9',
+                                    opacity: 0.4
+                                },
+                                stroke: {
+                                    color: '#0D47A1',
+                                    opacity: 0.4,
+                                    width: 1
+                                }
+                            }
+                        }
+                    },
+                    title: {
+                        text: this.$store.getters.symbol,
+                        align: 'left'
+                    },
+                    xaxis: {
+                        type: 'datetime',
+                    },
+                    yaxis: {
+                        tooltip: {
+                            enabled: true
+                        }
+                    },
+                    responsive: [{
+                        breakpoint: 1000,
+                        options: {},
+                    }],
+                    theme: {
+                        mode: this.$store.getters.darkmode ? 'dark' : 'light'
+                    },
+                },
             }
         },
+        computed: {
+            seriesEntries() {
+                return [{
+                    data:  this.$store.getters.candlesticks.map(item => { 
+                        return {
+                            x: new Date(item.opentime),
+                            y: [
+                                parseFloat(item.open),
+                                parseFloat(item.high),
+                                parseFloat(item.low),
+                                parseFloat(item.close),
+                            ]
+                        }
+                    })
+                }];
+            }
+        }
     }
 </script>
-
-<style lang="scss" scoped>
-
-</style>
