@@ -33,8 +33,8 @@ class Response(object):
     
     def _set_msg(self, statuscode):
         if statuscode == 429: 
-            self._message = 'You have been rate limited, stop making requests or your account might get banned'
+            self._message = '[PYNANCE] You have been rate limited, stop making requests or your account might get banned'
         elif statuscode == 418: 
-            self._message = 'You have been temporarly banned, You made to many requests'
+            self._message = '[PYNANCE] You have been temporarly banned, You made to many requests'
         elif statuscode == 200: 
-            self._message = f'Request successful {self._from}'
+            self._message = f'[PYNANCE] Request successful `{self._from}`'
