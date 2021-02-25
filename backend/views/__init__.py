@@ -30,3 +30,6 @@ class ViewManager(object):
 
         from backend.views.api.candlesticks import CandleSticksApiView
         CandleSticksApiView.register(self.server, route_base=f'/{self.prefix}/{self.version}/candlesticks')
+
+        from backend.views.api.balance import BalanceApiView
+        BalanceApiView.register(self.server, route_base=f'/{self.prefix}/{self.version}/balance')

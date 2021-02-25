@@ -8,7 +8,7 @@ class CandleSticks(object):
             signed=False, 
             data={"symbol": name, "interval": interval}
         )
-        if data.isSucces: return [
+        if data is not None and data.isSucces: return [
             {
                 'opentime': i[0],
                 'open': i[1],

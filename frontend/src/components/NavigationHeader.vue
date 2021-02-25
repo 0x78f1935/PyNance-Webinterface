@@ -5,17 +5,21 @@
                 <h5>Profits: {{ format_price(45665) }}</h5>
             </b-col>
             <b-col class="d-flex flex-row-reverse">
-                <h5>Balance: {{ format_price(5100) }}</h5>
+                <balance></balance>
             </b-col>
         </b-row>
     </v-app-bar>
 </template>
 
 <script>
-    import { price } from './utils';
+    import { price } from '@/components/utils';
+    import Balance from '@/components/Balance';
 
     export default {
         name: 'nav-header',
+        components: {
+            Balance,
+        },
         methods: {
             format_price(amount) {
                 return price(amount, this.$store.getters.metrics);

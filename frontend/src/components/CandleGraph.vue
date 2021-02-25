@@ -65,7 +65,7 @@
             }
         },
         computed: {
-            seriesEntries() {
+            seriesEntries() {  // Updates the graph to much... this makes the page TO SLOW
                 return [{
                     data:  this.$store.getters.candlesticks.map(item => { 
                         return {
