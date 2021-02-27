@@ -2,9 +2,7 @@
     <v-app-bar app>
         <b-row>
             <b-col>
-                <h5>Profits:</h5>
-            </b-col>
-            <b-col class="d-flex flex-row-reverse">
+                <v-app-bar-nav-icon @click.stop="$store.dispatch('toggle_drawer', !$store.getters.drawer);"></v-app-bar-nav-icon>
             </b-col>
         </b-row>
     </v-app-bar>
@@ -14,6 +12,12 @@
 
     export default {
         name: 'nav-header',
+        computed: {
+            drawer_mount: {
+                get(){ return this.$store.getters.drawer; },
+                set(value) { this.$store.dispatch('toggle_drawer', value); }
+            }
+        },
     }
 </script>
 

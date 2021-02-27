@@ -14,6 +14,7 @@ export default new Vuex.Store({
     symbols_sets: [],
     cur1: "",
     cur2: "",
+    drawer: true,
   },
   getters: {
     darkmode: state => { return state.darkmode; },
@@ -24,6 +25,7 @@ export default new Vuex.Store({
     symbols_sets: state => { return state.symbols_sets; },
     cur1: state => { return state.cur1; },
     cur2: state => { return state.cur2; },
+    drawer: state => { return state.drawer; },
   },
   mutations: {
     SET_DARKMODE(state, value) { state.darkmode = value; },
@@ -34,6 +36,7 @@ export default new Vuex.Store({
     SET_SYMBOLS_SETS(state, value) { state.symbols_sets = value; },
     SET_CUR1(state, value) { state.cur1 = value; },
     SET_CUR2(state, value) { state.cur2 = value; },
+    SET_DRAWER(state, value) { state.drawer = value; },
   },
   actions: {
     get_chatterer({ commit }) {
@@ -84,7 +87,10 @@ export default new Vuex.Store({
         commit('SET_CUR1', response.data.cur1);
         commit('SET_CUR2', response.data.cur2);
       });
-    },    
+    },
+    toggle_drawer(state, v) {
+      state.commit('SET_DRAWER', v);
+    }
   },
   modules: {
   }

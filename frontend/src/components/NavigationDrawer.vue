@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer app>
+    <v-navigation-drawer app v-model="drawer_mount">
         <b-row>
             <is-online></is-online>
         </b-row>
@@ -23,6 +23,12 @@
             DarkModeToggle,
             SettingsPanel,
             IsOnline
+        },
+        computed: {
+            drawer_mount: {
+                get(){ return this.$store.getters.drawer; },
+                set(value) { this.$store.dispatch('toggle_drawer', value); }
+            }
         },
     }
 </script>

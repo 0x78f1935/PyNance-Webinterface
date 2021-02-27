@@ -1,6 +1,6 @@
 <template>
     <v-card class="card" elevation="2" tile>
-        <v-card-subtitle>Currency 1: <span v-html="this.$store.getters.take_profit"></span></v-card-subtitle>
+        <v-card-subtitle>Currency 1: <span v-html="this.$store.getters.cur1"></span></v-card-subtitle>
 
             <v-card-text>
                 <v-autocomplete
@@ -14,7 +14,7 @@
             
             <v-divider></v-divider>
 
-            <v-card-subtitle>Currency 2: <span v-html="this.$store.getters.take_profit"></span></v-card-subtitle>
+            <v-card-subtitle>Currency 2: <span v-html="this.$store.getters.cur2"></span></v-card-subtitle>
 
             <v-card-text>
                 <v-autocomplete
