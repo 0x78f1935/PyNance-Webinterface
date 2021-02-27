@@ -21,3 +21,9 @@ class ViewManager(object):
 
         from backend.views.api.system import SystemApiView
         SystemApiView.register(self.server, route_base=f'/{self.prefix}/{self.version}/system')
+
+        from backend.views.api.orders import OrdersApiView
+        OrdersApiView.register(self.server, route_base=f'/{self.prefix}/{self.version}/orders')
+
+        from backend.views.api.ui import UIApiView
+        UIApiView.register(self.server, route_base=f'/{self.prefix}/{self.version}/ui')

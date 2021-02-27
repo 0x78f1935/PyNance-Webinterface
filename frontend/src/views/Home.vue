@@ -1,18 +1,21 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
+  <b-container fluid>
+    <knightrider></knightrider>
+    <order-history style="margin-top: 15px"></order-history>
+  </b-container>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+<script>
+// @ is an alias to /src
+// import CandleGraph from '@/components/CandleGraph.vue';
+import OrderHistory from '@/components/OrderHistory.vue';
+import Knightrider from '@/components/KnightRider.vue'
 
-@Component({
+export default {
+  name: 'Home',
   components: {
-    HelloWorld,
+    OrderHistory,
+    Knightrider
   },
-})
-export default class Home extends Vue {}
+}
 </script>
