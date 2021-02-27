@@ -3,6 +3,7 @@ from flask import jsonify, request
 
 from backend.models.orders import OrdersModel
 from backend.models.system import SystemModel
+from backend.models.chatterer import ChattererModel
 from backend import db, pynance
 from sqlalchemy import and_
 
@@ -21,6 +22,7 @@ class SystemApiView(FlaskView):
     def get(self):
         now = datetime.now()
 
+        chatterer = ChattererModel.query.first()
         system = SystemModel.query.first()
         cur1 = system.currency_1
         cur2 = system.currency_2
@@ -77,7 +79,7 @@ class SystemApiView(FlaskView):
 
         # SELLING
         if wouldve_paid > sell_without_fee_lost_plus_profit:
-            system.chat("SELLING")
+            chatterer.chat("SELLING")
             quantity = float(round(self.get_x_percentage_of_y(100, balance_free), precision))
             sell_order = pynance.orders.create(symbol, quantity, False, order_id='test_api')
             if sell_order is not None:
@@ -91,15 +93,15 @@ class SystemApiView(FlaskView):
                         'current': False,
                         'sold_for': str(paid_total)
                     })
-                system.chat(f"SOLD: {quantity}")
-            else: system.chat("NOTHING TO SELL")
+                chatterer.chat(f"SOLD: {quantity}")
+            else: chatterer.chat("NOTHING TO SELL")
         else:
             # Check if we have enough money to buy
             if model is None:
                 if balance2_free > minimal_money_needed_to_buy:
                     # Check if the current price is below average
                     if current_price < price_average:
-                        system.chat("BUYING")
+                        chatterer.chat("BUYING")
                         quantity = float(f"{self.get_x_percentage_of_y(100-take_profit, balance2_free / current_price ):.{precision}f}")
                         buy_order = pynance.orders.create(symbol, quantity, order_id='test_api')
                         if buy_order is not None:
@@ -114,14 +116,14 @@ class SystemApiView(FlaskView):
                             )
                             db.session.add(model)
                             db.session.commit()
-                        system.chat(f"BROUGHT: {quantity}")
-                else:
-                    system.chat("NOT ENOUGH MONEY TO BUY")
-            else: system.chat("HOLDING STRONG, PRICE TO LOW TO SELL")
+                        chatterer.chat(f"BROUGHT: {quantity}")
+                    else: chatterer.chat("CURRENT PRICE NOT BELOW AVERAGE, SKIPPING BUY ORDERS")
+                else: chatterer.chat("NOT ENOUGH MONEY TO BUY")
+            else: chatterer.chat("HOLDING STRONG, PRICE TO LOW TO SELL")
 
         return jsonify({
             "date": str(datetime.now().strftime('%d-%m-%y %H:%M:%S')),
             "execution_time": str(datetime.now()-now),
             "online": True,
-            "msg": system.chatterer
+            "msg": chatterer.msg
         }), 200

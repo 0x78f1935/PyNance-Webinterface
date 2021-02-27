@@ -61,10 +61,15 @@ class Webserver(Flask):
 
     def _setup_first_time_database_system_configuration(self):
         from backend.models.system import SystemModel
+        from backend.models.chatterer import ChattererModel
         from backend import db
         model = SystemModel.query.first()
         if model is None:
             db.session.add(SystemModel())
+            db.session.commit()
+        model = ChattererModel.query.first()
+        if model is None:
+            db.session.add(ChattererModel())
             db.session.commit()
     
     def _setup_jinja(self):

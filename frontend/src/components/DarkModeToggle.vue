@@ -1,5 +1,12 @@
 <template>
-    <v-switch v-model="toggle_darkmode" hide-details :color="color" :label="label"></v-switch>
+    <b-container fluid px-5>
+        <v-switch v-model="toggle_darkmode" hide-details :color="color" :label="label" :dense="true">
+            <template v-slot:label>
+                <span class="input__label">{{ label }}</span>
+            </template>
+        </v-switch>
+        <v-spacer></v-spacer>
+    </b-container>
 </template>
 
 <script>
@@ -12,7 +19,7 @@
             },
             label: {
                 type: String,
-                default: "",
+                default: "Dark Theme",
             }
         },
         computed: {
@@ -28,6 +35,8 @@
 </script>
 
 <style lang="scss" scoped>
-
+.input__label {
+    margin-top: 4px;
+}
 </style>
 
