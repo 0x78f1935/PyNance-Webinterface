@@ -1,67 +1,18 @@
 <template>
-  <b-container fluid>
-    <b-row>
-      <!-- <candle-graph></candle-graph> -->
-    </b-row>
-    <b-row>
-      <b-col class="col-md-4">
-        <spark-graph :updateCandles="true" evaluate="close" :card="true"></spark-graph>
-      </b-col>
-      <b-col class="col-md-4">
-        <spark-graph evaluate="high" :card="true"></spark-graph>
-      </b-col>
-      <b-col class="col-md-4">
-        <spark-graph evaluate="ignore" :card="true"></spark-graph>
-      </b-col>
-      <b-col class="col-md-4">
-        <spark-graph evaluate="low" :card="true"></spark-graph>
-      </b-col>
-      <b-col class="col-md-4">
-        <spark-graph evaluate="open" :card="true"></spark-graph>
-      </b-col>
-      <b-col class="col-md-4">
-        <spark-graph evaluate="quote_volume" :card="true"></spark-graph>
-      </b-col>
-      <b-col class="col-md-4">
-        <spark-graph evaluate="taker_buy_base" :card="true"></spark-graph>
-      </b-col>
-      <b-col class="col-md-4">
-        <spark-graph evaluate="taker_buy_quote" :card="true"></spark-graph>
-      </b-col>
-      <b-col class="col-md-4">
-        <spark-graph evaluate="trades" :card="true"></spark-graph>
-      </b-col>
-    </b-row>
-
-  </b-container>
+  <div class="home">
+    <img alt="Vue logo" src="../assets/logo.png">
+    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  </div>
 </template>
 
-<script>
-// @ is an alias to /src
-import SparkGraph from '@/components/SparkGraph.vue';
-// import CandleGraph from '@/components/CandleGraph.vue';
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
 
-export default {
-  name: 'Home',
+@Component({
   components: {
-    SparkGraph,
-    // CandleGraph
+    HelloWorld,
   },
-  beforeCreate(){
-    this.$store.dispatch('get_candlesticks');
-    this.$store.dispatch('get_total_balance');
-  },
-  created () {
-    setInterval(
-        () => {
-          this.$store.dispatch('get_candlesticks');
-          this.$store.dispatch('get_total_balance');
-        },
-        1000
-    )
-  },
-  methods: {
-
-  },
-}
+})
+export default class Home extends Vue {}
 </script>
