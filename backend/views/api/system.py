@@ -27,12 +27,14 @@ class SystemApiView(FlaskView):
         cur1 = system.currency_1
         cur2 = system.currency_2
 
-        if not system.online: return jsonify({
-            "date": str(datetime.now().strftime('%d-%m-%y %H:%M:%S')),
-            "execution_time": str(datetime.now()-now),
-            "online": False,
-            "msg": "Currently not running ..."
-        }), 200
+        if not system.online: 
+            chatterer.chat("CURRENTLY OFFLINE")
+            return jsonify({
+                "date": str(datetime.now().strftime('%d-%m-%y %H:%M:%S')),
+                "execution_time": str(datetime.now()-now),
+                "online": False,
+                "msg": "CURRENTLY OFFLINE"
+            }), 200
 
         model = OrdersModel.query.filter(
             and_(
