@@ -113,13 +113,15 @@ class SystemApiView(FlaskView):
                                 currency_2=cur2,
                                 quantity=str(quantity),
                                 brought_price=str(brought_price),
+                                fee_maker=str(fee_maker),
+                                fee_taker=str(fee_taker),
                             )
                             db.session.add(model)
                             db.session.commit()
                         chatterer.chat(f"BROUGHT: {quantity}")
                     else: chatterer.chat("CURRENT PRICE NOT BELOW AVERAGE, SKIPPING BUY ORDERS")
                 else: chatterer.chat("NOT ENOUGH MONEY TO BUY")
-            else: chatterer.chat("HOLDING STRONG, PRICE TO LOW TO SELL")
+            else: chatterer.chat("HOLDING STRONG, CURRENT PRICE TO LOW TO SELL")
 
         return jsonify({
             "date": str(datetime.now().strftime('%d-%m-%y %H:%M:%S')),

@@ -45,9 +45,10 @@ class OrdersModel(db.Model):
 
     sold_for = db.Column(db.Text, default="0")
     
+    fee_maker = db.Column(db.Text, nullable=False)
+    fee_taker = db.Column(db.Text, nullable=False)
+
     current = db.Column(db.Boolean, default=True)
-
-
 
     def update_data(self, data: dict):
         """"Just throw in a json object, each key that can be mapped will be updated"

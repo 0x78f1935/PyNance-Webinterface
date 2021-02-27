@@ -7,21 +7,21 @@
             <dark-mode-toggle style="float:right;"></dark-mode-toggle>
         </b-row>
         <b-row>
-            <take-profit></take-profit>
+            <settings-panel></settings-panel>
         </b-row>
     </v-navigation-drawer>
 </template>
 
 <script>
     import DarkModeToggle from '@/components/DarkModeToggle.vue';
-    import TakeProfit from '@/components/TakeProfit.vue';
+    import SettingsPanel from '@/components/Settings.vue';
     import IsOnline from '@/components/Online.vue';
 
     export default {
         name: 'nav-drawer',
         components: {
             DarkModeToggle,
-            TakeProfit,
+            SettingsPanel,
             IsOnline
         },
     }

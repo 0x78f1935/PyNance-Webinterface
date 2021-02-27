@@ -40,8 +40,13 @@ export default new Vuex.Store({
       })
     },
     set_take_profit(state, value) {
-      axios.post(`/api/v1/configure/take_profit`, {'tp': value});
+      if(value != state.take_profit) {
+        axios.post(`/api/v1/configure/take_profit`, {'tp': value});
+      }
     },
+    toggle_online(state) {
+      axios.get(`/api/v1/configure/online`);
+    }
   },
   modules: {
   }
