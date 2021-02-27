@@ -43,7 +43,20 @@ class SystemApiView(FlaskView):
                 OrdersModel.currency_2 == cur2,
             )).first()
         
-        price_average = float(pynance.price.average(cur1+cur2).json["price"])
+        try:
+            price_average = float(pynance.price.average(cur1+cur2).json["price"])
+        except AttributeError:
+            system.online = False
+            db.session.add(system)
+            db.session.commit()
+            chatterer.chat("UNKNOWN SYMBOL")
+            return jsonify({
+                "date": str(datetime.now().strftime('%d-%m-%y %H:%M:%S')),
+                "execution_time": str(datetime.now()-now),
+                "online": False,
+                "msg": "UNKNOWN SYMBOL"
+            }), 200
+
         if model is None: brought_price = price_average
         else: brought_price = float(model.brought_price)
 

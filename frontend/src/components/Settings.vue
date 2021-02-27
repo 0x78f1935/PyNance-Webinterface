@@ -1,5 +1,32 @@
 <template>
     <v-card class="card" elevation="2" tile>
+        <v-card-subtitle>Currency 1: <span v-html="this.$store.getters.take_profit"></span></v-card-subtitle>
+
+            <v-card-text>
+                <v-autocomplete
+                    :disabled="!editing"
+                    :items="this.$store.getters.symbols"
+                    label="First Symbol"
+                    v-model="cur1"
+                ></v-autocomplete>
+
+            </v-card-text>
+            
+            <v-divider></v-divider>
+
+            <v-card-subtitle>Currency 2: <span v-html="this.$store.getters.take_profit"></span></v-card-subtitle>
+
+            <v-card-text>
+                <v-autocomplete
+                    :disabled="!editing"
+                    :items="this.$store.getters.symbols"
+                    label="Second Symbol"
+                    v-model="cur2"
+                ></v-autocomplete>
+
+            </v-card-text>
+        <v-divider></v-divider>
+
         <v-card-subtitle>Take Profit: <span v-html="this.$store.getters.take_profit"></span>%</v-card-subtitle>
         <v-card-text>
             <v-slider
@@ -12,7 +39,10 @@
                 ticks
                 @click="$store.dispatch('get_take_profit')"
             ></v-slider>
+
         </v-card-text>
+        
+        
         <v-card-actions>
 
             <v-flex>
@@ -32,7 +62,7 @@
                 >{{this.$store.getters.online ? "Go Offline" : "Go Online"}}</v-btn>
             </v-flex>
             <v-flex class="text-xs-right" style="justify-content: flex-end; display:flex;margin-right:5px;">
-                <v-btn icon @click="editing = !editing">
+                <v-btn icon @click="start_editing()">
                     <v-icon v-if="editing">mdi-lock-open</v-icon>
                     <v-icon v-else>mdi-lock</v-icon>
                 </v-btn>
@@ -50,11 +80,18 @@
         name: 'settings-panel',
         data() {
             return {
-                editing: false
+                editing: false,
             }
         },
         created () {
             this.$store.dispatch("get_take_profit");
+            this.$store.dispatch("get_symbols");
+            this.$store.dispatch("get_currencies");
+        },
+        methods: {
+            start_editing() {
+                this.$data.editing = !this.$data.editing;
+            }
         },
         computed: {
             tp: {
@@ -64,6 +101,26 @@
                 set(value) {
                     if(this.editing){
                         this.$store.dispatch("set_take_profit", value);
+                    }
+                },
+            },
+            cur1: {
+                get() {
+                    return this.$store.getters.cur1;
+                },
+                set(value) {
+                    if(this.editing){
+                        this.$store.dispatch("set_cur1", value);
+                    }
+                },
+            },
+            cur2: {
+                get() {
+                    return this.$store.getters.cur2;
+                },
+                set(value) {
+                    if(this.editing){
+                        this.$store.dispatch("set_cur2", value);
                     }
                 },
             }
