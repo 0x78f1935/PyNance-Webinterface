@@ -22,7 +22,7 @@
         components: {
             DarkModeToggle,
             SettingsPanel,
-            IsOnline
+            IsOnline,
         },
         computed: {
             drawer_mount: {

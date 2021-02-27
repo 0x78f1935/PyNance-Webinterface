@@ -51,7 +51,7 @@
                 </v-btn>
 
                 <v-btn icon>
-                    <v-icon>mdi-gift</v-icon>
+                    <v-icon @click="helpdev=true">mdi-gift</v-icon>
                 </v-btn>
 
                 <v-btn
@@ -71,16 +71,23 @@
 
 
         </v-card-actions>
+        <help-a-dev-out :show="helpdev" @reset="helpdev=false"></help-a-dev-out>
     </v-card>
 </template>
 
 
 <script>
+    import HelpADevOut from '@/components/models/HelpADevOut.vue';
+
     export default {
         name: 'settings-panel',
+        components: {
+            HelpADevOut,
+        },
         data() {
             return {
                 editing: false,
+                helpdev: false,
             }
         },
         created () {
