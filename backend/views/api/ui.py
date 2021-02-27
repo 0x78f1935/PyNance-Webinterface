@@ -16,3 +16,8 @@ class UIApiView(FlaskView):
     def knightrider(self):
         model = ChattererModel.query.first()
         return jsonify({'chatterer': model.msg}), 200
+
+    @route('/online', methods=['GET'])
+    def is_online(self):
+        model = SystemModel.query.first()
+        return jsonify({'online': model.online}), 200

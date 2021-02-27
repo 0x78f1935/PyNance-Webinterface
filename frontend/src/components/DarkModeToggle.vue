@@ -1,6 +1,6 @@
 <template>
     <b-container fluid px-5>
-        <v-switch v-model="toggle_darkmode" hide-details :color="color" :label="label" :dense="true">
+        <v-switch v-model="toggle_darkmode" hide-details :color="color" :label="label" :dense="true" class="switcher">
             <template v-slot:label>
                 <span class="input__label">{{ label }}</span>
             </template>
@@ -35,6 +35,9 @@
 </script>
 
 <style lang="scss" scoped>
+.switcher{
+    height: 50px;
+}
 .input__label {
     margin-top: 4px;
 }
