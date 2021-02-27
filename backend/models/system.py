@@ -4,7 +4,7 @@ from backend import db
 from sqlalchemy import inspect
 
 
-class BalanceModel(db.Model):
+class SystemModel(db.Model):
 
     """
     This model keeps track of the current amount of coins available in the wallet.
@@ -17,25 +17,33 @@ class BalanceModel(db.Model):
         The ID of the user. Primary Key
     updated : DateTime, Automated
         The date the user was last seen. Updates automatically.
-    account_type : String
-        The place where the coins are held
-    asset : String
-        The name of the currency
-    free : String
-        The amount which is available to spent
-    locked : String
-        The amount which is available but unspendable
+    currency_1: string
+        Indicates the first currency of the symbol
+    currency_2: string
+        Indicates the second currency of the symbol
+    take_profit: string
+        The proft taken from the trading
+    online: boolean
+        indicates if the bot is trading
+    chatterer: text
+        the bot print sometimes text which might be outputted to the frontend. thats this text
     """
 
-    __tablename__ = "balance"
+    __tablename__ = "system"
     id = db.Column(db.Integer, primary_key=True)
     updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    account_type = db.Column(db.Text, nullable=False)
+    currency_1 = db.Column(db.Text, default="BTC")
+    currency_2 = db.Column(db.Text, default="USDT")
 
-    asset = db.Column(db.Text, default="Not Set")
-    free = db.Column(db.Text, default="0.00000000")
-    locked = db.Column(db.Text, default="0.00000000")
+    take_profit = db.Column(db.Text, default="20")
+    online = db.Column(db.Boolean, default=False, onupdate=False)
+
+    chatterer = db.Column(db.Text, default="Not yet started")
+
+    def chat(self, msg):
+        self.chatterer = msg
+        db.session.commit()
 
     def update_data(self, data: dict):
         """"Just throw in a json object, each key that can be mapped will be updated"

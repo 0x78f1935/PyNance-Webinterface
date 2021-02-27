@@ -8,14 +8,14 @@ from backend.config import Config
 from backend.views import ViewManager
 from backend.jinja import CustomFunctions
 
-from backend.plugins.pynance import PyNane
+from pynance import PyNance
 
 import pathlib
 
 db = SQLAlchemy()
 cors = CORS()
 migrate = Migrate()
-pynance = PyNane()
+pynance = PyNance('', '')
 
 class Webserver(Flask):
     def __init__(self):
@@ -54,7 +54,19 @@ class Webserver(Flask):
     def _setup_database(self):
         db.init_app(self)
         migrate.init_app(self, db)
+        with self.app_context():
+            try:
+                self._setup_first_time_database_system_configuration()
+            except Exception as e: print(e)
 
+    def _setup_first_time_database_system_configuration(self):
+        from backend.models.system import SystemModel
+        from backend import db
+        model = SystemModel.query.first()
+        if model is None:
+            db.session.add(SystemModel())
+            db.session.commit()
+    
     def _setup_jinja(self):
         """
         Updates jinja with custom python commands. Each new command will be callable

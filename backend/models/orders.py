@@ -4,7 +4,7 @@ from backend import db
 from sqlalchemy import inspect
 
 
-class BalanceModel(db.Model):
+class OrdersModel(db.Model):
 
     """
     This model keeps track of the current amount of coins available in the wallet.
@@ -17,25 +17,37 @@ class BalanceModel(db.Model):
         The ID of the user. Primary Key
     updated : DateTime, Automated
         The date the user was last seen. Updates automatically.
-    account_type : String
-        The place where the coins are held
-    asset : String
-        The name of the currency
-    free : String
-        The amount which is available to spent
-    locked : String
-        The amount which is available but unspendable
+    symbol : string, Required
+        Indicates the currency for example LTCBTC
+    currency_1: string, required
+        Indicates the first currency of the symbol
+    currency_2: string, required
+        Indicates the second currency of the symbol
+    quantity: string, required
+        The amount we brought
+    brought_price: string, required
+        The price we brought the amount for
+    current: boolean, optional (default True)
+        When true this is the current order we are processing
     """
 
-    __tablename__ = "balance"
+    __tablename__ = "orders"
     id = db.Column(db.Integer, primary_key=True)
+    created = db.Column(db.DateTime, default=datetime.utcnow)
     updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    account_type = db.Column(db.Text, nullable=False)
+    symbol = db.Column(db.Text, nullable=False)
+    currency_1 = db.Column(db.Text, nullable=False)
+    currency_2 = db.Column(db.Text, nullable=False)
 
-    asset = db.Column(db.Text, default="Not Set")
-    free = db.Column(db.Text, default="0.00000000")
-    locked = db.Column(db.Text, default="0.00000000")
+    quantity = db.Column(db.Text, nullable=False)
+    brought_price = db.Column(db.Text, nullable=False)
+
+    sold_for = db.Column(db.Text, default="0")
+    
+    current = db.Column(db.Boolean, default=True)
+
+
 
     def update_data(self, data: dict):
         """"Just throw in a json object, each key that can be mapped will be updated"
