@@ -27,3 +27,6 @@ class ViewManager(object):
 
         from backend.views.api.ui import UIApiView
         UIApiView.register(self.server, route_base=f'/{self.prefix}/{self.version}/ui')
+
+        from backend.views.api.configure import ConfigureApiView
+        ConfigureApiView.register(self.server, route_base=f'/{self.prefix}/{self.version}/configure')
