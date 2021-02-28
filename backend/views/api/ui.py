@@ -49,3 +49,12 @@ class UIApiView(FlaskView):
             'twitter': current_app.config['TWITTER'],
         }), 200
 
+    @route('/profit', methods=['GET'])
+    def profit(self):
+        profits = [float(i.sold_for) - float(i.brought_price) * float(i.quantity) for i in OrdersModel.query.all()]
+        profit = 0
+        for o in profits: profit += o
+        return jsonify({
+            "profit": profit
+        }), 200
+

@@ -19,7 +19,8 @@ export default new Vuex.Store({
     version: "",
     maintainer: "",
     github: "",
-    twitter: ""
+    twitter: "",
+    profit: "",
   },
   getters: {
     darkmode: state => { return state.darkmode; },
@@ -36,6 +37,7 @@ export default new Vuex.Store({
     maintainer: state => { return state.maintainer; },
     github: state => { return state.github; },
     twitter: state => { return state.twitter; },
+    profit: state => { return state.profit; },
   },
   mutations: {
     SET_DARKMODE(state, value) { state.darkmode = value; },
@@ -52,6 +54,7 @@ export default new Vuex.Store({
     SET_MAINTAINER(state, value) { state.maintainer = value; },
     SET_GITHUB(state, value) { state.github = value; },
     SET_TWITTER(state, value) { state.twitter = value; },
+    SET_PROFIT(state, value) { state.profit = value; },
   },
   actions: {
     get_chatterer({ commit }) {
@@ -62,6 +65,11 @@ export default new Vuex.Store({
     get_version({ commit }) {
       axios.get(`/api/v1/ui/version`).then(response => {
         commit('SET_VERSION', response.data.version);
+      })
+    },
+    get_profit({ commit }) {
+      axios.get(`/api/v1/ui/profit`).then(response => {
+        commit('SET_PROFIT', response.data.profit);
       })
     },
     get_maintainer({ commit }) {
