@@ -183,12 +183,17 @@
             },
             handleClose(forceClose=false) {
                 if(forceClose != true)
-                    if ( confirm("Are you sure you want to leave? Unsaved progress will be lost!") )
+                {
+                    if ( confirm("Are you sure you want to leave? Unsaved progress will be lost!") ) {
+                        this.$data.step = "1";
                         this.$emit('reset'); 
-                    else
-                        return; // Prevents closing
-                else
+
+                    } else { return; } // Prevents closing
+                }
+                else {
+                    this.$data.step = "1";
                     this.$emit('reset');
+                }
             },
         },
     }

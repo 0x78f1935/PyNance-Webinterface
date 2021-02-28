@@ -19,7 +19,7 @@ packaging==20.9
 pep517==0.9.1
 pycparser==2.20
 PyMySQL==1.0.2
-PyNance @ file:///D:/Private/PyNance/dist/PyNance-0.0.1-py3-none-any.whl
+PyNance @ file:///workspaceFolder/backend/plugins/PyNance/dist/PyNance-0.0.1-py3-none-any.whl
 pyparsing==2.4.7
 python-dateutil==2.8.1
 python-editor==1.0.4

@@ -1,0 +1,55 @@
+version: '3.7'
+services:
+
+  database:
+    image: mysql:5.7
+    container_name: database
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: PyNanny
+      MYSQL_DATABASE: PyNance
+    ports:
+      - 3307:3306
+    volumes:
+      - ./backend/config/docker/database/backup:/var/lib/mysql
+      - ./backend/config/docker/database/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+      # - ./backend/config/docker/database/mysql/authorization.sql:/docker-entrypoint-initdb.d/1.sql
+    networks:
+      - pynancenetwork
+
+  webinterface:
+    container_name: webinterface
+    build: .
+    environment:
+      FLASK_ENV: production
+      FLASK_APP: "webserver.py:start_le_server()"
+      FLASK_RUN_HOST: 0.0.0.0
+    # volumes:
+    #   - ./migrations:/workspaceFolder/migrations
+    networks:
+      - pynancenetwork
+    depends_on:
+      - database
+    links: 
+      - database:database
+    restart: always
+
+  nginx: 
+    container_name: nginx
+    image: nginx:latest
+    volumes:
+      - ./backend/config/docker/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - webinterface
+    links:
+      - webinterface
+    ports:
+      - 5000:5000
+      - 443:443
+    networks:
+      - pynancenetwork
+    restart: always
+
+networks:
+  pynancenetwork:

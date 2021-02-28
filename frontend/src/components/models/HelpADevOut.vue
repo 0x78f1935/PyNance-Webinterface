@@ -42,7 +42,7 @@
 </template>
 
 <script>
-    function initialState (processorCallback){
+    function initialState (){
         return {
             loading: false,
             search: '',
