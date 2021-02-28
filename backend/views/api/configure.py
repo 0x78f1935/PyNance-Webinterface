@@ -48,3 +48,15 @@ class ConfigureApiView(FlaskView):
         db.session.add(model)
         db.session.commit()
         return jsonify({'cur1': model.currency_1, 'cur2': model.currency_2}), 200
+
+    @route('/panik', methods=['POST'])
+    def panik(self):
+        model = SystemModel.query.first()
+        online = model.online
+        model.panik = request.json['panik']
+        db.session.add(model)
+        db.session.commit()
+        model.online = online
+        db.session.add(model)
+        db.session.commit()
+        return jsonify({'panik': model.panik}), 200

@@ -1,7 +1,10 @@
 alembic==1.5.4
+build==0.3.0
 certifi==2020.12.5
+cffi==1.14.5
 chardet==4.0.0
 click==7.1.2
+cryptography==3.4.6
 Flask==1.1.2
 Flask-Classful==0.14.2
 Flask-Cors==3.0.10
@@ -12,12 +15,17 @@ itsdangerous==1.1.0
 Jinja2==2.11.3
 Mako==1.1.4
 MarkupSafe==1.1.1
+packaging==20.9
+pep517==0.9.1
+pycparser==2.20
 PyMySQL==1.0.2
-pynance==0.0.1
+PyNance @ file:///D:/Private/PyNance/dist/PyNance-0.0.1-py3-none-any.whl
+pyparsing==2.4.7
 python-dateutil==2.8.1
 python-editor==1.0.4
 requests==2.25.1
 six==1.15.0
 SQLAlchemy==1.3.23
+toml==0.10.2
 urllib3==1.26.3
 Werkzeug==1.0.1

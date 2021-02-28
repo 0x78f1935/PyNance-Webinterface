@@ -47,7 +47,7 @@
 
             <v-flex>
                 <v-btn icon>
-                    <v-icon>mdi-help</v-icon>
+                    <v-icon @click="tut = true">mdi-help</v-icon>
                 </v-btn>
 
                 <v-btn icon>
@@ -57,7 +57,6 @@
                 <v-btn
                     class="m-1"
                     elevation="2"
-                    style="width:140px"
                     @click="$store.dispatch('toggle_online')"
                 >{{this.$store.getters.online ? "Go Offline" : "Go Online"}}</v-btn>
             </v-flex>
@@ -72,22 +71,26 @@
 
         </v-card-actions>
         <help-a-dev-out :show="helpdev" @reset="helpdev=false"></help-a-dev-out>
+        <tutorial :show="tut" @reset="tut=false"></tutorial>
     </v-card>
 </template>
 
 
 <script>
     import HelpADevOut from '@/components/models/HelpADevOut.vue';
+    import Tutorial from '@/components/models/Tutorial.vue';
 
     export default {
         name: 'settings-panel',
         components: {
             HelpADevOut,
+            Tutorial
         },
         data() {
             return {
                 editing: false,
                 helpdev: false,
+                tut: false,
             }
         },
         created () {

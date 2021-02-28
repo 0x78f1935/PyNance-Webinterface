@@ -37,6 +37,8 @@ class SystemModel(db.Model):
     take_profit = db.Column(db.Text, default="20")
     online = db.Column(db.Boolean, default=False, onupdate=False)
 
+    panik = db.Column(db.Boolean, default=False)
+
     def update_data(self, data: dict):
         """"Just throw in a json object, each key that can be mapped will be updated"
 

@@ -44,7 +44,6 @@
 <script>
     function initialState (processorCallback){
         return {
-            hint: '',
             loading: false,
             search: '',
             headers: [],

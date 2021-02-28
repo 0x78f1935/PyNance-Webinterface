@@ -15,6 +15,7 @@ export default new Vuex.Store({
     cur1: "",
     cur2: "",
     drawer: true,
+    panik: false,
   },
   getters: {
     darkmode: state => { return state.darkmode; },
@@ -26,6 +27,7 @@ export default new Vuex.Store({
     cur1: state => { return state.cur1; },
     cur2: state => { return state.cur2; },
     drawer: state => { return state.drawer; },
+    panik: state => { return state.panik; },
   },
   mutations: {
     SET_DARKMODE(state, value) { state.darkmode = value; },
@@ -37,6 +39,7 @@ export default new Vuex.Store({
     SET_CUR1(state, value) { state.cur1 = value; },
     SET_CUR2(state, value) { state.cur2 = value; },
     SET_DRAWER(state, value) { state.drawer = value; },
+    SET_PANIK(state, value) { state.panik = value; },
   },
   actions: {
     get_chatterer({ commit }) {
@@ -90,7 +93,12 @@ export default new Vuex.Store({
     },
     toggle_drawer(state, v) {
       state.commit('SET_DRAWER', v);
-    }
+    },
+    set_panik({commit}, value) {
+      axios.post(`/api/v1/configure/panik`, {'panik': value}).then(response => {
+        commit('SET_PANIK', response.data.panik);
+      });
+    },
   },
   modules: {
   }

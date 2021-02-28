@@ -15,7 +15,7 @@
         props: {
             color: {
                 type: String,
-                default: "indigo darken-3"
+                default: "accent darken-3"
             },
             label: {
                 type: String,

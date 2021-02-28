@@ -93,7 +93,7 @@ class SystemApiView(FlaskView):
 
 
         # SELLING
-        if wouldve_paid > sell_without_fee_lost_plus_profit:
+        if wouldve_paid > sell_without_fee_lost_plus_profit or system.panik and wouldve_paid > sell_without_fee_lose:
             chatterer.chat("SELLING")
             quantity = float(round(self.get_x_percentage_of_y(100, balance_free), precision))
             sell_order = pynance.orders.create(symbol, quantity, False, order_id='test_api')
@@ -114,27 +114,30 @@ class SystemApiView(FlaskView):
             # Check if we have enough money to buy
             if model is None:
                 if balance2_free > minimal_money_needed_to_buy:
-                    # Check if the current price is below average
-                    if current_price < price_average:
-                        chatterer.chat("BUYING")
-                        quantity = float(f"{self.get_x_percentage_of_y(100-take_profit, balance2_free / current_price ):.{precision}f}")
-                        buy_order = pynance.orders.create(symbol, quantity, order_id='test_api')
-                        if buy_order is not None:
-                            data = buy_order.json['fills'].pop(0)
-                            brought_price = float(data['price'])
-                            model = OrdersModel(
-                                symbol=symbol,
-                                currency_1=cur1,
-                                currency_2=cur2,
-                                quantity=str(quantity),
-                                brought_price=str(brought_price),
-                                fee_maker=str(fee_maker),
-                                fee_taker=str(fee_taker),
-                            )
-                            db.session.add(model)
-                            db.session.commit()
-                        chatterer.chat(f"BROUGHT: {quantity}")
-                    else: chatterer.chat("CURRENT PRICE NOT BELOW AVERAGE, SKIPPING BUY ORDERS")
+                    if system.panik:
+                        chatterer.chat("PANIK, NO NEW BUY ORDER WILL BE PLACED")
+                    else:
+                        # Check if the current price is below average
+                        if current_price < price_average:
+                            chatterer.chat("BUYING")
+                            quantity = float(f"{self.get_x_percentage_of_y(100-take_profit, balance2_free / current_price ):.{precision}f}")
+                            buy_order = pynance.orders.create(symbol, quantity, order_id='test_api')
+                            if buy_order is not None:
+                                data = buy_order.json['fills'].pop(0)
+                                brought_price = float(data['price'])
+                                model = OrdersModel(
+                                    symbol=symbol,
+                                    currency_1=cur1,
+                                    currency_2=cur2,
+                                    quantity=str(quantity),
+                                    brought_price=str(brought_price),
+                                    fee_maker=str(fee_maker),
+                                    fee_taker=str(fee_taker),
+                                )
+                                db.session.add(model)
+                                db.session.commit()
+                            chatterer.chat(f"BROUGHT: {quantity}")
+                        else: chatterer.chat("CURRENT PRICE NOT BELOW AVERAGE, SKIPPING BUY ORDERS")
                 else: chatterer.chat("NOT ENOUGH MONEY TO BUY")
             else: chatterer.chat("HOLDING STRONG, CURRENT PRICE TO LOW TO SELL")
 
