@@ -1,5 +1,5 @@
 from flask_classful import FlaskView, route
-from flask import jsonify, request
+from flask import jsonify, request, current_app
 
 from backend.models.orders import OrdersModel
 from backend.models.system import SystemModel
@@ -36,4 +36,16 @@ class UIApiView(FlaskView):
     def currencies(self):
         model = SystemModel.query.first()
         return jsonify({'cur1': model.currency_1, 'cur2': model.currency_2}), 200
+
+    @route('/version', methods=['GET'])
+    def versoin(self):
+        return jsonify({'version': current_app.config['VERSION']}), 200
+
+    @route('/maintainer', methods=['GET'])
+    def maintainer(self):
+        return jsonify({
+            'maintainer': current_app.config['MAINTAINER'],
+            'github': current_app.config['GITHUB'],
+            'twitter': current_app.config['TWITTER'],
+        }), 200
 

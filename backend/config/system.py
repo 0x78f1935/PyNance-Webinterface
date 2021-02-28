@@ -8,6 +8,8 @@ class System(Development, Production):
     """
     def __init__(self) -> None:
         self.MAINTAINER = "0x78f1935"
+        self.GITHUB = "https://github.com/0x78f1935"
+        self.TWITTER = "https://twitter.com/UnicodeError"
 
         # When debug is False, load production environment
         if not self.DEBUG: Production.__init__(self)

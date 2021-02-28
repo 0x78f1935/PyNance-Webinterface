@@ -16,6 +16,10 @@ export default new Vuex.Store({
     cur2: "",
     drawer: true,
     panik: false,
+    version: "",
+    maintainer: "",
+    github: "",
+    twitter: ""
   },
   getters: {
     darkmode: state => { return state.darkmode; },
@@ -28,6 +32,10 @@ export default new Vuex.Store({
     cur2: state => { return state.cur2; },
     drawer: state => { return state.drawer; },
     panik: state => { return state.panik; },
+    version: state => { return state.version; },
+    maintainer: state => { return state.maintainer; },
+    github: state => { return state.github; },
+    twitter: state => { return state.twitter; },
   },
   mutations: {
     SET_DARKMODE(state, value) { state.darkmode = value; },
@@ -40,11 +48,27 @@ export default new Vuex.Store({
     SET_CUR2(state, value) { state.cur2 = value; },
     SET_DRAWER(state, value) { state.drawer = value; },
     SET_PANIK(state, value) { state.panik = value; },
+    SET_VERSION(state, value) { state.version = value; },
+    SET_MAINTAINER(state, value) { state.maintainer = value; },
+    SET_GITHUB(state, value) { state.github = value; },
+    SET_TWITTER(state, value) { state.twitter = value; },
   },
   actions: {
     get_chatterer({ commit }) {
       axios.get(`/api/v1/ui/knightrider`).then(response => {
         commit('SET_CHATTERER', response.data.chatterer);
+      })
+    },
+    get_version({ commit }) {
+      axios.get(`/api/v1/ui/version`).then(response => {
+        commit('SET_VERSION', response.data.version);
+      })
+    },
+    get_maintainer({ commit }) {
+      axios.get(`/api/v1/ui/maintainer`).then(response => {
+        commit('SET_MAINTAINER', response.data.maintainer);
+        commit('SET_GITHUB', response.data.github);
+        commit('SET_TWITTER', response.data.twitter);
       })
     },
     get_online({commit}) {

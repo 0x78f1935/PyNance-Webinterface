@@ -101,6 +101,8 @@
             this.$store.dispatch("get_take_profit");
             this.$store.dispatch("get_symbols");
             this.$store.dispatch("get_currencies");
+            this.$store.dispatch("get_version");
+            this.$store.dispatch("get_maintainer");
         },
         methods: {
             start_editing() {

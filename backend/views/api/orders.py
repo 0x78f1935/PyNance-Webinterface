@@ -13,7 +13,7 @@ class OrdersApiView(FlaskView):
 
     def get(self):
         model = SystemModel.query.first()
-        data = [i.to_dict(['id']) for i in OrdersModel.query.all()]
+        data = [i.to_dict(['id']) for i in OrdersModel.query.order_by(OrdersModel.id.desc()).all()]
         for item in data:
             paid_total = float(item["brought_price"]) * float(item["quantity"])
             sell_without_fee_lose = paid_total * float(item["fee_maker"])

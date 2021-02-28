@@ -1,6 +1,6 @@
 <template>
     <v-footer app>
-      <!-- -->
+        Version: {{$store.getters.version}}
     </v-footer>
 </template>
 

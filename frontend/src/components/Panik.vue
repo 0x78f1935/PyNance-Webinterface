@@ -1,12 +1,13 @@
 <template>
     <b-container fluid>
         <v-btn block color="accent" @click="$store.dispatch('set_panik', !$store.getters.panik)">
-            PANIK
+            {{ $store.getters.panik ? "KALM" : "PANIK"}}
         </v-btn>
-        <b-container fluid v-if="$store.getters.panik">
+        <b-container fluid v-if="$store.getters.panik" class="panik">
             <v-img
                 :src="require('../assets/panik.png')"
-                width="100%"
+                width="160px"
+                height="160px"
             ></v-img>
         </b-container>
     </b-container>
@@ -17,3 +18,10 @@
         name:'panik',
     }
 </script>
+
+<style scoped>
+.panik {
+    display: flex;
+    justify-content: center;
+}
+</style>
