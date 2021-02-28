@@ -9,13 +9,13 @@
 // @ is an alias to /src
 // import CandleGraph from '@/components/CandleGraph.vue';
 import OrderHistory from '@/components/OrderHistory.vue';
-import Knightrider from '@/components/KnightRider.vue'
+import Knightrider from '@/components/KnightRider.vue';
 
 export default {
   name: 'Home',
   components: {
     OrderHistory,
-    Knightrider
+    Knightrider,
   },
 }
 </script>

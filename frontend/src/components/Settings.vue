@@ -57,7 +57,7 @@
                 <v-btn
                     class="m-1"
                     elevation="2"
-                    @click="$store.dispatch('toggle_online')"
+                    @click="toggle_bot"
                 >{{this.$store.getters.online ? "Go Offline" : "Go Online"}}</v-btn>
             </v-flex>
             <v-flex class="text-xs-right" style="justify-content: flex-end; display:flex;margin-right:5px;">
@@ -72,6 +72,7 @@
         </v-card-actions>
         <help-a-dev-out :show="helpdev" @reset="helpdev=false"></help-a-dev-out>
         <tutorial :show="tut" @reset="tut=false"></tutorial>
+        <disclaimer :show="show_disclaimer" @reset="show_disclaimer=false"></disclaimer>
     </v-card>
 </template>
 
@@ -79,18 +80,21 @@
 <script>
     import HelpADevOut from '@/components/models/HelpADevOut.vue';
     import Tutorial from '@/components/models/Tutorial.vue';
+    import Disclaimer from '@/components/models/Disclaimer.vue';
 
     export default {
         name: 'settings-panel',
         components: {
             HelpADevOut,
-            Tutorial
+            Tutorial,
+            Disclaimer
         },
         data() {
             return {
                 editing: false,
                 helpdev: false,
                 tut: false,
+                show_disclaimer: true
             }
         },
         created () {
@@ -101,7 +105,11 @@
         methods: {
             start_editing() {
                 this.$data.editing = !this.$data.editing;
-            }
+            },
+            toggle_bot(){
+                this.$data.show_disclaimer = true;
+                this.$store.dispatch('toggle_online');
+            },
         },
         computed: {
             tp: {
