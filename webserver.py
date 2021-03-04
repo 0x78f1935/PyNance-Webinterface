@@ -1,12 +1,20 @@
 from backend import Webserver
-from listener import Listener
+from sqlalchemy.sql import text
+# from listener import Listener
 
-def start_le_server() -> object:
+def create_server() -> object:
     """
     This method is used to host the backend server with gunicorn
     """
     server = Webserver()
-    Listener()
+    from backend import db
+    with server.app_context():
+        try:
+            db.session.query('1').from_statement(text('SELECT 1')).all()
+            can_connect = True
+        except Exception as e:
+            exit(1)
+    # Listener()
     return server
 
 server = Webserver()

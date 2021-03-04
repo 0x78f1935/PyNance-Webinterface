@@ -300,3 +300,6 @@ package-lock.json
 .whl
 
 ./reset_docker.bat
+
+node_modules/
+backend/config/docker/database/backup

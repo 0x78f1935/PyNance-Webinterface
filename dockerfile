@@ -6,7 +6,7 @@ WORKDIR /workspaceFolder
 # Map files directly to docker container
 ADD . .
 # Update system
-RUN apt-get update && apt-get upgrade -y
+RUN apt-get update && apt-get upgrade -y && apt-get install curl -y
 ## PYTHON
 WORKDIR /workspaceFolder/backend/plugins/PyNance
 # Install default requirements
@@ -30,5 +30,6 @@ RUN cd frontend && npm run build
 # Setup server environment
 ENV PYTHONUNBUFFERED=1
 RUN chmod +x ./backend/config/docker/entrypoint.sh
+
 ENTRYPOINT ["./backend/config/docker/entrypoint.sh" ]
 EXPOSE 5000

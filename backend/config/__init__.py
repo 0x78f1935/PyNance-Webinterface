@@ -16,3 +16,5 @@ class Config(System):
 
         # Load system configuration
         System.__init__(self)
+
+        self.SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:Y0uShoulDchAngETHIS!1!!1!@database:3306/PYNANCE'
