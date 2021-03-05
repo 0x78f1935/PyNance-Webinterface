@@ -11,9 +11,9 @@
             ></v-text-field>
         </v-card-title>
         <v-data-table
-        dense
-            :headers="headers"
-            :items="items"
+            dense
+            :headers="$store.getters.orders.headers"
+            :items="$store.getters.orders.data"
             :items-per-page="5"
             :search="search"
             class="elevation-1"
@@ -24,8 +24,6 @@
 </template>
 
 <script>
-    import axios from 'axios';
-
     export default {
         name: 'order-history',
         data() {
@@ -44,34 +42,8 @@
             poller() {
                 this.polling = setInterval(
                     () => {
-                        axios.get(`${this.$store.getters.endpoint}/api/v1/orders`).then(resp => {
-                            if(resp.data.length > 0) {
-                                this.$data.headers = Object.keys(resp.data[0]).map(item => { 
-                                let value = '';
-                                if (item == 'paid') { value = 'Paid'; }
-                                else if (item == 'brought_price') { value = 'Brought Price'; }
-                                else if (item == 'created') { value = 'Created'; }
-                                else if (item == 'currency_1') { value = 'Currency 1'; }
-                                else if (item == 'currency_2') { value = 'Currency 2'; }
-                                else if (item == 'current') { value = 'Processing'; }
-                                else if (item == 'quantity') { value = 'Quantity'; }
-                                else if (item == 'sold_for') { value = 'Sold For'; }
-                                else if (item == 'symbol') { value = 'Symbol'; }
-                                else if (item == 'updated') { value = 'Updated'; }
-                                else if (item == 'sell_without_fee_lose') { value = 'Sell target without loss'; }
-                                else if (item == 'sell_without_fee_lost_plus_profit') { value = 'Sell target with profit'; }
-            
-                                return {
-                                    text: value,
-                                    value: item,
-                                    sortable: true,
-                                    filterable: true
-                                } });
-                                this.$data.items = resp.data;
-                                this.$data.loading = false;
-                            }
-                        });
-
+                        this.$store.dispatch('get_orders');
+                        this.$data.loading = false;
                     },
                     1000
                 )

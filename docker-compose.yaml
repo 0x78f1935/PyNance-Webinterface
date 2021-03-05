@@ -20,6 +20,7 @@ services:
 
   dashboard:
     container_name: dashboard
+    hostname: dashboard
     build: 
       context: .
       dockerfile: webserver.dockerfile
@@ -61,8 +62,7 @@ services:
     links:
       - dashboard
     ports:
-      - 5000:5000
-      - 443:443
+      - 1337:5000
     networks:
       - pynance
     restart: always

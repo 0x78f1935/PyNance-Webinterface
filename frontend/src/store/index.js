@@ -3,11 +3,12 @@ import Vuex from 'vuex'
 import axios from 'axios';
 
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+axios.defaults.baseURL = process.env.SERVER_BACKEND;
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    endpoint: "http://127.0.0.1:5000",
     darkmode: true,
     chatterer: "",
     online: false,
@@ -23,9 +24,9 @@ export default new Vuex.Store({
     github: "",
     twitter: "",
     profit: "",
+    orders: {'headers': [], 'data': []},
   },
   getters: {
-    endpoint: state => { return state.endpoint; },
     darkmode: state => { return state.darkmode; },
     chatterer: state => { return state.chatterer; },
     online: state => { return state.online; },
@@ -41,6 +42,7 @@ export default new Vuex.Store({
     github: state => { return state.github; },
     twitter: state => { return state.twitter; },
     profit: state => { return state.profit; },
+    orders: state => { return state.orders; }
   },
   mutations: {
     SET_DARKMODE(state, value) { state.darkmode = value; },
@@ -58,82 +60,113 @@ export default new Vuex.Store({
     SET_GITHUB(state, value) { state.github = value; },
     SET_TWITTER(state, value) { state.twitter = value; },
     SET_PROFIT(state, value) { state.profit = value; },
+    SET_ORDERS(state, value) { state.orders = value; }
   },
   actions: {
     get_chatterer(state) {
-      axios.get(`${state.getters.endpoint}/api/v1/ui/knightrider`).then(response => {
+      axios.get(`/api/v1/ui/knightrider`).then(response => {
         state.commit('SET_CHATTERER', response.data.chatterer);
       })
     },
     get_version(state) {
-      axios.get(`${state.getters.endpoint}/api/v1/ui/version`).then(response => {
+      axios.get(`/api/v1/ui/version`).then(response => {
         state.commit('SET_VERSION', response.data.version);
       })
     },
     get_profit(state) {
-      axios.get(`${state.getters.endpoint}/api/v1/ui/profit`).then(response => {
+      axios.get(`/api/v1/ui/profit`).then(response => {
         state.commit('SET_PROFIT', response.data.profit);
       })
     },
     get_maintainer(state) {
-      axios.get(`${state.getters.endpoint}/api/v1/ui/maintainer`).then(response => {
+      axios.get(`/api/v1/ui/maintainer`).then(response => {
         state.commit('SET_MAINTAINER', response.data.maintainer);
         state.commit('SET_GITHUB', response.data.github);
         state.commit('SET_TWITTER', response.data.twitter);
       })
     },
     get_online(state) {
-      axios.get(`${state.getters.endpoint}/api/v1/ui/online`).then(response => {
+      axios.get(`/api/v1/ui/online`).then(response => {
         state.commit('SET_ONLINE', response.data.online);
       })
     },
     get_currencies(state) {
-      axios.get(`${state.getters.endpoint}/api/v1/ui/currency`).then(response => {
+      axios.get(`/api/v1/ui/currency`).then(response => {
         state.commit('SET_CUR1', response.data.cur1);
         state.commit('SET_CUR2', response.data.cur2);
       })
     },
     get_symbols(state) {
-      axios.get(`${state.getters.endpoint}/api/v1/ui/symbols`).then(response => {
+      axios.get(`/api/v1/ui/symbols`).then(response => {
         state.commit('SET_SYMBOLS', response.data.symbols);
       })
-      axios.get(`${state.getters.endpoint}/api/v1/ui/symbols_sets`).then(response => {
+      axios.get(`/api/v1/ui/symbols_sets`).then(response => {
         state.commit('SET_SYMBOLS_SETS', response.data.symbols);
       })
     },
     get_take_profit(state) {
-      axios.get(`${state.getters.endpoint}/api/v1/configure/take_profit`).then(response => {
+      axios.get(`/api/v1/configure/take_profit`).then(response => {
         state.commit('SET_TAKE_PROFIT', response.data.take_profit);
       })
     },
     set_take_profit(state, value) {
       if(value != state.take_profit) {
-        axios.post(`${state.getters.endpoint}/api/v1/configure/take_profit`, {'tp': value});
+        axios.post(`/api/v1/configure/take_profit`, {'tp': value});
       }
     },
-    toggle_online(state) {
-      axios.get(`${state.getters.endpoint}/api/v1/configure/online`);
+    toggle_online() {
+      axios.get(`/api/v1/configure/online`);
     },
     set_cur1(state, value) {
-      axios.post(`${state.getters.endpoint}/api/v1/configure/cur1`, {'cur': value}).then(response => {
+      axios.post(`/api/v1/configure/cur1`, {'cur': value}).then(response => {
         state.commit('SET_CUR1', response.data.cur1);
         state.commit('SET_CUR2', response.data.cur2);
       });
     },
     set_cur2(state, value) {
-      axios.post(`${state.getters.endpoint}/api/v1/configure/cur2`, {'cur': value}).then(response => {
+      axios.post(`/api/v1/configure/cur2`, {'cur': value}).then(response => {
         state.commit('SET_CUR1', response.data.cur1);
         state.commit('SET_CUR2', response.data.cur2);
       });
     },
     toggle_drawer(state, v) {
-      state.state.commit('SET_DRAWER', v);
+      state.commit('SET_DRAWER', v);
     },
     set_panik(state, value) {
-      axios.post(`${state.getters.endpoint}/api/v1/configure/panik`, {'panik': value}).then(response => {
+      axios.post(`/api/v1/configure/panik`, {'panik': value}).then(response => {
         state.commit('SET_PANIK', response.data.panik);
       });
     },
+    get_orders( { commit }) {
+      axios.get(`/api/v1/orders/`).then(resp => {
+        if(resp.data.length > 0) {
+            let headers = Object.keys(resp.data[0]).map(item => { 
+                let value = '';
+                if (item == 'paid') { value = 'Paid'; }
+                else if (item == 'brought_price') { value = 'Brought Price'; }
+                else if (item == 'created') { value = 'Created'; }
+                else if (item == 'currency_1') { value = 'Currency 1'; }
+                else if (item == 'currency_2') { value = 'Currency 2'; }
+                else if (item == 'current') { value = 'Processing'; }
+                else if (item == 'quantity') { value = 'Quantity'; }
+                else if (item == 'sold_for') { value = 'Sold For'; }
+                else if (item == 'symbol') { value = 'Symbol'; }
+                else if (item == 'updated') { value = 'Updated'; }
+                else if (item == 'sell_without_fee_lose') { value = 'Sell target without loss'; }
+                else if (item == 'sell_without_fee_lost_plus_profit') { value = 'Sell target with profit'; }
+
+                return {
+                    text: value,
+                    value: item,
+                    sortable: true,
+                    filterable: true
+                } 
+            });
+            let items = resp.data;
+            commit('SET_ORDERS', {'headers': headers, 'data': items})
+        }
+    });
+    }
   },
   modules: {
   }

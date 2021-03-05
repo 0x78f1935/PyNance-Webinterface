@@ -1,4 +1,4 @@
-from flask_classful import FlaskView
+from flask_classful import FlaskView, route
 from flask import jsonify, request
 
 from backend.models.orders import OrdersModel
@@ -11,6 +11,7 @@ class OrdersApiView(FlaskView):
     
     decorators = [ ]
 
+    @route('/', methods=['GET'])
     def get(self):
         model = SystemModel.query.first()
         data = [i.to_dict(['id']) for i in OrdersModel.query.order_by(OrdersModel.id.desc()).all()]

@@ -1,4 +1,4 @@
-from flask_classful import FlaskView
+from flask_classful import FlaskView, route
 from flask import jsonify, request
 
 from backend.models.orders import OrdersModel
