@@ -44,7 +44,7 @@
             poller() {
                 this.polling = setInterval(
                     () => {
-                        axios.get('/api/v1/orders').then(resp => {
+                        axios.get(`${this.$store.getters.endpoint}/api/v1/orders`).then(resp => {
                             if(resp.data.length > 0) {
                                 this.$data.headers = Object.keys(resp.data[0]).map(item => { 
                                 let value = '';
