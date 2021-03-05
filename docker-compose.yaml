@@ -20,7 +20,9 @@ services:
 
   dashboard:
     container_name: dashboard
-    build: .
+    build: 
+      context: .
+      dockerfile: webserver.dockerfile
     environment:
       FLASK_ENV: production
       FLASK_APP: "webserver.py:create_server()"
@@ -35,6 +37,19 @@ services:
     networks:
       - pynance
     restart: on-failure
+  
+  listener:
+    container_name: listener
+    build:
+      context: .
+      dockerfile: listener.dockerfile
+    depends_on: 
+      - dashboard
+    links:
+      - dashboard
+    networks:
+      - pynance
+    restart: always
 
   nginx: 
     container_name: nginx
@@ -46,7 +61,7 @@ services:
     links:
       - dashboard
     ports:
-      - 5000:5000
+      - 80:5000
       - 443:443
     networks:
       - pynance

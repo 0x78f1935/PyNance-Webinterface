@@ -12,6 +12,7 @@
                         <strong>By using this tool you agree to take FULL responsibility of your own money. </strong> <br/>
                         Even if this means missed opportunities caused by the automation algorithm of this bot or worse, losses caused by this bot. <br/>
                         <strong>Be responsible</strong>, Only trade with money you can afford to lose. Take chances, Make mistakes, Get messy. To the moon! <br/>
+                        <i>Tap outside this window to close this message</i>
                     </p>
                 </v-card-text>
             </v-card>
