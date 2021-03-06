@@ -1,7 +1,7 @@
 <template>
     <v-navigation-drawer app v-model="drawer_mount">
         <b-row class="m-2" style="margin-top:15px">
-            <h5>Configuration</h5>
+            <h5>{{ $t('configuration') }}</h5>
         </b-row>
         <b-row>
             <is-online></is-online>
@@ -30,7 +30,7 @@
             DarkModeToggle,
             SettingsPanel,
             IsOnline,
-            Panik
+            Panik,
         },
         computed: {
             drawer_mount: {

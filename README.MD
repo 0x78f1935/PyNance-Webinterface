@@ -6,4 +6,4 @@ The second time you start this environment, everything should work
 
 
 
-    scp -r PyNance-Webinterface server@192.168.178.213:/home/server/pynance-webinterface
+scp -r PyNance-Webinterface server@192.168.178.213:/home/server/pynance-webinterface

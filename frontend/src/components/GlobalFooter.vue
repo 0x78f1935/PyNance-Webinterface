@@ -1,9 +1,10 @@
 <template>
     <v-footer app>
         <b-col>
-            Version: {{$store.getters.version}}
+            {{ $t('version') }} {{$store.getters.version}}
         </b-col>
         <b-col class="mr-auro to_the_right">
+            <language-selector></language-selector>
             <v-btn icon>
                 <v-icon @click="show_discord=true">mdi-discord</v-icon>
             </v-btn>
@@ -21,11 +22,13 @@
 <script>
     import { price } from './utils';
     import Discord from '@/components/models/Discord.vue';
+    import LanguageSelector from '@/components/LanguageSelector.vue';
 
     export default {
         name: 'global-footer',
         components: {
             Discord,
+            LanguageSelector,
         },
         data() {
             return {

@@ -12,7 +12,7 @@
                         <v-text-field
                         v-model="search"
                         append-icon="mdi-magnify"
-                        label="Search"
+                        :label="label_text"
                         single-line
                         hide-details
                         :disabled="loading"
@@ -26,15 +26,15 @@
                         :search="search"
                         class="elevation-1"
                         :loading="loading"
-                        loading-text="Loading... Please wait"
+                        :loading-text="loading_text"
                     ></v-data-table>
-                    <small>Feel free to show some gratitude by donating/depositing a tip to any of the wallets above. Thank you!</small>
+                    <small>{{ $t('donation_hint') }}</small>
                 </v-card-text>
                 <v-card-actions class="justify-end">
                     <v-btn
                         text
                         @click="dialog.value = false"
-                    >Close</v-btn>
+                    >{{ $t('close') }}</v-btn>
                 </v-card-actions>
             </v-card>
         </template>
@@ -74,6 +74,12 @@
                     if(newValue == false) { this.$emit('reset'); }
                 }
             },
+            label_text() {
+                return this.$i18n.t('search');
+            },
+            loading_text() {
+                return this.$i18n.t('loading');
+            }
         },
         data() {
             return initialState(this.onProcessComplete)

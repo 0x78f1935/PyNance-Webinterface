@@ -63,7 +63,7 @@ class SystemApiView(FlaskView):
         take_profit = float(system.take_profit)  # The percentage to take as profit, cannot be higher then 99
 
         try:
-            fees = pynance.price.fees().json['tradeFee'].pop(0)
+            fees = pynance.price.fees(cur1+cur2).json['tradeFee'].pop(0)
         except AttributeError:
             # system.online = False
             # db.session.add(system)
@@ -95,6 +95,10 @@ class SystemApiView(FlaskView):
 
         paid_total = brought_price * balance_free
         wouldve_paid = current_price * balance_free
+
+        if model is not None: 
+            chatterer.update_price(f"{float(round(float(current_price) * float(model.quantity), 6))} - { float(round(current_price, 6)) } - { model.quantity }")
+        else: chatterer.update_price(f"0.0 - { float(round(current_price, 6)) } - 0")
 
         sell_without_fee_lose = paid_total * fee_maker
         wanted_profit = paid_total * float(take_profit/100)

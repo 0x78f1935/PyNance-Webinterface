@@ -1,10 +1,10 @@
 <template>
-    <v-card>
+    <v-card class="order-table">
         <v-card-title>
             <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
-            label="Search"
+            :label="$t('search')"
             single-line
             hide-details
             :disabled="loading"
@@ -18,7 +18,7 @@
             :search="search"
             class="elevation-1"
             :loading="loading"
-            loading-text="Loading... Please wait"
+            :loading-text="$t('loading')"
         ></v-data-table>
     </v-card>
 </template>
@@ -57,5 +57,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+.order-table {
+    width: 100%;
+}
 </style>

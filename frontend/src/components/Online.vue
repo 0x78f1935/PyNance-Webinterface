@@ -5,14 +5,14 @@
                 bottom
                 dot
                 color="green"
-            >Online</v-badge>
+            >{{ $t('online') }}</v-badge>
         </v-card-subtitle>
         <v-card-subtitle v-else>            
             <v-badge
                 bottom
                 dot
                 color="red"
-            >Offline</v-badge>
+            >{{ $t('offline') }}</v-badge>
         </v-card-subtitle>
     </v-card>
 </template>

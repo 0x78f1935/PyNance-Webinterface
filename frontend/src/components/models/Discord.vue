@@ -14,7 +14,7 @@
                     <v-btn
                         text
                         @click="dialog.value = false"
-                    >Close</v-btn>
+                    >{{ $t('close') }}</v-btn>
                 </v-card-actions>
             </v-card>
         </template>

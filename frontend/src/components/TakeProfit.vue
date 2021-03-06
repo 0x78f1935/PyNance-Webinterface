@@ -1,6 +1,6 @@
 <template>
     <v-card class="card" elevation="2" tile>
-        <v-card-subtitle>Take Profit: <span v-html="this.$store.getters.take_profit"></span>%</v-card-subtitle>
+        <v-card-subtitle>{{ $t('takeProfit') }}<span v-html="this.$store.getters.take_profit"></span>%</v-card-subtitle>
         <v-card-text>
             <v-slider
                 v-model="tp"

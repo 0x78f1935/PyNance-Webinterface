@@ -1,12 +1,12 @@
 <template>
     <v-card class="card" elevation="2" tile>
-        <v-card-subtitle>Currency 1: <span v-html="this.$store.getters.cur1"></span></v-card-subtitle>
+        <v-card-subtitle>{{ $t('currency1') }}<span v-html="this.$store.getters.cur1"></span></v-card-subtitle>
 
             <v-card-text>
                 <v-autocomplete
                     :disabled="!editing"
                     :items="this.$store.getters.symbols"
-                    label="First Symbol"
+                    :label="$t('firstSymbol')"
                     v-model="cur1"
                 ></v-autocomplete>
 
@@ -14,20 +14,20 @@
             
             <v-divider></v-divider>
 
-            <v-card-subtitle>Currency 2: <span v-html="this.$store.getters.cur2"></span></v-card-subtitle>
+            <v-card-subtitle>{{ $t('currency2') }}<span v-html="this.$store.getters.cur2"></span></v-card-subtitle>
 
             <v-card-text>
                 <v-autocomplete
                     :disabled="!editing"
                     :items="this.$store.getters.symbols"
-                    label="Second Symbol"
+                    :label="$t('secondSymbol')"
                     v-model="cur2"
                 ></v-autocomplete>
 
             </v-card-text>
         <v-divider></v-divider>
 
-        <v-card-subtitle>Take Profit: <span v-html="this.$store.getters.take_profit"></span>%</v-card-subtitle>
+        <v-card-subtitle>{{ $t('takeProfit') }}<span v-html="this.$store.getters.take_profit"></span>%</v-card-subtitle>
         <v-card-text>
             <v-slider
                 :disabled="!editing"
@@ -58,7 +58,7 @@
                     class="m-1"
                     elevation="2"
                     @click="toggle_bot"
-                >{{this.$store.getters.online ? "Go Offline" : "Go Online"}}</v-btn>
+                >{{this.$store.getters.online ? $t('goOffline') : $t('goOnline')}}</v-btn>
             </v-flex>
             <v-flex class="text-xs-right" style="justify-content: flex-end; display:flex;margin-right:5px;">
                 <v-btn icon @click="start_editing()">
@@ -109,7 +109,7 @@
                 this.$data.editing = !this.$data.editing;
             },
             toggle_bot(){
-                this.$data.show_disclaimer = true;
+                // this.$data.show_disclaimer = true;
                 this.$store.dispatch('toggle_online');
             },
         },

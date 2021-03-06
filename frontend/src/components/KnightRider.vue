@@ -3,7 +3,7 @@
         <b-row>
             <div :class="$vuetify.theme.dark ? 'knightrider-wrapper-dark' : 'knightrider-wrapper-light'">
                 <span class="txt">{{ txt }}</span>
-                <span class="gradient"></span>
+                <span :class="colorsss"></span>
                 <span class="dodge"></span>
             </div>
 
@@ -39,6 +39,12 @@
                     () => this.$store.dispatch("get_chatterer"),
                     1000
                 );
+            }
+        },
+        computed: {
+            colorsss() {
+                if(this.$vuetify.theme.dark) { return 'gradient1'; }
+                else { return 'gradient2'; }
             }
         },
         beforeDestroy () {
@@ -115,8 +121,18 @@
     overflow: hidden;
 }
 
-.gradient {
+.gradient1 {
     background: linear-gradient(115.8221404393721deg, rgba(245, 167, 128,1) 5.736111111111111%,rgba(241, 43, 92,1) 96.29166666666666%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    mix-blend-mode: multiply;
+}
+
+.gradient2 {
+    background: linear-gradient(115.8221404393721deg, rgb(128, 241, 245) 5.736111111111111%,rgb(79, 43, 241) 96.29166666666666%);
     position: absolute;
     top: 0;
     left: 0;

@@ -25,6 +25,11 @@ export default new Vuex.Store({
     twitter: "",
     profit: "",
     orders: {'headers': [], 'data': []},
+    languages: ['en', 'nl', 'fr'],
+    language: "en",
+    fiat_current_price: "0",
+    coin_current_price: "0",
+    current_quantity: "0",
   },
   getters: {
     darkmode: state => { return state.darkmode; },
@@ -42,7 +47,12 @@ export default new Vuex.Store({
     github: state => { return state.github; },
     twitter: state => { return state.twitter; },
     profit: state => { return state.profit; },
-    orders: state => { return state.orders; }
+    orders: state => { return state.orders; },
+    languages: state => { return state.languages; },
+    language: state => { return state.language; },
+    fiat_current_price: state => { return state.fiat_current_price; },
+    coin_current_price: state => { return state.coin_current_price; },
+    current_quantity: state => { return state.current_quantity; }
   },
   mutations: {
     SET_DARKMODE(state, value) { state.darkmode = value; },
@@ -60,7 +70,12 @@ export default new Vuex.Store({
     SET_GITHUB(state, value) { state.github = value; },
     SET_TWITTER(state, value) { state.twitter = value; },
     SET_PROFIT(state, value) { state.profit = value; },
-    SET_ORDERS(state, value) { state.orders = value; }
+    SET_ORDERS(state, value) { state.orders = value; },
+    SET_LANGUAGE(state, value) { state.language = value; },
+    SET_CURRENT_FIAT(state, value) { state.fiat_current_price = value; },
+    SET_CURRENT_COINT(state, value) { state.coin_current_price = value; },
+    SET_CURRENT_QUANTITY(state, value) { state.current_quantity = value; }
+
   },
   actions: {
     get_chatterer(state) {
@@ -71,6 +86,13 @@ export default new Vuex.Store({
     get_version(state) {
       axios.get(`/api/v1/ui/version`).then(response => {
         state.commit('SET_VERSION', response.data.version);
+      })
+    },
+    get_current_coin_price(state) {
+      axios.get(`/api/v1/ui/current_price`).then(response => {
+        state.commit('SET_CURRENT_FIAT', response.data.fiat);
+        state.commit('SET_CURRENT_COINT', response.data.coin);
+        state.commit('SET_CURRENT_QUANTITY', response.data.quantity);
       })
     },
     get_profit(state) {

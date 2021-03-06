@@ -38,7 +38,7 @@ class UIApiView(FlaskView):
         return jsonify({'cur1': model.currency_1, 'cur2': model.currency_2}), 200
 
     @route('/version', methods=['GET'])
-    def versoin(self):
+    def version(self):
         return jsonify({'version': current_app.config['VERSION']}), 200
 
     @route('/maintainer', methods=['GET'])
@@ -58,3 +58,12 @@ class UIApiView(FlaskView):
             "profit": profit
         }), 200
 
+    @route('/current_price', methods=['GET'])
+    def current_price(self):
+        model = ChattererModel.query.first()
+        if model is not None:
+            try:
+                fiat, coin, quantity = model.current_price.split(' - ')
+                return jsonify({'fiat': fiat, 'coin': coin, 'quantity': quantity}), 200
+            except ValueError: pass
+        return jsonify({'fiat': 0, 'coin': 0, 'quantity': 0}), 200

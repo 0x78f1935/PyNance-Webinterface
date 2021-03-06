@@ -25,9 +25,14 @@ class ChattererModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     msg = db.Column(db.Text, default="Not yet started")
+    current_price = db.Column(db.Text, default="0")
 
     def chat(self, msg):
         self.msg = msg
+        db.session.commit()
+    
+    def update_price(self, price):
+        self.current_price = price
         db.session.commit()
 
     def update_data(self, data: dict):

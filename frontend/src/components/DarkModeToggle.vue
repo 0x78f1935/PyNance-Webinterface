@@ -1,8 +1,8 @@
 <template>
     <b-container fluid px-5>
-        <v-switch v-model="toggle_darkmode" hide-details :color="color" :label="label" :dense="true" class="switcher">
+        <v-switch v-model="toggle_darkmode" hide-details :color="color" :label="$t('darkmode')" :dense="true" class="switcher">
             <template v-slot:label>
-                <span class="input__label">{{ label }}</span>
+                <span class="input__label">{{ $t('darkmode') }}</span>
             </template>
         </v-switch>
         <v-spacer></v-spacer>
@@ -17,10 +17,6 @@
                 type: String,
                 default: "accent darken-3"
             },
-            label: {
-                type: String,
-                default: "Dark Theme",
-            }
         },
         computed: {
             toggle_darkmode: {

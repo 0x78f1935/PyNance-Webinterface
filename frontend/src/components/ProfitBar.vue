@@ -1,5 +1,5 @@
 <template>
-    <label>Profit: <strong>{{ profit }}</strong></label>
+    <label>{{ $t('profit') }}<strong>{{ profit }}</strong></label>
 </template>
 
 <script>

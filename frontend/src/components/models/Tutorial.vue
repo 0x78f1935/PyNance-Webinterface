@@ -9,65 +9,82 @@
                 <v-card-text>
                     <v-img
                         v-if="step=='1'"
-                        class="mt-5"
+                        class="mt-5 foto"
                         :lazy-src="require('../../assets/ui_1.png')"
                         :src="require('../../assets/ui_1.png')"
                     ></v-img>
                     <v-img
                         v-else-if="step=='2'"
-                        class="mt-5"
+                        class="mt-5 foto"
                         :lazy-src="require('../../assets/ui_2.png')"
                         :src="require('../../assets/ui_2.png')"
                     ></v-img>
                     <v-img
                         v-else-if="step=='3'"
-                        class="mt-5"
+                        class="mt-5 foto"
                         :lazy-src="require('../../assets/ui_3.png')"
                         :src="require('../../assets/ui_3.png')"
                     ></v-img>
                     <v-img
                         v-else-if="step=='4'"
-                        class="mt-5"
+                        class="mt-5 foto"
                         :lazy-src="require('../../assets/ui_4.png')"
                         :src="require('../../assets/ui_4.png')"
                     ></v-img>
                     <v-img
                         v-else-if="step=='5'"
-                        class="mt-5"
+                        class="mt-5 foto"
                         :lazy-src="require('../../assets/ui_5.png')"
                         :src="require('../../assets/ui_5.png')"
                     ></v-img>
                     <v-img
                         v-else-if="step=='6'"
-                        class="mt-5"
+                        class="mt-5 foto"
                         :lazy-src="require('../../assets/ui_6.png')"
                         :src="require('../../assets/ui_6.png')"
                     ></v-img>
                     <v-img
                         v-else-if="step=='7'"
-                        class="mt-5"
+                        class="mt-5 foto"
                         :lazy-src="require('../../assets/ui_7.png')"
                         :src="require('../../assets/ui_7.png')"
                     ></v-img>
                     <v-img
                         v-else-if="step=='8'"
-                        class="mt-5"
+                        class="mt-5 foto"
                         :lazy-src="require('../../assets/ui_8.png')"
                         :src="require('../../assets/ui_8.png')"
                     ></v-img>
                     <v-img
                         v-else-if="step=='9'"
-                        class="mt-5"
+                        class="mt-5 foto"
                         :lazy-src="require('../../assets/ui_9.png')"
                         :src="require('../../assets/ui_9.png')"
                     ></v-img>
                     <b-container>
-                        <p
-                            v-for="(item, i) in tutorial_data[$data.step]"
-                            :key="i"
-                        >
-                            {{item.number}}. {{ item.description }}
-                        </p>
+                        <p v-if="$data.step==1">1. {{$t('tut11')}}</p>
+                        <p v-if="$data.step==1">2. {{$t('tut12')}}</p>
+                        <p v-if="$data.step==1">3. {{$t('tut13')}}</p>
+                        <p v-if="$data.step==2">1. {{$t('tut21')}}</p>
+                        <p v-if="$data.step==2">2. {{$t('tut22')}}</p>
+                        <p v-if="$data.step==3">1. {{$t('tut31')}}</p>
+                        <p v-if="$data.step==3">2. {{$t('tut32')}}</p>
+                        <p v-if="$data.step==3">3. {{$t('tut33')}}</p>
+                        <p v-if="$data.step==4">1. {{$t('tut41')}}</p>
+                        <p v-if="$data.step==4">2. {{$t('tut42')}}</p>
+                        <p v-if="$data.step==4">3. {{$t('tut43')}}</p>
+                        <p v-if="$data.step==5">1. {{$t('tut51')}}</p>
+                        <p v-if="$data.step==5">2. {{$t('tut52')}}</p>
+                        <p v-if="$data.step==6">1. {{$t('tut61')}}</p>
+                        <p v-if="$data.step==6">2. {{$t('tut62')}}</p>
+                        <p v-if="$data.step==6">3. {{$t('tut63')}}</p>
+                        <p v-if="$data.step==7">1. {{$t('tut71')}}</p>
+                        <p v-if="$data.step==7">2. {{$t('tut72')}}</p>
+                        <p v-if="$data.step==7">3. {{$t('tut73')}}</p>
+                        <p v-if="$data.step==8">1. {{$t('tut81')}}</p>
+                        <p v-if="$data.step==8">2. {{$t('tut82')}}</p>
+                        <p v-if="$data.step==9">1. {{$t('tut91')}}</p>
+                        <p v-if="$data.step==9">2. {{$t('tut92')}}</p>
                     </b-container>
 
                 </v-card-text>
@@ -76,16 +93,16 @@
                         text
                         v-if="parseInt(step) > 1"
                         @click="previous_step"
-                    >Previous</v-btn>
+                    >{{ $t('previous') }}</v-btn>
                     <v-btn
                         text
                         v-if="parseInt(step) < 9"
                         @click="next_step"
-                    >Next</v-btn>
+                    >{{ $t('next') }}</v-btn>
                     <v-btn
                         text
                         @click="dialog.value = false"
-                    >Close</v-btn>
+                    >{{ $t('close') }}</v-btn>
                 </v-card-actions>
             </v-card>
         </template>
@@ -96,49 +113,6 @@
     function initialState (){
         return {
             loading: false,
-            tutorial_data: {
-                "1": [
-                    {"number": 1, "description": "If you would like to burn your eyes you could turn off dark mode."},
-                    {"number": 2, "description": "Displays the current status of the bot."},
-                    {"number": 3, "description": "Shows the current version of PyNance-Webinterface."},
-                ],
-                "2": [
-                    {"number": 1, "description": "The two values configured here will be glued together to form the \"symbol\" which the bot uses to trade with."},
-                    {"number": 2, "description": "If a symbol doesn't exists the bot will turn off and keeps the status 'offline'."},
-                ],
-                "3": [
-                    {"number": 1, "description": "This percentage is the guaranteed profit margin the bot uses before the bot sells its coins."},
-                    {"number": 2, "description": "The margin will also be used to calculate the quantity to buy coins with."},
-                    {"number": 3, "description": "This configuration can only be edited when the configuration panel is unlocked"},
-                ],
-                "4": [
-                    {"number": 1, "description": "You can unlock the configuration panel with the highlighted button"},
-                    {"number": 2, "description": "Changes made when the control panel is unlocked take immediate effect."},
-                    {"number": 3, "description": "When changes take place the bot will turn itself off with the offline status."},
-                ],
-                "5": [
-                    {"number": 1, "description": "This indicator shows the online status of the bot."},
-                    {"number": 2, "description": "You can turn the bot off/on by pressing the highlighted button."},
-                ],
-                "6": [
-                    {"number": 1, "description": "Profits are shown in the top right corner."},
-                    {"number": 2, "description": "Profits are calculated across all orders which the bot has placed."},
-                    {"number": 3, "description": "Based on the total amount paid minus the total amount we sold it for."},
-                ],
-                "7": [
-                    {"number": 1, "description": "In need to FOMO? The Panik button is just for you. (see highlighted button)."},
-                    {"number": 2, "description": "When Panik is active the bot will sell of its tokens if the 'current price  is higher then the 'sell target without loss'."},
-                    {"number": 3, "description": "When active it also prevents the bot from buying new tokens which allows you to go full FOMO."},
-                ],
-                "8": [
-                    {"number": 1, "description": "The search bar allows you to quickly search through orders the bot has places previously."},
-                    {"number": 2, "description": "Contains useful information about orders the bot has placed. The column 'Sell target with profit' is updated based on the 'Take Profit'."},
-                ],
-                "9": [
-                    {"number": 1, "description": "If you like my work you could give me a follow, or share my content!"},
-                    {"number": 2, "description": "Still in need to show more gratitude?, consider donating! That allows me to maintain such kind of projects."},
-                ],
-            },
             model: 1,
             step: "1"
         }
@@ -157,7 +131,7 @@
             },
         },
         data() {
-            return initialState(this.onProcessComplete)
+            return initialState();
         },
         props: {
             show: {
@@ -184,7 +158,7 @@
             handleClose(forceClose=false) {
                 if(forceClose != true)
                 {
-                    if ( confirm("Are you sure you want to leave? Unsaved progress will be lost!") ) {
+                    if ( confirm(this.$i18n.t('leave_unsaved')) ) {
                         this.$data.step = "1";
                         this.$emit('reset'); 
 
