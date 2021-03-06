@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build --mode production",
     "lint": "vue-cli-service lint",
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'",
     "lint:fix": "vue-cli-service lint --fix",
-    "watch": "vue-cli-service build --watch"
+    "watch": "vue-cli-service build --watch --mode development"
   },
   "dependencies": {
     "apexcharts": "^3.25.0",

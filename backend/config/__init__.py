@@ -10,11 +10,9 @@ class Config(System):
     System should super at the end of the init file
     """
     def __init__(self) -> None:
-        self.DEBUG = False
+        self.DEBUG = True
         self.VERSION = "1.0.0"
         self.PROJECT_NAME = "PyNance - Webinterface"
 
         # Load system configuration
         System.__init__(self)
-
-        self.SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:Y0uShoulDchAngETHIS!1!!1!@database:3306/PYNANCE'

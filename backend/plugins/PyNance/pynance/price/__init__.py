@@ -32,3 +32,15 @@ class Price(object):
             signed=False, 
             data={"symbol": asset}
         )
+    
+    def average(self, asset):
+        """returns the price of any asset
+        
+        Example
+            client.price.average('LTCBTC')
+        """
+        return self.client.get(
+            f'{self.client.endpoint}/api/v3/avgPrice',
+            signed=False, 
+            data={"symbol": asset}
+        )

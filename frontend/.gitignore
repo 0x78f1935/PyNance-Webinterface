@@ -23,3 +23,4 @@ pnpm-debug.log*
 *.sw?
 
 backend/config/docker/database/backup
+backend/config/development.py
