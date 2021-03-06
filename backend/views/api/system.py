@@ -46,15 +46,15 @@ class SystemApiView(FlaskView):
         try:
             price_average = float(pynance.price.average(cur1+cur2).json["price"])
         except AttributeError:
-            system.online = False
-            db.session.add(system)
-            db.session.commit()
+            # system.online = False
+            # db.session.add(system)
+            # db.session.commit()
             chatterer.chat("UNKNOWN SYMBOL")
             return jsonify({
                 "date": str(datetime.now().strftime('%d-%m-%y %H:%M:%S')),
                 "execution_time": str(datetime.now()-now),
                 "online": False,
-                "msg": "UNKNOWN SYMBOL"
+                "msg": chatterer.msg
             }), 200
 
         if model is None: brought_price = price_average
@@ -62,7 +62,19 @@ class SystemApiView(FlaskView):
 
         take_profit = float(system.take_profit)  # The percentage to take as profit, cannot be higher then 99
 
-        fees = pynance.price.fees(cur1+cur2).json['tradeFee'].pop(0)
+        try:
+            fees = pynance.price.fees().json['tradeFee'].pop(0)
+        except AttributeError:
+            # system.online = False
+            # db.session.add(system)
+            # db.session.commit()
+            chatterer.chat("BINANCE SERVICES ARE UNAVAILABLE AT THIS TIME")
+            return jsonify({
+                "date": str(datetime.now().strftime('%d-%m-%y %H:%M:%S')),
+                "execution_time": str(datetime.now()-now),
+                "online": False,
+                "msg": chatterer.msg
+            }), 200
 
         fee_maker = 1 + fees['maker'] * 100 # Maker -> Buys crypto
         fee_taker = 1 + fees['taker'] * 100 # Taker -> Sells crypto

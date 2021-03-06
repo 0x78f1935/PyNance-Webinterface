@@ -29,7 +29,7 @@ class UIApiView(FlaskView):
 
     @route('/symbols_sets', methods=['GET'])
     def symbols_sets(self):
-        symbols = [i['symbol'] for i in  pynance.price.fees().json['tradeFee']]
+        symbols = [i['symbol'] for i in  pynance.price.fees(request.args.get('symbol')).json['tradeFee']]
         return jsonify({'symbols': symbols}), 200
 
     @route('/currency', methods=['GET'])

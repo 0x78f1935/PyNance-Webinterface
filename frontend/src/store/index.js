@@ -100,9 +100,11 @@ export default new Vuex.Store({
       axios.get(`/api/v1/ui/symbols`).then(response => {
         state.commit('SET_SYMBOLS', response.data.symbols);
       })
-      axios.get(`/api/v1/ui/symbols_sets`).then(response => {
-        state.commit('SET_SYMBOLS_SETS', response.data.symbols);
-      })
+      if(state.getters.cur1.length > 0 && state.getters.cur2 > 0) {
+        axios.get(`/api/v1/ui/symbols_sets?symbol=${state.getters.cur1}${state.getters.cur1}`).then(response => {
+          state.commit('SET_SYMBOLS_SETS', response.data.symbols);
+        })
+      }
     },
     get_take_profit(state) {
       axios.get(`/api/v1/configure/take_profit`).then(response => {
