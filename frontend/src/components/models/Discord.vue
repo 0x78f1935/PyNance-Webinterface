@@ -8,7 +8,7 @@
         <template v-slot:default="dialog">
             <v-card>
                 <v-card-text>
-                    <iframe src="https://discord.com/widget?id=817537111350968330&theme=dark" width="100%" height="480px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+                    <iframe style="margin-top: 25px" src="https://discord.com/widget?id=817537111350968330&theme=dark" width="100%" height="480px" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
                 </v-card-text>
                 <v-card-actions class="justify-end">
                     <v-btn

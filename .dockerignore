@@ -303,3 +303,4 @@ package-lock.json
 
 node_modules/
 backend/config/docker/database/backup
+dist/
