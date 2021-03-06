@@ -2,7 +2,7 @@ from requests.exceptions import ConnectionError
 import requests
 import time
 
-debug = True
+debug = False
 
 while True:
     try:
