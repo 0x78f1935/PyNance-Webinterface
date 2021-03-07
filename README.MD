@@ -74,4 +74,14 @@ In order to switch the environment you need to open the file `/pynance-webinterf
 
 ## <a name="pynance-installation"></a>PyNance Installation
 
+In this case we ignore the development environment for now and we make this a point of attention in the advanced section of this documentation. Once the [dependencies](#req-prod) are installed and the [configuration](#pynance-config) is configured for `production` we can finally start the installation. Open a terminal and navigate to `/pynance-webinterface` root folder. Execute the following command:
+
+    docker-compose up --build -d
+
+This will take a moment depending on your hardware. Once finished you should be able to type normally in the terminal again. Check if everything is `up` (4 containers) with the following command.
+
+    docker ps -a
+
+And your done! It's that simple. Open up your favorite browser (recommended: google chrome) and navigate to: [http://127.0.0.1:1337/](http://127.0.0.1:1337/).
+
 scp -r PyNance-Webinterface server@192.168.178.213:/home/server/pynance-webinterface
