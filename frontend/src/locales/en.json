@@ -49,6 +49,6 @@
   "takeProfit": "Minimal profit: ",
   "goOnline": "Go online",
   "goOnffline": "Go offline",
-  "currency1": "Currency 1:",
-  "currency2": "Currency 2:"
+  "currency1": "Currency 1: ",
+  "currency2": "Currency 2: "
 }

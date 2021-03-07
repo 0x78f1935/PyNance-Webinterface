@@ -25,7 +25,7 @@ export default new Vuex.Store({
     twitter: "",
     profit: "",
     orders: {'headers': [], 'data': []},
-    languages: ['en', 'nl', 'fr'],
+    languages: ['en', 'nl', 'fr', 'fil'],
     language: "en",
     fiat_current_price: "0",
     coin_current_price: "0",

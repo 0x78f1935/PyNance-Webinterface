@@ -111,8 +111,8 @@ class SystemApiView(FlaskView):
         # SELLING
         if wouldve_paid > sell_without_fee_lost_plus_profit or system.panik and wouldve_paid > sell_without_fee_lose:
             chatterer.chat("SELLING")
-            quantity = float(round(self.get_x_percentage_of_y(100, balance_free), precision))
-            sell_order = pynance.orders.create(symbol, quantity, buy=False, order_id='test_api')
+            quantity = float(round(self.get_x_percentage_of_y(99.9, balance_free), precision))
+            sell_order = pynance.orders.create(symbol, quantity, False, order_id='test_api')
             if sell_order is not None:
                 data = sell_order.json['fills'].pop(0)
                 paid_total = float(data['price'])
@@ -122,7 +122,7 @@ class SystemApiView(FlaskView):
                 if model is not None:
                     model.update_data({
                         'current': False,
-                        'sold_for': str(paid_total)
+                        'sold_for': str(paid_total * quantity)
                     })
                 chatterer.chat(f"SOLD: {quantity}")
             else: chatterer.chat("NOTHING TO SELL")
