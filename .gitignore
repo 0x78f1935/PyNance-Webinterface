@@ -294,3 +294,4 @@ backend/static/vue
 package-lock.json
 
 backend/config/production.py
+backend/config/docker/database/backup/*
