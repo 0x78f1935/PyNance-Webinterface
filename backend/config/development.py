@@ -13,7 +13,7 @@ class Development(object):
         self.SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://user:admin@127.0.0.1:3306/webserver'
         self.SQLALCHEMY_TRACK_MODIFICATIONS = True
 
-        # BINANCE  ## https://testnet.binance.vision/
+        # BINANCE TEST env
         self.BINANCE_API_KEY = "oepK24J3sKucEaTHd9EuHI9FfgHp8r7jOAxwmM1rwKDsOpn5XJgHrTUqazb5isca"
         self.BINANCE_API_SECRET = "SSFSWtBcI9ew5UnOMH4I6JiCujijmEVdA8b0EIHbXTN6z5ZVvjGI7lk3fJSk8PDD"
         self.BINANCE_ENDPOINT = "https://testnet.binance.vision"
