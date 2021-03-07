@@ -1,67 +1,31 @@
 <template>
   <b-container fluid>
     <b-row>
-      <!-- <candle-graph></candle-graph> -->
+      <knightrider></knightrider>
+    </b-row>
+    <v-divider class="mt-3"></v-divider>
+    <b-row>
+      <current-fiat-coin-price></current-fiat-coin-price>
     </b-row>
     <b-row>
-      <b-col class="col-md-4">
-        <spark-graph :updateCandles="true" evaluate="close" :card="true"></spark-graph>
-      </b-col>
-      <b-col class="col-md-4">
-        <spark-graph evaluate="high" :card="true"></spark-graph>
-      </b-col>
-      <b-col class="col-md-4">
-        <spark-graph evaluate="ignore" :card="true"></spark-graph>
-      </b-col>
-      <b-col class="col-md-4">
-        <spark-graph evaluate="low" :card="true"></spark-graph>
-      </b-col>
-      <b-col class="col-md-4">
-        <spark-graph evaluate="open" :card="true"></spark-graph>
-      </b-col>
-      <b-col class="col-md-4">
-        <spark-graph evaluate="quote_volume" :card="true"></spark-graph>
-      </b-col>
-      <b-col class="col-md-4">
-        <spark-graph evaluate="taker_buy_base" :card="true"></spark-graph>
-      </b-col>
-      <b-col class="col-md-4">
-        <spark-graph evaluate="taker_buy_quote" :card="true"></spark-graph>
-      </b-col>
-      <b-col class="col-md-4">
-        <spark-graph evaluate="trades" :card="true"></spark-graph>
-      </b-col>
+      <order-history style="margin-top: 15px"></order-history>
     </b-row>
-
   </b-container>
 </template>
 
 <script>
 // @ is an alias to /src
-import SparkGraph from '@/components/SparkGraph.vue';
 // import CandleGraph from '@/components/CandleGraph.vue';
+import OrderHistory from '@/components/OrderHistory.vue';
+import Knightrider from '@/components/KnightRider.vue';
+import CurrentFiatCoinPrice from '@/components/CurrentFiatCoinValue.vue';
 
 export default {
   name: 'Home',
   components: {
-    SparkGraph,
-    // CandleGraph
-  },
-  beforeCreate(){
-    this.$store.dispatch('get_candlesticks');
-    this.$store.dispatch('get_total_balance');
-  },
-  created () {
-    setInterval(
-        () => {
-          this.$store.dispatch('get_candlesticks');
-          this.$store.dispatch('get_total_balance');
-        },
-        1000
-    )
-  },
-  methods: {
-
+    OrderHistory,
+    Knightrider,
+    CurrentFiatCoinPrice
   },
 }
 </script>

@@ -1,5 +1,12 @@
 <template>
-    <v-switch v-model="toggle_darkmode" hide-details :color="color" :label="label"></v-switch>
+    <b-container fluid px-5>
+        <v-switch v-model="toggle_darkmode" hide-details :color="color" :label="$t('darkmode')" :dense="true" class="switcher">
+            <template v-slot:label>
+                <span class="input__label">{{ $t('darkmode') }}</span>
+            </template>
+        </v-switch>
+        <v-spacer></v-spacer>
+    </b-container>
 </template>
 
 <script>
@@ -8,12 +15,8 @@
         props: {
             color: {
                 type: String,
-                default: "indigo darken-3"
+                default: "accent darken-3"
             },
-            label: {
-                type: String,
-                default: "",
-            }
         },
         computed: {
             toggle_darkmode: {
@@ -28,6 +31,11 @@
 </script>
 
 <style lang="scss" scoped>
-
+.switcher{
+    height: 50px;
+}
+.input__label {
+    margin-top: 4px;
+}
 </style>
 

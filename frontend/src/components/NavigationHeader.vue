@@ -2,32 +2,35 @@
     <v-app-bar app>
         <b-row>
             <b-col>
-                <h5>Profits: {{ format_price(45665) }}</h5>
+                <v-app-bar-nav-icon @click.stop="$store.dispatch('toggle_drawer', !$store.getters.drawer);"></v-app-bar-nav-icon>
             </b-col>
-            <b-col class="d-flex flex-row-reverse">
-                <balance></balance>
+            <b-col class="mr-auro to_the_right">
+                <profit-bar></profit-bar>
             </b-col>
         </b-row>
     </v-app-bar>
 </template>
 
 <script>
-    import { price } from '@/components/utils';
-    import Balance from '@/components/Balance';
+    import ProfitBar from '@/components/ProfitBar.vue';
 
     export default {
         name: 'nav-header',
         components: {
-            Balance,
+            ProfitBar,
         },
-        methods: {
-            format_price(amount) {
-                return price(amount, this.$store.getters.metrics);
+        computed: {
+            drawer_mount: {
+                get(){ return this.$store.getters.drawer; },
+                set(value) { this.$store.dispatch('toggle_drawer', value); }
             }
         },
     }
 </script>
 
 <style lang="scss" scoped>
-
+    .to_the_right {
+        flex-direction: column-reverse;
+        display: contents;
+    }
 </style>

@@ -15,9 +15,9 @@ function loadLocaleMessages () {
   })
   return messages
 }
-
+import store from '@/store/index';
 export default new VueI18n({
-  locale: process.env.VUE_APP_I18N_LOCALE || 'en',
-  fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
+  locale: store.getters.language || process.env.LOCALE || 'en',
+  fallbackLocale: store.getters.language || process.env.FALLBACK_LOCALE || 'en',
   messages: loadLocaleMessages()
 })

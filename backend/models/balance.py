@@ -44,8 +44,10 @@ class BalanceModel(db.Model):
             data (dict): The data to update with
         """
         for key, value in data.items():
-            if(getattr(self, key)):
+            try:
+                getattr(self, key)
                 setattr(self, key, value)
+            except AttributeError: pass
         db.session.commit()
 
     def to_dict(self, blacklist:list=[]):
