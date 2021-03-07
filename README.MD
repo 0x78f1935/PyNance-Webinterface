@@ -192,7 +192,7 @@ After you have created your [binance account](#binance-account) you need to crea
 
 ## <a name="pynance-config"></a>PyNance Configuration
 
-There are two environments available to you. `production` and `development`. Both environments work the exact same way. The main difference is that `production` should be used in the `docker environment`.
+There are two environments available to you. `production` and `development`. Both environments work the exact same way. The main difference is that `production` should be used in the `docker environment`.. You can ignore changes for git using the following command: `git update-index --assume-unchanged backend/config/production.py`
 
 Navigate to the following path `/pynance-webinterface/backend/config`. \
 In this location you should have atleast two files. `development.py` and `production.py` which represents those environments. `BINANCE_API_KEY` and `BINANCE_API_SECRET` are the two values which should contain your API credentials obtained from [Binance](#binance-api).
