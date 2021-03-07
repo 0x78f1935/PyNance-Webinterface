@@ -36,8 +36,8 @@ This tool makes use of docker. Once a running container has been established and
     * [Localization](#localization)
     * [Database Password](#database-pass)
 7. [PyNance Backups](#pynance-backups)
-0. [Frequently Asked Questions](#faq)
-0. [Community](#community)
+8. [Frequently Asked Questions](#faq)
+9. [Community](#community)
 
 # <a name="why"></a>Why PyNance
 
@@ -219,3 +219,12 @@ And your done! It's that simple. Open up your favorite browser (recommended: goo
 # <a name="pynance-backups"></a>Backups
 
 The docker environment is configured so the data in the `MySQL` database is stored on disk and not locked away in docker itself. This should mean that whenever you `git pull` the latest version you should keep your data in the database. The data can be found in `/pynance-webinterface/backend/config/docker/database/backup`.
+
+# <a name="faq"></a>Frequently Asked Questions
+
+- I recieve the error: `standard_init_linux.go:190: exec user process caused "no such file or directory"`. What should I do?
+    *   You can read more on how to solve this issue [here](https://stackoverflow.com/questions/51508150/standard-init-linux-go190-exec-user-process-caused-no-such-file-or-directory)
+
+# <a name="Community"></a>Community
+
+If you still manage to get stuck, want to keep updated with the latests updates or flex your profit with other botters you can!. [Join our discord!](https://discord.gg/qmb7PG9r2c)
