@@ -247,7 +247,7 @@ The docker environment is configured so the data in the `MySQL` database is stor
     * Binance is LAW. You can at anytime access your portfolio within Binance. Make sure the bot is offline or it will keep trading your funds. Keep in mind if you trade manually within Binance your Database might get out of sync with Binance.
 
 - I am unable to choose between currencies, what now?
-    * Make sure yout API credentials are correct.
+    * Make sure your API credentials are correct.
 
 # <a name="Community"></a>Community
 
