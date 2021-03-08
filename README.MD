@@ -225,6 +225,30 @@ The docker environment is configured so the data in the `MySQL` database is stor
 - I recieve the error: `standard_init_linux.go:190: exec user process caused "no such file or directory"`. What should I do?
     *   You can read more on how to solve this issue [here](https://stackoverflow.com/questions/51508150/standard-init-linux-go190-exec-user-process-caused-no-such-file-or-directory)
 
+- If there is a trade ongoing and the bot senses that there is a good entry will it buy again?
+    * No
+
+- I see an error message about the database not able to reach, what can i do to fix this?
+    *   Patience, wait until your environment is ready to go.
+
+- The bot keeps losing connection. What can I do?
+    * Make sure you are on a stable internet line. Wifi is not recommended.
+
+- Can I trade multiple currencies at the same time?
+    * No, The bot only trades what is selected in the configuration panel.
+
+- Can I switch symbols while the bot is trading?
+    * Yes, the bot keeps track of what it traded. Just make sure you have the funds available in your wallet.
+
+- Can I run multiple instances of PyNance?
+    * No, In theory you could... But Binance will ban your API credentials based on their ratelimit. MAX 1 instance.
+
+- How do i QUIT a trade!?
+    * Binance is LAW. You can at anytime access your portfolio within Binance. Make sure the bot is offline or it will keep trading your funds. Keep in mind if you trade manually within Binance your Database might get out of sync with Binance.
+
+- I am unable to choose between currencies, what now?
+    * Make sure yout API credentials are correct.
+
 # <a name="Community"></a>Community
 
 If you still manage to get stuck, want to keep updated with the latests updates or flex your profit with other botters you can!. [Join our discord!](https://discord.gg/qmb7PG9r2c)
