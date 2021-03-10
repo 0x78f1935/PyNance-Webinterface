@@ -10,7 +10,7 @@ class Development(object):
 
         self.ENVIRONMENT = "Development"
 
-        self.SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://user:admin@127.0.0.1:3306/webserver'
+        self.SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://user:admin@127.0.0.1:3306/pynance'
         self.SQLALCHEMY_TRACK_MODIFICATIONS = True
 
         # BINANCE TEST env

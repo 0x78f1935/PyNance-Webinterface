@@ -87,38 +87,48 @@ class SystemApiView(FlaskView):
         balance = pynance.wallet.balance(cur1)
         balance2 = pynance.wallet.balance(cur2)
 
-        balance_free = float(balance['free'])        # BTC
+        # balance_free = float(balance['free'])        # BTC
+        balance_free = 1  # DEBUG
         balance_locked = float(balance['locked'])
-        balance2_free = float(balance2['free'])      # USDT
+        # balance2_free = float(balance2['free'])      # USDT
+        balance2_free = 50000
         balance2_locked = float(balance2['locked'])
         current_price = float(pynance.price.asset(cur1+cur2).json['price'])
 
-        paid_total = brought_price * balance_free
-        wouldve_paid = current_price * balance_free
+        # Price of the fees we paid
+        paid_fees = float(brought_price * balance_free) *  float(fee_taker/100)
+        # Price including fees we have paid
+        paid_total = float(brought_price * balance_free) + paid_fees
+
+        # Price of the fees if we wouldve brought
+        wouldve_paid_fees = float(current_price * balance_free) *  float(fee_taker/100)
+        # Total price including fees if we brought
+        wouldve_paid = float(current_price * balance_free) + paid_fees
 
         if model is not None: 
             chatterer.update_price(f"{float(round(float(current_price) * float(model.quantity), 6))} - { float(round(current_price, 6)) } - { model.quantity }")
         else: chatterer.update_price(f"0.0 - { float(round(current_price, 6)) } - 0")
 
-        sell_without_fee_lose = paid_total * fee_maker
         wanted_profit = paid_total * float(take_profit/100)
-        sell_without_fee_lost_plus_profit = sell_without_fee_lose + wanted_profit
-        btc_sell_price = sell_without_fee_lost_plus_profit / brought_price
+        sellprice_without_loss_on_fee_plus_profit = paid_total + wanted_profit
+        total_if_sold_with_profit = sellprice_without_loss_on_fee_plus_profit / brought_price
 
-        minimal_money_needed_to_buy = current_price * 0.001
+        minimal_money_needed_to_buy = current_price*0.1  # 
 
-
-        # SELLING
-        if wouldve_paid > sell_without_fee_lost_plus_profit or system.panik and wouldve_paid > sell_without_fee_lose:
+        # If we are in profit or if the bot is panikkin + the price is higher then what we paid; we sell.
+        if wouldve_paid > sellprice_without_loss_on_fee_plus_profit or system.panik and wouldve_paid > paid_total:
             chatterer.chat("SELLING")
             quantity = float(round(self.get_x_percentage_of_y(99.9, balance_free), precision))
             sell_order = pynance.orders.create(symbol, quantity, False, order_id='test_api')
             if sell_order is not None:
                 data = sell_order.json['fills'].pop(0)
-                paid_total = float(data['price'])
-                sell_without_fee_lose = paid_total * fee_maker
+                # Price of the fees we paid
+                paid_fees = float(float(data['price']) * balance_free) *  float(fee_taker/100)
+                # Price including fees we have paid
+                paid_total = float(float(data['price']) * balance_free) + paid_fees
                 wanted_profit = paid_total * float(take_profit/100)
-                sell_without_fee_lost_plus_profit = sell_without_fee_lose + wanted_profit
+                sellprice_without_loss_on_fee_plus_profit = paid_total + wanted_profit
+                total_if_sold_with_profit = sellprice_without_loss_on_fee_plus_profit / float(data['price'])
                 if model is not None:
                     model.update_data({
                         'current': False,
@@ -127,14 +137,13 @@ class SystemApiView(FlaskView):
                 chatterer.chat(f"SOLD: {quantity}")
             else: chatterer.chat("NOTHING TO SELL")
         else:
-            # Check if we have enough money to buy
             if model is None:
                 if balance2_free > minimal_money_needed_to_buy:
                     if system.panik:
                         chatterer.chat("PANIK, NO NEW BUY ORDER WILL BE PLACED")
                     else:
                         # Check if the current price is below average
-                        if current_price < price_average:
+                        if current_price < float(price_average - float(price_average * float(float(take_profit/100)/10))):
                             chatterer.chat("BUYING")
                             quantity = float(f"{self.get_x_percentage_of_y(100-take_profit, balance2_free / current_price ):.{precision}f}")
                             buy_order = pynance.orders.create(symbol, quantity, order_id='test_api')
