@@ -87,11 +87,9 @@ class SystemApiView(FlaskView):
         balance = pynance.wallet.balance(cur1)
         balance2 = pynance.wallet.balance(cur2)
 
-        # balance_free = float(balance['free'])        # BTC
-        balance_free = 1  # DEBUG
+        balance_free = float(balance['free'])        # BTC
         balance_locked = float(balance['locked'])
-        # balance2_free = float(balance2['free'])      # USDT
-        balance2_free = 50000
+        balance2_free = float(balance2['free'])      # USDT
         balance2_locked = float(balance2['locked'])
         current_price = float(pynance.price.asset(cur1+cur2).json['price'])
 
