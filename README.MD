@@ -13,8 +13,9 @@ This tool makes use of docker. Once a running container has been established and
 # <a name="table-of-contents"></a>Table of Contents
 1. [Table of Contents](#table-of-contents)
 2. [Disclaimer](#Disclaimer)
-3. [Why PyNance](#why)
-4. [Requirements & Dependencies](#req)
+3. [Quick Start](#quick-start)
+4. [Why PyNance](#why)
+5. [Requirements & Dependencies](#req)
     * [Production Req and Dep](#req-prod)
         - [Binance Account](#binance-account)
         - [Binance API Credentials](#binance-api)
@@ -29,18 +30,24 @@ This tool makes use of docker. Once a running container has been established and
         - [(win10) PyNance Listener](#install-pynance-listener)
         - [(win10) MySQL](#install-mysql)
         - [PyNance Configuration](#install-configuration)
-5. [Get Started](#get-started)
+6. [Get Started](#get-started)
     - [Binance Account](#binance-account)
     - [Binance API Credentials](#binance-api)
     - [PyNance Configuration](#pynance-config)
     - [PyNance Installation](#pynance-installation)
-6. [PyNance Configuration](#install-configuration)
+7. [PyNance Configuration](#install-configuration)
     * [Localization](#localization)
     * [Database Password](#database-pass)
-7. [PyNance Backups](#pynance-backups)
-8. [Quick Start](#quick-start)
+8. [PyNance Backups](#pynance-backups)
 9. [Frequently Asked Questions](#faq)
 10. [Community](#community)
+
+# <a name="Community"></a>Quick start
+- Make sure you have a [binance account](#binance-account) with [API credentials](#binance-api).
+- Make sure you have [docker installed](#req)
+- Copy and paste your [API credentials](#binance-api) into [/pynance-webinterface/backend/config/production.py](#pynance-config)
+- Open a terminal in the root folder of the project and [deploy the containers](#pynance-installation)
+- profit.
 
 # <a name="why"></a>Why PyNance
 
@@ -222,13 +229,6 @@ And your done! It's that simple. Open up your favorite browser (recommended: goo
 # <a name="pynance-backups"></a>Backups
 
 The docker environment is configured so the data in the `MySQL` database is stored on disk and not locked away in docker itself. This should mean that whenever you `git pull` the latest version you should keep your data in the database. The data can be found in `/pynance-webinterface/backend/config/docker/database/backup`.
-
-# <a name="Community"></a>Quick start
-- Make sure you have a [binance account](#binance-account) with [API credentials](#binance-api).
-- Make sure you have [docker installed](#req)
-- Copy and paste your [API credentials](#binance-api) into [/pynance-webinterface/backend/config/production.py](#pynance-config)
-- Open a terminal in the root folder of the project and [deploy the containers](#pynance-installation)
-- profit.
 
 # <a name="faq"></a>Frequently Asked Questions
 
