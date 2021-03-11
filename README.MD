@@ -4,7 +4,7 @@
 <hr/>
 <a name="Disclaimer"></a><span style="font-family:Papyrus; font-size:3em;color:red;">DISCLAIMER</span><br/>
 <span style="font-family:Papyrus; font-size:2.5em;color:red;"> This tool is not a money printing tool and contains risks. </span><br/>
-You are <strong> responsible</strong> for <strong>your own money and actions.</strong> <br/><br/><strong>By using this tool you agree to take FULL responsibility of your own money. </strong><br/> Even if this would mean missed opportunities caused by the algorithm of this bot or worse; <strong style="color:red;">losses</strong>. <br/><br/><strong style="color:green;">Be responsible</strong>, Only trade with money you can afford to lose.<br/>Take chances, Make mistakes, Get messy.... To the moon! <br/><br/><hr/>
+You are <strong> responsible</strong> for <strong>your own money and actions.</strong> <br/><br/><strong>By using this tool you agree to take FULL responsibility of your own money. </strong><br/> Even if this would mean missed opportunities caused by the algorithm of this bot or worse; <strong style="color:red;">losses</strong>. <br/><br/><strong style="color:green;">Be responsible</strong>, Only trade with money you can afford to lose.<br/>Take chances, Make mistakes, Get messy.... To the moon! <br/><br/>
 
 <span style="font-family:Papyrus; font-size:3em;color:red;">IMPORTANT NOTICE</span><br/>
 
@@ -163,7 +163,7 @@ The connection string can be placed in `/pynance-webinterface/backend/config/dev
 
 ## <a name="install-configuration"></a>Configuration
 
-Outside the normal configuration described [here](#pynance-config) there are still a couple of variables to play with. <span style="color:yellow">The following files contain a variable called `DEBUG` which are required to be `False` when building the production environment.</span> This is imporant. Otherwise your docker build will fail.
+Outside the normal configuration described [here](#pynance-config) there are still a couple of variables to play with. <span style="color:orange">The following files contain a variable called `DEBUG` which are required to be `False` when building the production environment.</span> This is imporant. Otherwise your docker build will fail.
 
  - /pynance-webinterface/listener.py
  - /pynance-webinterface/backend/config/\_\_init\_\_.py
