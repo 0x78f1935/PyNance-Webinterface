@@ -52,15 +52,15 @@
     "currency1": "Salapi 1: ",
     "currency2": "Salapi 2: ",
 
-    "selling_panik": "Selling at lowest price without loss on fees",
-    "paid_total": "Paid including fees", 
-    "total_fee_paid": "Total fee costs", 
-    "fees_amount": "Fee cost", 
-    "wanted_profit": "Expected profit without panik", 
-    "sellprice_without_loss_on_fee_plus_profit": "Sell target", 
-    "total_if_sold_with_profit": "Expected profit on panik",
-    "BBDIP": "Buy Big DIP",
-    "BSDIP": "Buy Small DIP",
-    "disclaimer_txt": "Disclaimer",
-    "quantity": "Quantity"
+    "selling_panik": "Nagbebenta sa pinakamababang presyo nang walang pagkawala sa mga bayarin",
+    "paid_total": "Bayad kasama ang bayarin", 
+    "total_fee_paid": "Kabuuang mga gastos sa bayarin", 
+    "fees_amount": "Bayad sa bayarin", 
+    "wanted_profit": "Inaasahang kita nang walang panik", 
+    "sellprice_without_loss_on_fee_plus_profit": "Target ng pagbebenta", 
+    "total_if_sold_with_profit": "Target ng pagbebenta",
+    "BBDIP": "BBumili ng Malaking DIP",
+    "BSDIP": "Bumili ng Maliit na DIP",
+    "disclaimer_txt": "Pagwawaksi",
+    "quantity": "Dami"
 }
