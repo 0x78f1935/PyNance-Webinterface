@@ -301,6 +301,6 @@ package-lock.json
 
 ./reset_docker.bat
 
-node_modules/
+frontend/node_modules
 backend/config/docker/database/backup
 dist/

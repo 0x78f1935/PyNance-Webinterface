@@ -17,7 +17,7 @@ You need to build a whl package.
 
 # COPY TO SERVER
 
-    scp -r D:\Private\PyNance server@192.168.178.213:/home/server/PyNance
+    scp -r D:\Private\PyNance-Webinterface server@192.168.178.213:/home/server/PyNance
 
 ## Debian10
 

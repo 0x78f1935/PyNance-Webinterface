@@ -115,7 +115,7 @@ class SystemApiView(FlaskView):
 
         # If we are in profit or if the bot is panikkin + the price is higher then what we paid; we sell.
         if wouldve_paid > sellprice_without_loss_on_fee_plus_profit or system.panik and wouldve_paid > paid_total:
-            chatterer.chat("SELLING")
+            chatterer.chat(f"SELLING {cur1}")
             quantity = float(round(self.get_x_percentage_of_y(99.9, balance_free), precision))
             sell_order = pynance.orders.create(symbol, quantity, False, order_id='test_api')
             if sell_order is not None:
@@ -132,7 +132,7 @@ class SystemApiView(FlaskView):
                         'current': False,
                         'sold_for': str(paid_total * quantity)
                     })
-                chatterer.chat(f"SOLD: {quantity}")
+                chatterer.chat(f"SOLD {cur1}: {quantity}")
             else: chatterer.chat("NOTHING TO SELL")
         else:
             if model is None:
@@ -141,8 +141,9 @@ class SystemApiView(FlaskView):
                         chatterer.chat("PANIK, NO NEW BUY ORDER WILL BE PLACED")
                     else:
                         # Check if the current price is below average
-                        if current_price < float(price_average - float(price_average * float(float(take_profit/100)/10))):
-                            chatterer.chat("BUYING")
+                        price_average_would_buy = float(price_average - float(price_average * float(float(take_profit/100)/10)))
+                        if current_price < price_average_would_buy:
+                            chatterer.chat(f"BUYING {cur1}")
                             quantity = float(f"{self.get_x_percentage_of_y(100-take_profit, balance2_free / current_price ):.{precision}f}")
                             buy_order = pynance.orders.create(symbol, quantity, order_id='test_api')
                             if buy_order is not None:
@@ -160,9 +161,13 @@ class SystemApiView(FlaskView):
                                 db.session.add(model)
                                 db.session.commit()
                             chatterer.chat(f"BROUGHT: {quantity}")
-                        else: chatterer.chat("CURRENT PRICE NOT BELOW AVERAGE, SKIPPING BUY ORDERS")
+                        else: chatterer.chat(f"CURRENT {cur1} PRICE ({current_price}) NOT BELOW AVERAGE ({price_average_would_buy}), SKIPPING BUY ORDERS")
                 else: chatterer.chat("NOT ENOUGH MONEY TO BUY")
-            else: chatterer.chat("HOLDING STRONG, CURRENT PRICE TO LOW TO SELL")
+            else: 
+                if system.panik:
+                    chatterer.chat(f"HOLDING {cur1} STRONG, CURRENT PRICE ({current_price}) TO LOW TO SELL, TARGET PRICE ({paid_total})")
+                else:
+                    chatterer.chat(f"HOLDING {cur1} STRONG, CURRENT PRICE ({current_price}) TO LOW TO SELL, TARGET PRICE ({sellprice_without_loss_on_fee_plus_profit})")
 
         return jsonify({
             "date": str(datetime.now().strftime('%d-%m-%y %H:%M:%S')),
