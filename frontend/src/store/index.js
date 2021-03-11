@@ -183,9 +183,8 @@ export default new Vuex.Store({
                 else if (item == 'paid_total') { value = 'Paid including fees';}
                 else if (item == 'total_fee_paid') { value = 'Total fee costs';}
                 else if (item == 'fees_amount') { value = 'Fee cost';}
-                else if (item == 'wanted_profit') { value = 'Expected profit without panik';}
+                else if (item == 'wanted_profit') { value = 'Expected profit';}
                 else if (item == 'sellprice_without_loss_on_fee_plus_profit') { value = 'Sell target';}
-                else if (item == 'total_if_sold_with_profit') { value = 'Expected profit on panik';}
                 else if (item == 'sold_for') { value = 'Sold for';}
                 else { value = item;}
                 return {
