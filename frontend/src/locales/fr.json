@@ -50,5 +50,17 @@
   "goOnline": "Se connecter",
   "goOnffline": "Se déconnecter",
   "currency1": "Monnaie 1: ",
-  "currency2": "Monnaie 2: "
+  "currency2": "Monnaie 2: ",
+
+  "selling_panik": "Selling at lowest price without loss on fees",
+  "paid_total": "Paid including fees", 
+  "total_fee_paid": "Total fee costs", 
+  "fees_amount": "Fee cost", 
+  "wanted_profit": "Expected profit without panik", 
+  "sellprice_without_loss_on_fee_plus_profit": "Sell target", 
+  "total_if_sold_with_profit": "Expected profit on panik",
+  "BBDIP": "Buy Big DIP",
+  "BSDIP": "Buy Small DIP",
+  "disclaimer_txt": "Disclaimer",
+  "quantity": "Quantity"
 }

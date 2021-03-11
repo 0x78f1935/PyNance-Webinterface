@@ -1,21 +1,39 @@
 <template>
-    <b-container fluid>
-        <v-btn block color="accent" @click="$store.dispatch('set_panik', !$store.getters.panik)">
+    <b-container>
+        <v-btn block :color="$store.getters.panik ? 'green' : 'accent'" @click="$store.dispatch('set_panik', !$store.getters.panik)">
             {{ $store.getters.panik ? "KALM" : "PANIK"}}
         </v-btn>
-        <b-container fluid v-if="$store.getters.panik" class="panik">
+        <v-snackbar
+            v-model="paniker"
+            class="snack"
+            :centered="true"
+        >
             <v-img
                 :src="require('../assets/panik.png')"
                 width="160px"
                 height="160px"
-            ></v-img>
-        </b-container>
+            >{{ $t('selling_panik') }}</v-img>
+        </v-snackbar>
     </b-container>
 </template>
 
 <script>
     export default {
         name:'panik',
+        data() {
+            return {
+                snackbar: false
+            }
+        },
+        computed: {
+            paniker: {
+                get() { return this.$store.getters.panik; },
+                set() {}
+            }
+        },
+        mounted () {
+            this.$store.dispatch('get_panik');
+        },
     }
 </script>
 
@@ -23,5 +41,11 @@
 .panik {
     display: flex;
     justify-content: center;
+}
+
+.snack {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 </style>

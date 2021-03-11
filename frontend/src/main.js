@@ -9,7 +9,6 @@ import vuetify from './plugins/vuetify';
 import './plugins/apexcharts.js';
 import i18n from './i18n';
 
-
 Vue.config.productionTip = false;
 
 new Vue(

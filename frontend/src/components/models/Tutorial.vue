@@ -7,6 +7,8 @@
         <template v-slot:default="dialog">
             <v-card tile>
                 <v-card-text>
+                    <b-container fluid>
+
                     <v-img
                         v-if="step=='1'"
                         class="mt-5 foto"
@@ -61,6 +63,7 @@
                         :lazy-src="require('../../assets/ui_9.png')"
                         :src="require('../../assets/ui_9.png')"
                     ></v-img>
+                    </b-container>
                     <b-container>
                         <p v-if="$data.step==1">1. {{$t('tut11')}}</p>
                         <p v-if="$data.step==1">2. {{$t('tut12')}}</p>
@@ -172,3 +175,9 @@
         },
     }
 </script>
+
+<style scoped>
+.foto{
+    margin-top: 15px;
+}
+</style>

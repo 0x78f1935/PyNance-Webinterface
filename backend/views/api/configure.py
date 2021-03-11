@@ -6,6 +6,8 @@ from backend.models.system import SystemModel
 from backend import db, pynance
 from sqlalchemy import and_
 
+import operator
+
 
 class ConfigureApiView(FlaskView):
     
@@ -49,14 +51,21 @@ class ConfigureApiView(FlaskView):
         db.session.commit()
         return jsonify({'cur1': model.currency_1, 'cur2': model.currency_2}), 200
 
-    @route('/panik', methods=['POST'])
+    @route('/panik', methods=['POST', 'GET'])
     def panik(self):
         model = SystemModel.query.first()
-        online = model.online
-        model.panik = request.json['panik']
-        db.session.add(model)
-        db.session.commit()
-        model.online = online
-        db.session.add(model)
-        db.session.commit()
-        return jsonify({'panik': model.panik}), 200
+        if request.method == 'POST':
+            online = model.online # Prevents model to set itself to false
+            model.update_data(request.json)
+            model.online = online
+            db.session.add(model)
+            db.session.commit()
+            return jsonify({'panik': model.panik}), 200
+        else:
+            return jsonify({'panik': model.panik}), 200
+
+    @route('/only_dip', methods=['POST'])
+    def only_dip(self):
+        model = SystemModel.query.first()
+        model.update_data({'only_dip': not request.json['dip']})
+        return jsonify({'dip': model.only_dip}), 200

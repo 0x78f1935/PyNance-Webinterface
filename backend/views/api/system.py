@@ -141,7 +141,9 @@ class SystemApiView(FlaskView):
                         chatterer.chat("PANIK, NO NEW BUY ORDER WILL BE PLACED")
                     else:
                         # Check if the current price is below average
-                        price_average_would_buy = float(price_average - float(price_average * float(float(take_profit/100)/10)))
+                        if system.only_dip:
+                            price_average_would_buy = float(price_average - float(price_average * float(float(take_profit/100)/10)))
+                        else: price_average_would_buy = price_average
                         if current_price < price_average_would_buy:
                             chatterer.chat(f"BUYING {cur1}")
                             quantity = float(f"{self.get_x_percentage_of_y(100-take_profit, balance2_free / current_price ):.{precision}f}")

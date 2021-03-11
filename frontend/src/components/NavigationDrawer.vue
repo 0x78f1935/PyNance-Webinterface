@@ -13,6 +13,11 @@
             <settings-panel></settings-panel>
         </b-row>
         <b-row>
+            <b-col>
+                <only-dip></only-dip>
+            </b-col>
+        </b-row>
+        <b-row>
             <panik></panik>
         </b-row>
     </v-navigation-drawer>
@@ -23,6 +28,7 @@
     import SettingsPanel from '@/components/Settings.vue';
     import IsOnline from '@/components/Online.vue';
     import Panik from '@/components/Panik.vue';
+    import onlyDip from '@/components/onlyDip.vue';
 
     export default {
         name: 'nav-drawer',
@@ -31,6 +37,7 @@
             SettingsPanel,
             IsOnline,
             Panik,
+            onlyDip
         },
         computed: {
             drawer_mount: {
@@ -40,4 +47,3 @@
         },
     }
 </script>
-z

@@ -14,15 +14,21 @@ class OrdersApiView(FlaskView):
     @route('/', methods=['GET'])
     def get(self):
         model = SystemModel.query.first()
+        take_profit = float(model.take_profit)
         data = [i.to_dict(['id']) for i in OrdersModel.query.order_by(OrdersModel.id.desc()).all()]
+        results = []
         for item in data:
-            paid_total = float(item["brought_price"]) * float(item["quantity"])
-            sell_without_fee_lose = paid_total * float(item["fee_maker"])
-            wanted_profit = paid_total * float(float(model.take_profit)/100)
-            sell_without_fee_lost_plus_profit = sell_without_fee_lose + wanted_profit
-            item["paid"] = paid_total
-            item["sell_without_fee_lose"] = sell_without_fee_lose
-            item["sell_without_fee_lost_plus_profit"] = sell_without_fee_lost_plus_profit
-            del item['fee_taker']
-            del item['fee_maker']
-        return jsonify(data), 200
+            order_item = {}
+            order_item["Symbol"] = item["symbol"]
+            order_item["Active"] = str(bool(item["current"])).capitalize() if str(model.currency_1 + model.currency_2) in order_item["Symbol"] else "False"
+            order_item["quantity"] = float(item["quantity"])
+            order_item["paid_total"] = float(item["brought_price"]) * order_item["quantity"]
+            order_item["total_fee_paid"] = float(item["fee_taker"]) / order_item["paid_total"]
+            order_item["fees_amount"] = order_item["paid_total"] - order_item["total_fee_paid"]
+            order_item["wanted_profit"] = order_item["paid_total"] * float(take_profit/100)
+            order_item["sellprice_without_loss_on_fee_plus_profit"] = order_item["paid_total"] + order_item["wanted_profit"]
+            order_item["total_if_sold_with_profit"] = order_item["sellprice_without_loss_on_fee_plus_profit"] / float(item["brought_price"])
+            order_item["sold_for"] = item["sold_for"]
+
+            results.append(order_item)
+        return jsonify(results), 200

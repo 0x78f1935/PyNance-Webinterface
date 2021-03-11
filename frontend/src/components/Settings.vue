@@ -2,7 +2,7 @@
     <v-card class="card" elevation="2" tile>
         <v-card-subtitle>{{ $t('currency1') }}<span v-html="this.$store.getters.cur1"></span></v-card-subtitle>
 
-            <v-card-text>
+            <v-card-text class="sm">
                 <v-autocomplete
                     :disabled="!editing"
                     :items="this.$store.getters.symbols"
@@ -16,7 +16,7 @@
 
             <v-card-subtitle>{{ $t('currency2') }}<span v-html="this.$store.getters.cur2"></span></v-card-subtitle>
 
-            <v-card-text>
+            <v-card-text class="sm">
                 <v-autocomplete
                     :disabled="!editing"
                     :items="this.$store.getters.symbols"
@@ -28,13 +28,13 @@
         <v-divider></v-divider>
 
         <v-card-subtitle>{{ $t('takeProfit') }}<span v-html="this.$store.getters.take_profit"></span>%</v-card-subtitle>
-        <v-card-text>
+        <v-card-text class="sm">
             <v-slider
                 :disabled="!editing"
                 v-model="tp"
-                max="95"
-                min="5"
-                step="5"
+                max="100"
+                min="2"
+                step="2"
                 thumb-label
                 ticks
                 @click="$store.dispatch('get_take_profit')"
@@ -43,6 +43,9 @@
         </v-card-text>
         
         
+        <v-btn block color="accent" @click="show_disclaimer = true">
+            {{ $t('disclaimer_txt') }}
+        </v-btn>
         <v-card-actions>
 
             <v-flex>
@@ -151,5 +154,9 @@
 <style lang="scss" scoped>
 .card {
     width: 100%
+}
+
+.sm{
+    height: 50px;
 }
 </style>

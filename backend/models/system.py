@@ -35,6 +35,7 @@ class SystemModel(db.Model):
     currency_2 = db.Column(db.Text, default="USDT")
 
     take_profit = db.Column(db.Text, default="20")
+    only_dip = db.Column(db.Boolean, default=True)
     online = db.Column(db.Boolean, default=False, onupdate=False)
 
     panik = db.Column(db.Boolean, default=False)

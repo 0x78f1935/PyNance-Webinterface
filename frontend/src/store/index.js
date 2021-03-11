@@ -19,6 +19,7 @@ export default new Vuex.Store({
     cur2: "",
     drawer: true,
     panik: false,
+    only_dip: true,
     version: "",
     maintainer: "",
     github: "",
@@ -42,6 +43,7 @@ export default new Vuex.Store({
     cur2: state => { return state.cur2; },
     drawer: state => { return state.drawer; },
     panik: state => { return state.panik; },
+    only_dip: state => { return state.only_dip; },
     version: state => { return state.version; },
     maintainer: state => { return state.maintainer; },
     github: state => { return state.github; },
@@ -65,6 +67,7 @@ export default new Vuex.Store({
     SET_CUR2(state, value) { state.cur2 = value; },
     SET_DRAWER(state, value) { state.drawer = value; },
     SET_PANIK(state, value) { state.panik = value; },
+    SET_ONLY_DIP(state, value) { state.only_dip = value; },
     SET_VERSION(state, value) { state.version = value; },
     SET_MAINTAINER(state, value) { state.maintainer = value; },
     SET_GITHUB(state, value) { state.github = value; },
@@ -161,24 +164,30 @@ export default new Vuex.Store({
         state.commit('SET_PANIK', response.data.panik);
       });
     },
+    get_panik(state) {
+      axios.get(`/api/v1/configure/panik`).then(response => {
+        state.commit('SET_PANIK', response.data.panik);
+      });
+    },
+    set_only_dip(state, value) {
+      axios.post(`/api/v1/configure/only_dip`, {'dip': !value}).then(response => {
+        state.commit('SET_ONLY_DIP', response.data.dip);
+      });
+    },
     get_orders( { commit }) {
       axios.get(`/api/v1/orders/`).then(resp => {
         if(resp.data.length > 0) {
             let headers = Object.keys(resp.data[0]).map(item => { 
                 let value = '';
-                if (item == 'paid') { value = 'Paid'; }
-                else if (item == 'brought_price') { value = 'Brought Price'; }
-                else if (item == 'created') { value = 'Created'; }
-                else if (item == 'currency_1') { value = 'Currency 1'; }
-                else if (item == 'currency_2') { value = 'Currency 2'; }
-                else if (item == 'current') { value = 'Processing'; }
-                else if (item == 'quantity') { value = 'Quantity'; }
-                else if (item == 'sold_for') { value = 'Sold For'; }
-                else if (item == 'symbol') { value = 'Symbol'; }
-                else if (item == 'updated') { value = 'Updated'; }
-                else if (item == 'sell_without_fee_lose') { value = 'Sell target without loss'; }
-                else if (item == 'sell_without_fee_lost_plus_profit') { value = 'Sell target with profit'; }
-
+                if (item == 'quantity') { value = 'Quantity';}
+                else if (item == 'paid_total') { value = 'Paid including fees';}
+                else if (item == 'total_fee_paid') { value = 'Total fee costs';}
+                else if (item == 'fees_amount') { value = 'Fee cost';}
+                else if (item == 'wanted_profit') { value = 'Expected profit without panik';}
+                else if (item == 'sellprice_without_loss_on_fee_plus_profit') { value = 'Sell target';}
+                else if (item == 'total_if_sold_with_profit') { value = 'Expected profit on panik';}
+                else if (item == 'sold_for') { value = 'Sold for';}
+                else { value = item;}
                 return {
                     text: value,
                     value: item,
