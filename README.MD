@@ -262,6 +262,9 @@ The docker environment is configured so the data in the `MySQL` database is stor
 - I still seem to have issues with my API key. What can i check to hopefully fix this issue?
     * Check if your API key has the following API restrictions enabled: `Enable Reading` and `Enable Spot & Margin Trading`
 
+- I seem to have trouble installing docker,.. It seems that I am unable to install WSL2 even if i follow the documentation [here](https://docs.microsoft.com/en-us/windows/wsl/install-win10). What do I do?
+    * Get rid of powershell and use command prompt instead.. stupid powershell
+
 # <a name="Community"></a>Community
 
 If you still manage to get stuck, want to keep updated with the latests updates or flex your profit with other botters you can!. [Join our discord!](https://discord.gg/qmb7PG9r2c)
