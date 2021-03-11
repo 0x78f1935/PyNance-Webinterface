@@ -224,7 +224,7 @@ The docker environment is configured so the data in the `MySQL` database is stor
 # <a name="Community"></a>Quick start
 - Make sure you have a [binance account](#binance-account) with [API credentials](#binance-api).
 - Make sure you have [docker installed](#req)
-- Copy and paste your [API credentials](#binance-api) into [/pynance-webinterface/backend/config/production.py](pynance-config)
+- Copy and paste your [API credentials](#binance-api) into [/pynance-webinterface/backend/config/production.py](#pynance-config)
 - Open a terminal in the root folder of the project and [deploy the containers](#pynance-installation)
 - profit.
 
