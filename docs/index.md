@@ -8,7 +8,7 @@ You are <strong> responsible</strong> for <strong>your own money and actions.</s
 
 <span style="font-family:Papyrus; font-size:3em;color:red;">IMPORTANT NOTICE</span><br/>
 
-This tool makes use of docker. Once a running container has been established and the port of your machine is public. everyone in the same network will be able to connect to PyNance. <span style="color:red;">The current version of PyNance has no login screen.</span> You can secure yourself if you host PyNance on the machine you would like to check the interface on. Just make sure to block the port PyNance is running on.<br/><br/>Please do note; When creating your API key you should only allow it to work if the traffic send to Binance is comming from your IP address. This does <strong style="color:orange;">not</strong> fix the problem described above.<hr>
+This tool makes use of docker. Once a running container has been established and the port of your machine is public. everyone in the same network will be able to connect to PyNance. <span style="color:red;">The current version of PyNance has no login screen.</span> You can secure yourself if you host PyNance on the machine you would like to check the interface on. Just make sure to block the port PyNance is running on.<br/><br/>Please do note; When creating your API key you should only allow it to work if the traffic send to Binance is comming from your IP address. This does <strong style="color:orange;">not</strong> fix the problem described above.<hr/>
 
 # <a name="table-of-contents"></a>Table of Contents
 1. [Table of Contents](#table-of-contents)
