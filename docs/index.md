@@ -163,7 +163,7 @@ The connection string can be placed in `/pynance-webinterface/backend/config/dev
 
 ## <a name="install-configuration"></a>Configuration
 
-Outside the normal configuration described [here](#pynance-config) there are still a couple of variables to play with. <span style="color:yellow">The following files contain a variable called `DEBUG` which are required to be `False` when building the production environment.</span> This is imporant. Otherwise your docker build will fail.
+Outside the normal configuration described [here](#pynance-config) there are still a couple of variables to play with. <span style="color:orange">The following files contain a variable called `DEBUG` which are required to be `False` when building the production environment.</span> This is imporant. Otherwise your docker build will fail.
 
  - /pynance-webinterface/listener.py
  - /pynance-webinterface/backend/config/\_\_init\_\_.py
