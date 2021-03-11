@@ -1,6 +1,6 @@
 <span style="font-family:Papyrus; font-size:4em;"> PyNance </span>
 <hr>
-<span style="font-family:Papyrus; font-size:2em;color:red;">Scammers are very active in the crypto market. PyNance will never ask  for your contact details. Avoid any other repository that claims to be PyNance and which also is a Binance trade bot. Trade safe.</span>
+<span style="font-family:Papyrus; font-size:2em;color:red;">Scammers are very active in the crypto market. PyNance will never ask  for your contact details. Avoid any other repository that claims to be PyNance which also is a Binance trading bot. Trade safe.</span>
 <hr/>
 <a name="Disclaimer"></a><span style="font-family:Papyrus; font-size:3em;color:red;">DISCLAIMER</span><br/>
 <span style="font-family:Papyrus; font-size:2.5em;color:red;"> This tool is not a money printing tool and contains risks. </span><br/>
