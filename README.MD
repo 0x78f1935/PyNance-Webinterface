@@ -207,7 +207,7 @@ In order to switch the environment you need to open the file `/pynance-webinterf
 
 ## <a name="pynance-installation"></a>PyNance Installation
 
-In this case we ignore the development environment for now and we make this a point of attention in the advanced section of this documentation. Once the [dependencies](#req-prod) are installed and the [configuration](#pynance-config) is configured for `production` we can finally start the installation. Open a terminal and navigate to `/pynance-webinterface` root folder. Execute the following command:
+In this case we ignore the development environment for now and we make this a point of attention in the advanced section of this documentation. Once the [dependencies](#req) are installed and the [configuration](#pynance-config) is configured for `production` we can finally start the installation. Open a terminal and navigate to `/pynance-webinterface` root folder. Execute the following command:
 
     docker-compose up --build -d
 
