@@ -1,5 +1,7 @@
 <span style="font-family:Papyrus; font-size:4em;"> PyNance </span>
 <hr>
+<span style="font-family:Papyrus; font-size:2em;color:red;">Scammers are very active in the crypto market. PyNance will never ask  for your contact details. Avoid any other repository that claims to be PyNance and which also is a Binance trade bot. Trade safe.</span>
+<hr/>
 <a name="Disclaimer"></a><span style="font-family:Papyrus; font-size:3em;color:red;">DISCLAIMER</span><br/>
 <span style="font-family:Papyrus; font-size:2.5em;color:red;"> This tool is not a money printing tool and contains risks. </span><br/>
 You </strong> are <strong> responsible</strong> for <strong>your own money and actions.</strong> <br/><br/><strong>By using this tool you agree to take FULL responsibility of your own money. </strong><br/> Even if this would mean missed opportunities caused by the algorithm of this bot or worse; <strong style="color:red;">losses</strong>. <br/><br/><strong style="color:green;">Be responsible</strong>, Only trade with money you can afford to lose.<br/>Take chances, Make mistakes, Get messy.... To the moon! <br/><br/><hr/>
@@ -256,6 +258,9 @@ The docker environment is configured so the data in the `MySQL` database is stor
 
 - I am unable to choose between currencies, what now?
     * Make sure your API credentials are correct.
+
+- I still seem to have issues with my API key. What can i check to hopefully fix this issue?
+    * Check if your API key has the following API restrictions enabled: `Enable Reading` and `Enable Spot & Margin Trading`
 
 # <a name="Community"></a>Community
 
