@@ -265,6 +265,9 @@ The docker environment is configured so the data in the `MySQL` database is stor
 - I seem to have trouble installing docker,.. It seems that I am unable to install WSL2 even if i follow the documentation [here](https://docs.microsoft.com/en-us/windows/wsl/install-win10). What do I do?
     * Get rid of powershell and use command prompt instead.. stupid powershell
 
+- When using docker, hyper-v or WSL2?
+    * WSL2
+
 # <a name="Community"></a>Community
 
 If you still manage to get stuck, want to keep updated with the latests updates or flex your profit with other botters you can!. [Join our discord!](https://discord.gg/qmb7PG9r2c)
