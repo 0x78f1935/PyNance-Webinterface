@@ -101,15 +101,14 @@ class SystemApiView(FlaskView):
         # Price of the fees if we wouldve brought
         wouldve_paid_fees = float(current_price * balance_free) *  float(fee_taker/100)
         # Total price including fees if we brought
-        wouldve_paid = float(current_price * balance_free) + paid_fees
+        wouldve_paid = float(current_price * balance_free) + wouldve_paid_fees
 
         if model is not None: 
             chatterer.update_price(f"{float(round(float(current_price) * float(model.quantity), 6))} - { float(round(current_price, 6)) } - { model.quantity }")
         else: chatterer.update_price(f"0.0 - { float(round(current_price, 6)) } - 0")
 
         wanted_profit = paid_total * float(take_profit/100)
-        sellprice_without_loss_on_fee_plus_profit = paid_total + wanted_profit
-        total_if_sold_with_profit = sellprice_without_loss_on_fee_plus_profit / brought_price
+        sellprice_without_loss_on_fee_plus_profit = float(round(float(paid_total + wanted_profit), precision))
 
         minimal_money_needed_to_buy = current_price*0.1  # 
 
@@ -125,12 +124,12 @@ class SystemApiView(FlaskView):
                 # Price including fees we have paid
                 paid_total = float(float(data['price']) * balance_free) + paid_fees
                 wanted_profit = paid_total * float(take_profit/100)
-                sellprice_without_loss_on_fee_plus_profit = paid_total + wanted_profit
-                total_if_sold_with_profit = sellprice_without_loss_on_fee_plus_profit / float(data['price'])
+                sellprice_without_loss_on_fee_plus_profit = float(round(float(paid_total + wanted_profit), precision))
+
                 if model is not None:
                     model.update_data({
                         'current': False,
-                        'sold_for': str(paid_total * quantity)
+                        'sold_for': str(wouldve_paid)
                     })
                 chatterer.chat(f"SOLD {cur1}: {quantity}")
             else: chatterer.chat("NOTHING TO SELL")
