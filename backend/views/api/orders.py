@@ -24,7 +24,7 @@ class OrdersApiView(FlaskView):
             order_item["quantity"] = float(item["quantity"])
             order_item["paid_total"] = float(item["brought_price"]) * order_item["quantity"]
             order_item["total_fee_paid"] = float(item["fee_taker"]) / order_item["paid_total"]
-            order_item["fees_amount"] = order_item["paid_total"] - order_item["total_fee_paid"]
+            order_item["total_paid_minus_fee"] = order_item["paid_total"] - order_item["total_fee_paid"]
             order_item["wanted_profit"] = order_item["paid_total"] * float(take_profit/100)
             order_item["sellprice_without_loss_on_fee_plus_profit"] = order_item["paid_total"] + order_item["wanted_profit"]
             order_item["sold_for"] = item["sold_for"]
