@@ -7,5 +7,8 @@
 <script>
     export default {
         name:'only-dip',
+        mounted () {
+            this.$store.dispatch('get_only_dip');
+        },
     }
 </script>

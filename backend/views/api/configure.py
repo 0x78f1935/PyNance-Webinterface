@@ -13,18 +13,14 @@ class ConfigureApiView(FlaskView):
     
     decorators = [ ]
 
-    @route('/take_profit', methods=['GET'])
+    @route('/take_profit', methods=['POST', 'GET'])
     def take_profit(self):
         model = SystemModel.query.first()
-        return jsonify({'take_profit': int(model.take_profit)}), 200
-
-    @route('/take_profit', methods=['POST'])
-    def set_take_profit(self):
-        model = SystemModel.query.first()
-        if model.take_profit != str(request.json['tp']):
-            model.take_profit = str(request.json['tp'])
-            db.session.add(model)
-            db.session.commit()
+        if request.method == 'POST':
+            if model.take_profit != str(request.json['tp']):
+                model.take_profit = str(request.json['tp'])
+                db.session.add(model)
+                db.session.commit()
         return jsonify({'take_profit': int(model.take_profit)}), 200
     
     @route('/online', methods=['GET'])
@@ -64,8 +60,23 @@ class ConfigureApiView(FlaskView):
         else:
             return jsonify({'panik': model.panik}), 200
 
-    @route('/only_dip', methods=['POST'])
+    @route('/only_dip', methods=['POST', 'GET'])
     def only_dip(self):
         model = SystemModel.query.first()
-        model.update_data({'only_dip': not request.json['dip']})
+        if request.method == 'POST':
+            online = model.online # Prevents model to set itself to false
+            model.update_data({'only_dip': not request.json['dip']})
+            model.online = online
+            db.session.add(model)
+            db.session.commit()
         return jsonify({'dip': model.only_dip}), 200
+
+    @route('/total_entry', methods=['POST', 'GET'])
+    def set_take_profit(self):
+        model = SystemModel.query.first()
+        if request.method == 'POST':
+            if model.total_entry != str(request.json['total_entry']):
+                model.total_entry = str(request.json['total_entry'])
+                db.session.add(model)
+                db.session.commit()
+        return jsonify({'total_entry': int(model.total_entry)}), 200

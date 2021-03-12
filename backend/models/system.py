@@ -23,8 +23,14 @@ class SystemModel(db.Model):
         Indicates the second currency of the symbol
     take_profit: string
         The proft taken from the trading
+    total_entry: string
+        The total amount of % used in the selected wallet to buy with
     online: boolean
         indicates if the bot is trading
+    buying: boolean
+        indicates if the bot is buying or not
+    panik: boolean
+        indicates if the bot is in panik mode
     """
 
     __tablename__ = "system"
@@ -35,10 +41,13 @@ class SystemModel(db.Model):
     currency_2 = db.Column(db.Text, default="USDT")
 
     take_profit = db.Column(db.Text, default="20")
+    total_entry = db.Column(db.Text, default="100")
     only_dip = db.Column(db.Boolean, default=True)
     online = db.Column(db.Boolean, default=False, onupdate=False)
-
+    buying = db.Column(db.Boolean, default=True)
     panik = db.Column(db.Boolean, default=False)
+
+    current_value = db.Column(db.Text, default="0")
 
     def update_data(self, data: dict):
         """"Just throw in a json object, each key that can be mapped will be updated"

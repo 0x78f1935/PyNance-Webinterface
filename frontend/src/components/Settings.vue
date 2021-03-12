@@ -1,6 +1,6 @@
 <template>
     <v-card class="card" elevation="2" tile>
-        <v-card-subtitle>{{ $t('currency1') }}<span v-html="this.$store.getters.cur1"></span></v-card-subtitle>
+        <!-- <v-card-subtitle>{{ $t('currency1') }}<span v-html="this.$store.getters.cur1"></span></v-card-subtitle> -->
 
             <v-card-text class="sm">
                 <v-autocomplete
@@ -14,7 +14,7 @@
             
             <v-divider></v-divider>
 
-            <v-card-subtitle>{{ $t('currency2') }}<span v-html="this.$store.getters.cur2"></span></v-card-subtitle>
+            <!-- <v-card-subtitle>{{ $t('currency2') }}<span v-html="this.$store.getters.cur2"></span></v-card-subtitle> -->
 
             <v-card-text class="sm">
                 <v-autocomplete
@@ -27,21 +27,27 @@
             </v-card-text>
         <v-divider></v-divider>
 
-        <v-card-subtitle>{{ $t('takeProfit') }}<span v-html="this.$store.getters.take_profit"></span>%</v-card-subtitle>
         <v-card-text class="sm">
-            <v-slider
+            <v-text-field
+                :label="$t('takeProfit') + this.$store.getters.take_profit + '%'"
+                placeholder="Placeholder"
+                filled
                 :disabled="!editing"
                 v-model="tp"
-                max="100"
-                min="2"
-                step="2"
-                thumb-label
-                ticks
-                @click="$store.dispatch('get_take_profit')"
-            ></v-slider>
-
+                @change="$store.dispatch('get_take_profit')"
+            ></v-text-field>
         </v-card-text>
-        
+        <v-divider></v-divider>
+        <v-card-text>
+            <v-text-field
+                :label="$t('totalEntry') + this.$store.getters.total_entry + '%'"
+                placeholder="Placeholder"
+                filled
+                :disabled="!editing"
+                v-model="total_entry"
+                @change="$store.dispatch('get_total_entry')"
+            ></v-text-field>
+        </v-card-text>
         
         <v-btn block color="accent" @click="show_disclaimer = true">
             {{ $t('disclaimer_txt') }}
@@ -102,6 +108,7 @@
         },
         created () {
             this.$store.dispatch("get_take_profit");
+            this.$store.dispatch("get_total_entry");
             this.$store.dispatch("get_symbols");
             this.$store.dispatch("get_currencies");
             this.$store.dispatch("get_version");
@@ -126,6 +133,14 @@
                         this.$store.dispatch("set_take_profit", value);
                     }
                 },
+            },
+            total_entry: {
+                get(){ return this.$store.getters.total_entry; },
+                set(value) {
+                    if(this.editing) {
+                        this.$store.dispatch("set_total_entry", value);
+                    }
+                }
             },
             cur1: {
                 get() {

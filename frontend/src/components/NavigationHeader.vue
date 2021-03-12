@@ -1,8 +1,11 @@
 <template>
     <v-app-bar app>
         <b-row>
-            <b-col>
+            <b-col class="col-1 m-1" style="max-width: 120px;">
                 <v-app-bar-nav-icon @click.stop="$store.dispatch('toggle_drawer', !$store.getters.drawer);"></v-app-bar-nav-icon>
+            </b-col>
+            <b-col>
+                <v-app-bar-nav-icon><current-value></current-value></v-app-bar-nav-icon>
             </b-col>
             <b-col class="mr-auro to_the_right">
                 <profit-bar></profit-bar>
@@ -13,11 +16,13 @@
 
 <script>
     import ProfitBar from '@/components/ProfitBar.vue';
+    import CurrentValue from '@/components/CurrentValue.vue';
 
     export default {
         name: 'nav-header',
         components: {
             ProfitBar,
+            CurrentValue
         },
         computed: {
             drawer_mount: {

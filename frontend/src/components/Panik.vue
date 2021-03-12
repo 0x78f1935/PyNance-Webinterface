@@ -3,17 +3,21 @@
         <v-btn block :color="$store.getters.panik ? 'green' : 'accent'" @click="$store.dispatch('set_panik', !$store.getters.panik)">
             {{ $store.getters.panik ? "KALM" : "PANIK"}}
         </v-btn>
-        <v-snackbar
-            v-model="paniker"
-            class="snack"
-            :centered="true"
-        >
-            <v-img
-                :src="require('../assets/panik.png')"
-                width="160px"
-                height="160px"
-            >{{ $t('selling_panik') }}</v-img>
-        </v-snackbar>
+        <b-container fluid>
+            <v-snackbar
+                v-model="paniker"
+                class="snack"
+                centered
+                timeout="-1"
+                top
+            >
+                <v-img
+                    :src="require('../assets/panik.png')"
+                    width="160px"
+                    height="160px"
+                >{{ $t('selling_panik') }}</v-img>
+            </v-snackbar>
+        </b-container>
     </b-container>
 </template>
 

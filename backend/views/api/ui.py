@@ -67,3 +67,9 @@ class UIApiView(FlaskView):
                 return jsonify({'fiat': fiat, 'coin': coin, 'quantity': quantity}), 200
             except ValueError: pass
         return jsonify({'fiat': 0, 'coin': 0, 'quantity': 0}), 200
+
+    @route('/v2/current_price', methods=['GET'])
+    def current_price_2(self):
+        model = SystemModel.query.first()
+        return jsonify({'price': model.current_value}), 200
+    

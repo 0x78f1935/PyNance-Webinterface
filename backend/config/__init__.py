@@ -11,7 +11,7 @@ class Config(System):
     """
     def __init__(self) -> None:
         self.DEBUG = False
-        self.VERSION = "1.0.2"
+        self.VERSION = "1.1.0"
         self.PROJECT_NAME = "PyNance - Webinterface"
 
         # Load system configuration

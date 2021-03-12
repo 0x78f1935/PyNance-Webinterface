@@ -13,6 +13,7 @@ export default new Vuex.Store({
     chatterer: "",
     online: false,
     take_profit: 0,
+    total_entry: 100,
     symbols: [],
     symbols_sets: [],
     cur1: "",
@@ -31,12 +32,14 @@ export default new Vuex.Store({
     fiat_current_price: "0",
     coin_current_price: "0",
     current_quantity: "0",
+    current_price: "",
   },
   getters: {
     darkmode: state => { return state.darkmode; },
     chatterer: state => { return state.chatterer; },
     online: state => { return state.online; },
     take_profit: state => { return state.take_profit; },
+    total_entry: state => { return state.total_entry; },
     symbols: state => { return state.symbols; },
     symbols_sets: state => { return state.symbols_sets; },
     cur1: state => { return state.cur1; },
@@ -54,13 +57,15 @@ export default new Vuex.Store({
     language: state => { return state.language; },
     fiat_current_price: state => { return state.fiat_current_price; },
     coin_current_price: state => { return state.coin_current_price; },
-    current_quantity: state => { return state.current_quantity; }
+    current_quantity: state => { return state.current_quantity; },
+    current_price: state => { return state.current_price; }
   },
   mutations: {
     SET_DARKMODE(state, value) { state.darkmode = value; },
     SET_CHATTERER(state, value) { state.chatterer = value; },
     SET_ONLINE(state, value) { state.online = value; },
     SET_TAKE_PROFIT(state, value) { state.take_profit = value; },
+    SET_TOTAL_ENTRY(state, value) { state.total_entry = value; },
     SET_SYMBOLS(state, value) { state.symbols = value; },
     SET_SYMBOLS_SETS(state, value) { state.symbols_sets = value; },
     SET_CUR1(state, value) { state.cur1 = value; },
@@ -77,8 +82,8 @@ export default new Vuex.Store({
     SET_LANGUAGE(state, value) { state.language = value; },
     SET_CURRENT_FIAT(state, value) { state.fiat_current_price = value; },
     SET_CURRENT_COINT(state, value) { state.coin_current_price = value; },
-    SET_CURRENT_QUANTITY(state, value) { state.current_quantity = value; }
-
+    SET_CURRENT_QUANTITY(state, value) { state.current_quantity = value; },
+    SET_CURRENT_PRICE(state, value) {state.current_price = value; }
   },
   actions: {
     get_chatterer(state) {
@@ -96,6 +101,11 @@ export default new Vuex.Store({
         state.commit('SET_CURRENT_FIAT', response.data.fiat);
         state.commit('SET_CURRENT_COINT', response.data.coin);
         state.commit('SET_CURRENT_QUANTITY', response.data.quantity);
+      })
+    },
+    get_current_price(state) {
+      axios.get(`/api/v1/ui/v2/current_price`).then(response => {
+        state.commit('SET_CURRENT_PRICE', response.data.price);
       })
     },
     get_profit(state) {
@@ -141,6 +151,16 @@ export default new Vuex.Store({
         axios.post(`/api/v1/configure/take_profit`, {'tp': value});
       }
     },
+    get_total_entry(state) {
+      axios.get(`/api/v1/configure/total_entry`).then(response => {
+        state.commit('SET_TOTAL_ENTRY', response.data.total_entry);
+      })
+    },
+    set_total_entry(state, value) {
+      if(value != state.total_entry) {
+        axios.post(`/api/v1/configure/total_entry`, {'total_entry': value});
+      }
+    },
     toggle_online() {
       axios.get(`/api/v1/configure/online`);
     },
@@ -169,6 +189,11 @@ export default new Vuex.Store({
         state.commit('SET_PANIK', response.data.panik);
       });
     },
+    get_only_dip(state) {
+      axios.get(`/api/v1/configure/only_dip`).then(response => {
+        state.commit('SET_ONLY_DIP', response.data.dip);
+      });
+    },
     set_only_dip(state, value) {
       axios.post(`/api/v1/configure/only_dip`, {'dip': !value}).then(response => {
         state.commit('SET_ONLY_DIP', response.data.dip);
@@ -181,8 +206,8 @@ export default new Vuex.Store({
                 let value = '';
                 if (item == 'quantity') { value = 'Quantity';}
                 else if (item == 'paid_total') { value = 'Paid including fees';}
-                else if (item == 'total_fee_paid') { value = 'Total fee costs';}
-                else if (item == 'total_paid_minus_fee') { value = 'Total paid minus fee';}
+                else if (item == 'total_fee_paid') { value = 'Fee costs';}
+                else if (item == 'total_paid_minus_fee') { value = 'Paid excluding fee';}
                 else if (item == 'wanted_profit') { value = 'Expected profit';}
                 else if (item == 'sellprice_without_loss_on_fee_plus_profit') { value = 'Sell target';}
                 else if (item == 'sold_for') { value = 'Sold for';}

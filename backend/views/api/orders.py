@@ -20,6 +20,8 @@ class OrdersApiView(FlaskView):
         for item in data:
             order_item = {}
             order_item["Symbol"] = item["symbol"]
+            order_item["Created"] = item["created"]
+            order_item["Updated"] = item["updated"]
             order_item["Active"] = str(bool(item["current"])).capitalize() if str(model.currency_1 + model.currency_2) in order_item["Symbol"] else "False"
             order_item["quantity"] = float(item["quantity"])
             order_item["paid_total"] = float(item["brought_price"]) * order_item["quantity"]

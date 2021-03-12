@@ -62,6 +62,8 @@
   "BBDIP": "Buy Big DIP",
   "BSDIP": "Buy Small DIP",
   "disclaimer_txt": "Disclaimer",
-  "quantity": "Quantity"
+  "quantity": "Quantity",
+
+  "totalEntry": "Buy amount wallet: "
 
 }

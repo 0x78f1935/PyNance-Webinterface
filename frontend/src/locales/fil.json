@@ -62,5 +62,7 @@
     "BBDIP": "BBumili ng Malaking DIP",
     "BSDIP": "Bumili ng Maliit na DIP",
     "disclaimer_txt": "Pagwawaksi",
-    "quantity": "Dami"
+    "quantity": "Dami",
+
+    "totalEntry": "Buy amount wallet: "
 }

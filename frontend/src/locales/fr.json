@@ -62,5 +62,7 @@
   "BBDIP": "Acheter à la grande baisse",
   "BSDIP": "Acheter à la petite baisse",
   "disclaimer_txt": "Avertissement",
-  "quantity": "Quantité"
+  "quantity": "Quantité",
+
+  "totalEntry": "Buy amount wallet: "
 }
