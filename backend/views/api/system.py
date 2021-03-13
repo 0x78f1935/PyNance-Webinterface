@@ -176,7 +176,7 @@ class SystemApiView(FlaskView):
             total_fomo_price = float(round(float(work_price + fees_current_price), 8))
             fomo_price = float(round(float(float(total_fomo_price * quantity) + float(float(total_fomo_price * quantity) * fee_taker)), 8))
 
-            if system.panik: chatterer.chat(f"{quantity} {cur1} IS {previous_price_order} {cur2} WORTH - TRYING TO SELL FOR {fomo_price} {cur2}")
+            if system.panik: chatterer.chat(f"{quantity} {cur1} IS {float(round(float(current_price * quantity), 8))} {cur2} WORTH - TRYING TO SELL FOR {fomo_price} {cur2}")
             else: chatterer.chat(f"{quantity} {cur1} IS {float(round(float(current_price * quantity), 8))} {cur2} WORTH - TRYING TO SELL FOR {sell_target} {cur2}")
 
             if current_price > total_profit_on_each_coin or system.panik and current_price > total_fomo_price:
