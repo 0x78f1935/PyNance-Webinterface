@@ -133,8 +133,7 @@ class SystemApiView(FlaskView):
                     if current_price <= price_entry:
                         chatterer.chat(f"BUYING {cur1}")
                         quantity = float(float(float(float(balance2_free / current_price) / 100) * float(system.total_entry)))
-                        # buy_order = pynance.orders.create(symbol, float(round(float(quantity - float(quantity/100)), precision)), order_id='test_api')
-                        buy_order = None
+                        buy_order = pynance.orders.create(symbol, float(round(float(quantity - float(quantity/100)), precision)), order_id='test_api')
                         if buy_order is not None:
                             data = buy_order.json['fills'].pop(0)
                             brought_price = float(round(float(data['price']), 8))
