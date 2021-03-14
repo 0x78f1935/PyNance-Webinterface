@@ -106,9 +106,9 @@ class UIApiView(FlaskView):
                 model = self.update_system_without_going_offline(model, {
                     'candleinterval': data['candlehistory'],
                 })
-            elif 'timeinterval' in data.keys():
+            elif 'timerinterval' in data.keys():
                 model = self.update_system_without_going_offline(model, {
-                    'timeinterval': data['timeinterval'],
+                    'timeinterval': data['timerinterval'],
                 })
-            return jsonify({'timeinterval': model.timeinterval, 'candlehistory': model.candleinterval}), 200
+            return jsonify({'timerinterval': model.timeinterval, 'candlehistory': model.candleinterval}), 200
     

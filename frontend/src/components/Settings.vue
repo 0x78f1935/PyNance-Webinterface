@@ -55,12 +55,13 @@
         <v-card-text class="sm">{{ $t('buy-in-config') }}</v-card-text>
 
         <v-card-text class="sm">
-            <v-autocomplete
+            <v-select
                 :disabled="!editing"
-                :items="['1m', '3m', '5m', '15m', '30m', '1H', '2H', '4H', '6H', '8H', '12H', '1D', '3D', '1W', '1M']"
+                :items="chart_types"
                 :label="$t('timerinterval')"
                 v-model="selected_chart"
-            ></v-autocomplete>
+                @change="$store.dispatch('get_current_price')"
+            ></v-select>
 
         </v-card-text>
 
@@ -72,6 +73,7 @@
                 :items="Array.from({length: 1000}, (_, i) => i + 1)"
                 :label="$t('candleinterval')"
                 v-model="total_candles"
+                @change="$store.dispatch('get_current_price')"
             ></v-autocomplete>
 
         </v-card-text>
@@ -136,7 +138,8 @@
                 editing: false,
                 helpdev: false,
                 tut: false,
-                show_disclaimer: true
+                show_disclaimer: true,
+                chart_types: ['1m', '3m', '5m', '15m', '30m', '1H', '2H', '4H', '6H', '8H', '12H', '1D', '3D', '1W', '1M']
             }
         },
         created () {
@@ -221,6 +224,6 @@
 }
 
 .sm{
-    height: 25px;
+    height: 45px;
 }
 </style>
