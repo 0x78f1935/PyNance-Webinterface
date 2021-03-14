@@ -64,6 +64,10 @@
   "disclaimer_txt": "Disclaimer",
   "quantity": "Quantity",
 
-  "totalEntry": "Buy amount wallet: "
-
+  "totalEntry": "Buy amount wallet: ",
+  "timerinterval": "Selected average graph",
+  "candleinterval": "Total candles calculated for average",
+  "buy-in-entry": "BUY-IN ENTRY FOR ",
+  "buy-in-config": "BUY-IN Config",
+  "sell-config": "Sell Target Config"
 }

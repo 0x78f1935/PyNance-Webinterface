@@ -52,7 +52,9 @@ class SystemApiView(FlaskView):
             )).first()
         
         try:
-            price_average = float(pynance.price.average(cur1+cur2).json["price"])
+            # price_average = float(pynance.price.average(cur1+cur2).json["price"])
+            price_average = pynance.price.average(cur1+cur2, system.timeinterval, system.candleinterval)
+            system = self.update_system_without_going_offline(system, {'average_price': str(price_average)})
         except AttributeError:
             chatterer.chat("UNKNOWN SYMBOL")
             return jsonify({
@@ -125,13 +127,14 @@ class SystemApiView(FlaskView):
             if model is None:
                 if system.panik: chatterer.chat("PANIK ACTIVE, NO NEW BUY ORDER WILL BE PLACED")
                 else:
-                    if system.only_dip: price_entry = float(work_price - float(expected_profit))
-                    else: price_entry = float(work_price - float(expected_profit / 2))
+                    if system.only_dip: price_entry = work_price
+                    else: price_entry = work_price
 
                     if current_price <= price_entry:
                         chatterer.chat(f"BUYING {cur1}")
                         quantity = float(float(float(float(balance2_free / current_price) / 100) * float(system.total_entry)))
-                        buy_order = pynance.orders.create(symbol, float(round(float(quantity - float(quantity/100)), precision)), order_id='test_api')
+                        # buy_order = pynance.orders.create(symbol, float(round(float(quantity - float(quantity/100)), precision)), order_id='test_api')
+                        buy_order = None
                         if buy_order is not None:
                             data = buy_order.json['fills'].pop(0)
                             brought_price = float(round(float(data['price']), 8))
@@ -146,9 +149,9 @@ class SystemApiView(FlaskView):
                             )
                             db.session.add(model)
                             db.session.commit()
-                            chatterer.chat(f"BROUGHT {quantity} {cur1} FOR {brought_price} {cur2}")
+                            chatterer.chat(f"BROUGHT ({quantity}) {cur1} FOR ({brought_price}) {cur2}")
                             system = self.update_system_without_going_offline(system, {'buying': False}) # Reset state
-                        else: chatterer.chat(f"UNABLE TO PLACE A BUY ORDER FOR {quantity} {cur1}")
+                        else: chatterer.chat(f"UNABLE TO PLACE A BUY ORDER FOR ({quantity}) {cur1} AT THE PRICE OF ({current_price}) {cur2}")
                     else: chatterer.chat(f"CURRENT {cur1} PRICE ({current_price}) NOT AT BUY TARGET ({price_entry}), SKIPPING BUY ORDER")
             else:
                 system = self.update_system_without_going_offline(system, {'buying': False}) # Reset state
@@ -176,8 +179,8 @@ class SystemApiView(FlaskView):
             total_fomo_price = float(round(float(work_price + fees_current_price), 8))
             fomo_price = float(round(float(float(total_fomo_price * quantity) + float(float(total_fomo_price * quantity) * fee_taker)), 8))
 
-            if system.panik: chatterer.chat(f"{quantity} {cur1} IS {float(round(float(current_price * quantity), 8))} {cur2} WORTH - TRYING TO SELL FOR {fomo_price} {cur2}")
-            else: chatterer.chat(f"{quantity} {cur1} IS {float(round(float(current_price * quantity), 8))} {cur2} WORTH - TRYING TO SELL FOR {sell_target} {cur2}")
+            if system.panik: chatterer.chat(f"({quantity}) {cur1} IS ({float(round(float(current_price * quantity), 8))}) {cur2} WORTH - TRYING TO SELL FOR ({fomo_price}) {cur2}")
+            else: chatterer.chat(f"({quantity}) {cur1} IS ({float(round(float(current_price * quantity), 8))}) {cur2} WORTH - TRYING TO SELL FOR ({sell_target}) {cur2}")
 
             if current_price > total_profit_on_each_coin or system.panik and current_price > total_fomo_price:
                 chatterer.chat(f"SELLING {cur1}")
@@ -189,9 +192,9 @@ class SystemApiView(FlaskView):
                             'current': False,
                             'sold_for': str(sold_price)
                         })
-                        chatterer.chat(f"SOLD {quantity} {cur1} FOR AN AMAZING {sold_price} {cur2}")
+                        chatterer.chat(f"SOLD ({quantity}) {cur1} FOR AN AMAZING ({sold_price}) {cur2}")
                         system = self.update_system_without_going_offline(system, {'buying': True}) # Reset state
-                else: chatterer.chat(f"UNABLE TO PLACE A SELL ORDER FOR {quantity} {cur1}")
+                else: chatterer.chat(f"UNABLE TO PLACE A SELL ORDER FOR ({quantity}) {cur1}")
 
         return jsonify({
             "date": str(datetime.now().strftime('%d-%m-%y %H:%M:%S')),

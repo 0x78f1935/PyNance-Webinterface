@@ -31,6 +31,13 @@ class SystemModel(db.Model):
         indicates if the bot is buying or not
     panik: boolean
         indicates if the bot is in panik mode
+
+    timeinterval: string
+        the graphtype the average price is caluclated on
+    candleinterval: Integer
+        The amount of candles we look back on in history to calculate average on
+    average_price : string
+        The current average price of the current selected symbol
     """
 
     __tablename__ = "system"
@@ -47,6 +54,10 @@ class SystemModel(db.Model):
     buying = db.Column(db.Boolean, default=True)
     panik = db.Column(db.Boolean, default=False)
 
+    timeinterval = db.Column(db.Text, default="3m")
+    candleinterval = db.Column(db.Integer, default=60)
+
+    average_price = db.Column(db.Text, default="0")
     current_value = db.Column(db.Text, default="0")
 
     def update_data(self, data: dict):

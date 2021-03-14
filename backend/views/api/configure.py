@@ -21,7 +21,10 @@ class ConfigureApiView(FlaskView):
                 model.take_profit = str(request.json['tp'])
                 db.session.add(model)
                 db.session.commit()
-        return jsonify({'take_profit': int(model.take_profit)}), 200
+        try:
+            return jsonify({'take_profit': float(model.take_profit)}), 200
+        except ValueError:
+            return jsonify({'take_profit': 100.0}), 200
     
     @route('/online', methods=['GET'])
     def toggle_online(self):

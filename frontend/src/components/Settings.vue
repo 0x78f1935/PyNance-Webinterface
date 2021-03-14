@@ -1,6 +1,7 @@
 <template>
     <v-card class="card" elevation="2" tile>
         <!-- <v-card-subtitle>{{ $t('currency1') }}<span v-html="this.$store.getters.cur1"></span></v-card-subtitle> -->
+            <v-card-text class="sm">{{ $t('sell-config') }}</v-card-text>
 
             <v-card-text class="sm">
                 <v-autocomplete
@@ -27,7 +28,7 @@
             </v-card-text>
         <v-divider></v-divider>
 
-        <v-card-text class="sm">
+        <v-card-text  class="sm">
             <v-text-field
                 :label="$t('takeProfit') + this.$store.getters.take_profit + '%'"
                 placeholder="Placeholder"
@@ -38,7 +39,7 @@
             ></v-text-field>
         </v-card-text>
         <v-divider></v-divider>
-        <v-card-text>
+        <v-card-text  class="sm">
             <v-text-field
                 :label="$t('totalEntry') + this.$store.getters.total_entry + '%'"
                 placeholder="Placeholder"
@@ -48,7 +49,37 @@
                 @change="$store.dispatch('get_total_entry')"
             ></v-text-field>
         </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-text class="sm">{{ $t('buy-in-config') }}</v-card-text>
+
+        <v-card-text class="sm">
+            <v-autocomplete
+                :disabled="!editing"
+                :items="['1m', '3m', '5m', '15m', '30m', '1H', '2H', '4H', '6H', '8H', '12H', '1D', '3D', '1W', '1M']"
+                :label="$t('timerinterval')"
+                v-model="selected_chart"
+            ></v-autocomplete>
+
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-text class="sm">
+            <v-autocomplete
+                :disabled="!editing"
+                :items="Array.from({length: 1000}, (_, i) => i + 1)"
+                :label="$t('candleinterval')"
+                v-model="total_candles"
+            ></v-autocomplete>
+
+        </v-card-text>
+
+        <v-divider></v-divider>
         
+        <panik></panik>
+
         <v-btn block color="accent" @click="show_disclaimer = true">
             {{ $t('disclaimer_txt') }}
         </v-btn>
@@ -90,13 +121,15 @@
     import HelpADevOut from '@/components/models/HelpADevOut.vue';
     import Tutorial from '@/components/models/Tutorial.vue';
     import Disclaimer from '@/components/models/Disclaimer.vue';
+    import Panik from '@/components/Panik.vue';
 
     export default {
         name: 'settings-panel',
         components: {
             HelpADevOut,
             Tutorial,
-            Disclaimer
+            Disclaimer,
+            Panik
         },
         data() {
             return {
@@ -161,6 +194,22 @@
                         this.$store.dispatch("set_cur2", value);
                     }
                 },
+            },
+            selected_chart: {
+                get() { return this.$store.getters.timerinterval; },
+                set(value) {
+                    if(this.editing) {
+                        this.$store.dispatch('set_timerinterval', value);
+                    }
+                }
+            },
+            total_candles: {
+                get() { return this.$store.getters.candlehistory; },
+                set(value) {
+                    if(this.editing) {
+                        this.$store.dispatch('set_candleinterval', value);
+                    }
+                }
             }
         },
     }
@@ -172,6 +221,6 @@
 }
 
 .sm{
-    height: 50px;
+    height: 25px;
 }
 </style>

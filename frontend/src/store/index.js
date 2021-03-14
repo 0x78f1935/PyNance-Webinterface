@@ -33,6 +33,9 @@ export default new Vuex.Store({
     coin_current_price: "0",
     current_quantity: "0",
     current_price: "",
+    average_price: "",
+    timerinterval: "3m",
+    candlehistory: 60
   },
   getters: {
     darkmode: state => { return state.darkmode; },
@@ -58,7 +61,10 @@ export default new Vuex.Store({
     fiat_current_price: state => { return state.fiat_current_price; },
     coin_current_price: state => { return state.coin_current_price; },
     current_quantity: state => { return state.current_quantity; },
-    current_price: state => { return state.current_price; }
+    current_price: state => { return state.current_price; },
+    average_price: state => { return state.average_price; },
+    timerinterval: state => { return state.timerinterval; },
+    candlehistory: state => { return state.candlehistory; }
   },
   mutations: {
     SET_DARKMODE(state, value) { state.darkmode = value; },
@@ -83,7 +89,10 @@ export default new Vuex.Store({
     SET_CURRENT_FIAT(state, value) { state.fiat_current_price = value; },
     SET_CURRENT_COINT(state, value) { state.coin_current_price = value; },
     SET_CURRENT_QUANTITY(state, value) { state.current_quantity = value; },
-    SET_CURRENT_PRICE(state, value) {state.current_price = value; }
+    SET_CURRENT_PRICE(state, value) {state.current_price = value; },
+    SET_AVERAGE_PRICE(state, value) {state.average_price = value; },
+    SET_TIMERINTERVAL(state, value) {state.timerinterval = value; },
+    SET_CANDLEHISTORY(state, value) {state.candlehistory = value; }
   },
   actions: {
     get_chatterer(state) {
@@ -104,8 +113,38 @@ export default new Vuex.Store({
       })
     },
     get_current_price(state) {
-      axios.get(`/api/v1/ui/v2/current_price`).then(response => {
+      axios.get(`/api/v1/ui/v2/current_price?cur1=${state.getters.cur1}&cur2=${state.getters.cur2}`).then(response => {
         state.commit('SET_CURRENT_PRICE', response.data.price);
+        state.commit('SET_AVERAGE_PRICE', response.data.average_price);
+        state.commit('SET_TIMERINTERVAL', response.data.timerinterval);
+        state.commit('SET_CANDLEHISTORY', response.data.candlehistory);
+      })
+    },
+    set_timerinterval(state, value) {
+      axios.post(`/api/v1/ui/v2/current_price`, {
+        'symbol': state.getters.cur1 + state.getters.cur2,
+        'timerinterval': value,
+      }).then(response => {
+        state.commit('SET_TIMERINTERVAL', response.data.timerinterval);
+        state.commit('SET_CANDLEHISTORY', response.data.candlehistory);
+      })
+    },
+    set_candleinterval(state, value) {
+      axios.post(`/api/v1/ui/v2/current_price`, {
+        'symbol': state.getters.cur1 + state.getters.cur2,
+        'candlehistory': value,
+      }).then(response => {
+        state.commit('SET_TIMERINTERVAL', response.data.timerinterval);
+        state.commit('SET_CANDLEHISTORY', response.data.candlehistory);
+      })
+    },
+    set_timerinterval(state, value) {
+      axios.post(`/api/v1/ui/v2/current_price`, {
+        'symbol': state.getters.cur1 + state.getters.cur2,
+        'timeinterval': value,
+      }).then(response => {
+        state.commit('SET_TIMERINTERVAL', response.data.timerinterval);
+        state.commit('SET_CANDLEHISTORY', response.data.candlehistory);
       })
     },
     get_profit(state) {

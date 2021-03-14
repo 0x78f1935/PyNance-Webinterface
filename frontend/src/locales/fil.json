@@ -64,5 +64,10 @@
     "disclaimer_txt": "Pagwawaksi",
     "quantity": "Dami",
 
-    "totalEntry": "Buy amount wallet: "
+    "totalEntry": "Bumili ng halaga ng wallet: ",
+    "timerinterval": "Napiling average na grap",
+    "candleinterval": "Ang kabuuang mga kandila ay kinakalkula para sa average",
+    "buy-in-entry": "Bumili sa entry ",
+    "buy-in-config": "Bumili sa entry configure",
+    "sell-config": "Sell Target Config"
 }

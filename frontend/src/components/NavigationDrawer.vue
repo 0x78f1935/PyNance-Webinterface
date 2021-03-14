@@ -14,12 +14,12 @@
         </b-row>
         <b-row>
             <b-col>
-                <only-dip></only-dip>
+                <!-- <only-dip></only-dip> -->
             </b-col>
         </b-row>
-        <b-row>
+        <!-- <b-row>
             <panik></panik>
-        </b-row>
+        </b-row> -->
     </v-navigation-drawer>
 </template>
 
@@ -27,8 +27,8 @@
     import DarkModeToggle from '@/components/DarkModeToggle.vue';
     import SettingsPanel from '@/components/Settings.vue';
     import IsOnline from '@/components/Online.vue';
-    import Panik from '@/components/Panik.vue';
-    import onlyDip from '@/components/onlyDip.vue';
+    // import Panik from '@/components/Panik.vue';
+    // import onlyDip from '@/components/onlyDip.vue';
 
     export default {
         name: 'nav-drawer',
@@ -36,8 +36,8 @@
             DarkModeToggle,
             SettingsPanel,
             IsOnline,
-            Panik,
-            onlyDip
+            // Panik,
+            // onlyDip
         },
         computed: {
             drawer_mount: {

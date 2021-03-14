@@ -1,5 +1,5 @@
 <template>
-    <label>{{ $t('profit') }}<strong>{{ profit }}</strong></label>
+    <label class="d-none d-md-block">{{ $t('profit') }}<strong>{{ profit }}</strong></label>
 </template>
 
 <script>
