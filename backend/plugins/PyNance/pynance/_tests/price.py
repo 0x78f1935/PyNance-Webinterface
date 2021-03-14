@@ -27,5 +27,4 @@ class PriceTest(TestCase):
     
     def test_average(self):
         data = self.pynance.price.average('LTCBTC')
-        self.assertTrue("mins" in data.json.keys())
-        self.assertTrue("price" in data.json.keys())
+        self.assertIsInstance(data, float)
