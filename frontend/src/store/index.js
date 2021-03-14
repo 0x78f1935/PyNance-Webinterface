@@ -138,15 +138,6 @@ export default new Vuex.Store({
         state.commit('SET_CANDLEHISTORY', response.data.candlehistory);
       })
     },
-    set_timerinterval(state, value) {
-      axios.post(`/api/v1/ui/v2/current_price`, {
-        'symbol': state.getters.cur1 + state.getters.cur2,
-        'timeinterval': value,
-      }).then(response => {
-        state.commit('SET_TIMERINTERVAL', response.data.timerinterval);
-        state.commit('SET_CANDLEHISTORY', response.data.candlehistory);
-      })
-    },
     get_profit(state) {
       axios.get(`/api/v1/ui/profit`).then(response => {
         state.commit('SET_PROFIT', response.data.profit);

@@ -2,7 +2,7 @@
     <span>
         <span style="float: right">1 {{ $store.getters.cur1 }} == {{ $store.getters.current_price }} {{ $store.getters.cur2 }}</span><br/>
         <span style="float: right">Buy-in entry for {{ $store.getters.cur1 }}</span><br/>
-        <span style="float: right"><strong><</strong> {{ $store.getters.average_price }}</span>
+        <span style="float: right"><strong>&#60;</strong> {{ $store.getters.average_price }}</span>
     </span>
 </template>
 
