@@ -294,3 +294,5 @@ backend/static/vue
 package-lock.json
 
 !frontend/.env
+
+.env.production

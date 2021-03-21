@@ -93,6 +93,9 @@ In order to close PyNance on your computer use the following two commands in a t
 When you get asked to enter `(y/N)` type in `Y` and hit enter.
 Everything should be clean right now.
 
+If you have some issues with closing PyNance or building PyNance you might want to reset docker.
+Be warned the `reset_docker.bat` cleans almost everything within docker. Images and containers.
+
 <div class="text-white bg-blue mb-2">
   The following section will explain a bit more about the functionality within <strong>PyNance</strong>. For the development version <a href='#dev-build'>click here</a>
 </div><br/>
