@@ -21,6 +21,3 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
-
-backend/config/docker/database/backup
-backend/config/development.py

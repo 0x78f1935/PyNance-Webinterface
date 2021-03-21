@@ -5,6 +5,7 @@
 
 # Node artifact files
 node_modules/
+**/node_modules/
 dist/
 
 # Compiled Java class files
@@ -302,7 +303,6 @@ package-lock.json
 ./reset_docker.bat
 
 frontend/node_modules
-backend/config/docker/database/backup
 dist/
 .github
 .git

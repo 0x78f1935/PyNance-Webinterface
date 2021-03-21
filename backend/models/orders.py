@@ -4,36 +4,10 @@ from backend import db
 from sqlalchemy import inspect
 
 
-class OrdersModel(db.Model):
-
-    """
-    This model keeps track of the current amount of coins available in the wallet.
-
-    Attributes
-    ----------
-    __tablename__ : str
-        The name of the table in the database.
-    id : int
-        The ID of the user. Primary Key
-    updated : DateTime, Automated
-        The date the user was last seen. Updates automatically.
-    symbol : string, Required
-        Indicates the currency for example LTCBTC
-    currency_1: string, required
-        Indicates the first currency of the symbol
-    currency_2: string, required
-        Indicates the second currency of the symbol
-    quantity: string, required
-        The amount we brought
-    brought_price: string, required
-        The price we brought the amount for
-    current: boolean, optional (default True)
-        When true this is the current order we are processing
-    """
-
+class OrderModel(db.Model):
     __tablename__ = "orders"
     id = db.Column(db.Integer, primary_key=True)
-    created = db.Column(db.DateTime, default=datetime.utcnow)
+    brought = db.Column(db.DateTime, default=datetime.utcnow)
     updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     symbol = db.Column(db.Text, nullable=False)
