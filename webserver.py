@@ -1,6 +1,6 @@
 from backend import Webserver
 from sqlalchemy.sql import text
-# from listener import Listener
+from backend.cli import register
 
 def create_server() -> object:
     """
@@ -15,6 +15,8 @@ def create_server() -> object:
         except Exception as e:
             exit(1)
     # Listener()
+    register(server)
     return server
 
 server = Webserver()
+register(server)

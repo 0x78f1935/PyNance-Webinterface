@@ -9,13 +9,18 @@ from backend.views import ViewManager
 from backend.jinja import CustomFunctions
 
 from pynance import PyNance
-
 import pathlib
 
 db = SQLAlchemy()
 cors = CORS()
 migrate = Migrate()
 pynance = PyNance('', '')
+
+from backend.models.bot import BotModel
+from backend.models.orders import OrderModel
+from backend.models.preference import PreferenceModel
+from backend.models.settings import SettingsModel
+from backend.models.system import SystemModel
 
 class Webserver(Flask):
     def __init__(self):
@@ -42,15 +47,15 @@ class Webserver(Flask):
         self._setup_cors()
         self._setup_views()
         self._setup_database()
-        self._setup_jinja()
         self._setup_plugins()
+        self._setup_jinja()
 
     def _setup_cors(self):
         cors.init_app(self, resources={r'/*': {'origins': '*'}})
-    
+
     def _setup_views(self):
         ViewManager(self).register()
-    
+
     def _setup_database(self):
         db.init_app(self)
         migrate.init_app(self, db)
@@ -60,26 +65,37 @@ class Webserver(Flask):
             except Exception as e: print(e)
 
     def _setup_first_time_database_system_configuration(self):
+        # from backend.models.system import SystemModel
+        # from backend.models.chatterer import ChattererModel
+        from backend.models.preference import PreferenceModel
+        model = PreferenceModel.query.first()
+        if model is None:
+            db.session.add(PreferenceModel(version=self.config['VERSION']))
+            db.session.commit()
         from backend.models.system import SystemModel
-        from backend.models.chatterer import ChattererModel
-        from backend import db
         model = SystemModel.query.first()
         if model is None:
             db.session.add(SystemModel())
             db.session.commit()
-        model = ChattererModel.query.first()
+        from backend.models.settings import SettingsModel
+        model = SettingsModel.query.first()
         if model is None:
-            db.session.add(ChattererModel())
+            db.session.add(SettingsModel())
             db.session.commit()
-    
+        from backend.models.bot import BotModel
+        model = BotModel.query.first()
+        if model is None:
+            db.session.add(BotModel())
+            db.session.commit()
+
+    def _setup_plugins(self):
+        pynance.init_app(self)
+
     def _setup_jinja(self):
         """
         Updates jinja with custom python commands. Each new command will be callable
         in the jinja templates.
         """
         self.jinja_env.globals.update(
-            project_name=CustomFunctions.project_name,
+            secret_key=CustomFunctions.secret_key,
         )
-    
-    def _setup_plugins(self):
-        pynance.init_app(self)
