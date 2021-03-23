@@ -43,6 +43,7 @@ Before we get started, this README file includes "two" editions. The First part 
         1. [Backend](#backend)
         2. [Frontend](#frontend)
     4. [Database](#db)
+    5. [git](#git)
 
 # <a name="configure"></a>Configure PyNance
 Open the `.env.production` file and read through it. You can look into `.env.development` for a working example. The following environment variables are important
@@ -275,3 +276,9 @@ Once the database is set you can use **FLASK** to setup all the tables and such
     flask db init
     flask db migrate
     flask db upgrade
+
+## <a name="git"></a>Git
+
+I want you all to be safe,. Please make sure to untrack your `.env.production` file.
+
+    git update-index --assume-unchanged .env.production 
