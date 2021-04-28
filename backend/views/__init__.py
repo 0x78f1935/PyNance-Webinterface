@@ -27,23 +27,5 @@ class ViewManager(object):
         from backend.views.homepage import HomePageView
         HomePageView.register(self.server, route_base='/')
 
-        from backend.views.api.preference import PreferenceAPIView
-        PreferenceAPIView.register(self.server, route_base=f'{self.prefix+self.version}/preference')
-
-        from backend.views.api.system import SystemAPIView
-        SystemAPIView.register(self.server, route_base=f'{self.prefix+self.version}/system')
-
-        from backend.views.api.settings import SettingsAPIView
-        SettingsAPIView.register(self.server, route_base=f'{self.prefix+self.version}/settings')
-
-        from backend.views.api.bot import BotAPIView
-        BotAPIView.register(self.server, route_base=f'{self.prefix+self.version}/bot')
-
-        from backend.views.api.orders import OrdersAPIView
-        OrdersAPIView.register(self.server, route_base=f'{self.prefix+self.version}/orders')
-
-        from backend.views.api.backup import BackupAPIView
-        BackupAPIView.register(self.server, route_base=f'{self.prefix+self.version}/backup')
-
-        from backend.views.api.auth import AuthAPIView
-        AuthAPIView.register(self.server, route_base=f'{self.prefix+self.version}/auth')
+        # from backend.views.api.preference import PreferenceAPIView
+        # PreferenceAPIView.register(self.server, route_base=f'{self.prefix+self.version}/preference')

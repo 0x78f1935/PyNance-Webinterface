@@ -10,8 +10,8 @@ class Config(System):
     System should super at the end of the init file
     """
     def __init__(self) -> None:
-        self.DEBUG = False
-        self.VERSION = "2.0.0"
+        self.DEBUG = True
+        self.VERSION = "3.0.0"
         self.PROJECT_NAME = "PyNance - Webinterface"
 
         self.ENVIRONMENT = None

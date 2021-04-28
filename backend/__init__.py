@@ -16,12 +16,6 @@ cors = CORS()
 migrate = Migrate()
 pynance = PyNance('', '')
 
-from backend.models.bot import BotModel
-from backend.models.orders import OrderModel
-from backend.models.preference import PreferenceModel
-from backend.models.settings import SettingsModel
-from backend.models.system import SystemModel
-
 class Webserver(Flask):
     def __init__(self):
         public_folder = str(
@@ -67,26 +61,27 @@ class Webserver(Flask):
     def _setup_first_time_database_system_configuration(self):
         # from backend.models.system import SystemModel
         # from backend.models.chatterer import ChattererModel
-        from backend.models.preference import PreferenceModel
-        model = PreferenceModel.query.first()
-        if model is None:
-            db.session.add(PreferenceModel(version=self.config['VERSION']))
-            db.session.commit()
-        from backend.models.system import SystemModel
-        model = SystemModel.query.first()
-        if model is None:
-            db.session.add(SystemModel())
-            db.session.commit()
-        from backend.models.settings import SettingsModel
-        model = SettingsModel.query.first()
-        if model is None:
-            db.session.add(SettingsModel())
-            db.session.commit()
-        from backend.models.bot import BotModel
-        model = BotModel.query.first()
-        if model is None:
-            db.session.add(BotModel())
-            db.session.commit()
+        # from backend.models.preference import PreferenceModel
+        # model = PreferenceModel.query.first()
+        # if model is None:
+        #     db.session.add(PreferenceModel(version=self.config['VERSION']))
+        #     db.session.commit()
+        # from backend.models.system import SystemModel
+        # model = SystemModel.query.first()
+        # if model is None:
+        #     db.session.add(SystemModel())
+        #     db.session.commit()
+        # from backend.models.settings import SettingsModel
+        # model = SettingsModel.query.first()
+        # if model is None:
+        #     db.session.add(SettingsModel())
+        #     db.session.commit()
+        # from backend.models.bot import BotModel
+        # model = BotModel.query.first()
+        # if model is None:
+        #     db.session.add(BotModel())
+        #     db.session.commit()
+        pass
 
     def _setup_plugins(self):
         pynance.init_app(self)

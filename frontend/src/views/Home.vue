@@ -1,14 +1,18 @@
 <template>
-  <b-container fluid>
-    <orderhistory></orderhistory>
-  </b-container>
+  <div class="home">
+    <img alt="Vue logo" src="../assets/logo.png">
+    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  </div>
 </template>
 
 <script lang="ts">
-  import Orderhistory from '@/components/orders.vue';
-  export default {
-    components: {
-      Orderhistory,
-    },
-  }
+import { Component, Vue } from 'vue-property-decorator';
+import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+
+@Component({
+  components: {
+    HelloWorld,
+  },
+})
+export default class Home extends Vue {}
 </script>

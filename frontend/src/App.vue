@@ -1,72 +1,32 @@
 <template>
-  <v-app id="inspire">
-    <nav-header></nav-header>
-    <drawer class="laden"></drawer>
-
-    <v-main app>
-      <systembar></systembar>
-      <v-container fluid>
-        <router-view></router-view>
-      </v-container>
-    </v-main>
-
-    <v-footer app>
-      <b-col cols="11"></b-col>
-      <b-col class="mr-auro to_the_right" cols="1" md="1">
-        {{ $t('version') }}{{ $store.getters.version }}
-      </b-col>
-    </v-footer>
-
-    <masterPasswordInput :show="!$store.getters.authenticated" @reset="$store.commit('SET_AUTHENTICATED', true)"></masterPasswordInput>
-  </v-app>
+  <div id="app">
+    <div id="nav">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link>
+    </div>
+    <router-view/>
+  </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue';
-import Drawer from '@/layout/navigation_drawer.vue';
-import NavHeader from '@/layout/navigation_header.vue';
-import Systembar from '@/layout/navigation_system.vue';
-import MasterPasswordInput from '@/models/authenticate.vue';
-
-export default Vue.extend({
-  name: 'App',
-
-  components: {
-    Drawer,
-    NavHeader,
-    Systembar,
-    MasterPasswordInput
-  },
-
-  created: async function() {
-    await this.$store.dispatch('initApp');
-    this.$vuetify.theme.dark = this.$store.getters.darkmode;
-  },
-
-  data: () => ({
-    drawer: true,
-  }),
-});
-</script>
-
-<style scoped>
-  .laden {
-      padding-top: 0px !important;
-  }
-
-  .to_the_right{
-    justify-content: flex-end;
-    display: flex;
-  }
-</style>
-
-<style>
-::-webkit-scrollbar {
-    width: 0;  /* Remove scrollbar space */
-    background: black;  /* Optional: just make scrollbar invisible */
+<style lang="scss">
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
 }
-/* Optional: show position indicator in red */
-::-webkit-scrollbar-thumb {
-    background: rgba(241, 43, 92,1);
+
+#nav {
+  padding: 30px;
+
+  a {
+    font-weight: bold;
+    color: #2c3e50;
+
+    &.router-link-exact-active {
+      color: #42b983;
+    }
+  }
 }
 </style>
