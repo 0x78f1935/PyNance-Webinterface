@@ -14,7 +14,7 @@ import pathlib
 db = SQLAlchemy()
 cors = CORS()
 migrate = Migrate()
-pynance = PyNance('', '')
+pynance = PyNance()
 
 class Webserver(Flask):
     def __init__(self):
