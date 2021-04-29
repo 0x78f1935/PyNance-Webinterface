@@ -11,8 +11,23 @@ const keysModule: Module<any, any> = {
     },
 
     mutations: {
-        SET_CONMARKETCAL(state, value) { state.coinmarketcal = value; },
+        coinmarketcal(state, value) { state.coinmarketcal = value; },
     },
+
+    actions: {
+        loadKeys(state) {
+            if(state.getters.authenticated){
+                axios.get(`/api/v1/keys/`, {headers: {'token': state.getters.token}}).then(response => {
+                    response.data.forEach(element => {
+                        for (const [key, value] of Object.entries(element)) {
+                            state.commit(key, value);
+                            // console.log(`${key}: ${value}`);
+                        }
+                    });
+                });
+            }
+        }
+    }
 }
 
 export default keysModule;

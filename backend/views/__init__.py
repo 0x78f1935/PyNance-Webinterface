@@ -30,5 +30,8 @@ class ViewManager(object):
         from backend.views.api.system import SystemApiView
         SystemApiView.register(self.server, route_base=f'{self.prefix+self.version}/system')
 
+        from backend.views.api.keys import KeysApiView
+        KeysApiView.register(self.server, route_base=f'{self.prefix+self.version}/keys')
+
         from backend.views.api.coinmarketcal import CoinMarketApiView
         CoinMarketApiView.register(self.server, route_base=f'{self.prefix+self.version}/coinmarketcal')

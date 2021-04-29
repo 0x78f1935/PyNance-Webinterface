@@ -12,4 +12,4 @@ class KeysApiView(FlaskView):
     def get(self):
         from backend.models.keys import KeysModel
         model = KeysModel.query.all()
-        return jsonify([i.to_dict() for i in model])
+        return jsonify([{i.value: i.key} for i in model])

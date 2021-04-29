@@ -67,6 +67,7 @@
                         this.$store.commit('SET_AUTHENTICATED', response.data[sk]);
                         this.$data.show = false;
                         this.$data.MPWD = "";
+                        this.$store.dispatch('loadDashboard');
                     }
                 });
 
