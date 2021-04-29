@@ -54,7 +54,12 @@
     "parserOptions": {
       "ecmaVersion": 2020
     },
-    "rules": {}
+    "rules": {
+      "no-debugger": 0,
+      "no-useless-escape": "off",
+      "prefer-const": "off",
+      "@typescript-eslint/explicit-module-boundary-types": "off"
+    }
   },
   "browserslist": [
     "> 1%",

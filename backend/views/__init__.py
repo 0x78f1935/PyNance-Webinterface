@@ -27,5 +27,8 @@ class ViewManager(object):
         from backend.views.homepage import HomePageView
         HomePageView.register(self.server, route_base='/')
 
-        # from backend.views.api.preference import PreferenceAPIView
-        # PreferenceAPIView.register(self.server, route_base=f'{self.prefix+self.version}/preference')
+        from backend.views.api.system import SystemApiView
+        SystemApiView.register(self.server, route_base=f'{self.prefix+self.version}/system')
+
+        from backend.views.api.coinmarketcal import CoinMarketApiView
+        CoinMarketApiView.register(self.server, route_base=f'{self.prefix+self.version}/coinmarketcal')

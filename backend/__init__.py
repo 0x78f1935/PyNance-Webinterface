@@ -45,7 +45,7 @@ class Webserver(Flask):
         self._setup_jinja()
 
     def _setup_cors(self):
-        cors.init_app(self, resources={r'/*': {'origins': '*'}})
+        cors.init_app(self, resources={r'/*': {'origins': ['*', 'https://developers.coinmarketcal.com/']}})
 
     def _setup_views(self):
         ViewManager(self).register()
@@ -59,28 +59,13 @@ class Webserver(Flask):
             except Exception as e: print(e)
 
     def _setup_first_time_database_system_configuration(self):
-        # from backend.models.system import SystemModel
-        # from backend.models.chatterer import ChattererModel
-        # from backend.models.preference import PreferenceModel
-        # model = PreferenceModel.query.first()
-        # if model is None:
-        #     db.session.add(PreferenceModel(version=self.config['VERSION']))
-        #     db.session.commit()
-        # from backend.models.system import SystemModel
-        # model = SystemModel.query.first()
-        # if model is None:
-        #     db.session.add(SystemModel())
-        #     db.session.commit()
-        # from backend.models.settings import SettingsModel
-        # model = SettingsModel.query.first()
-        # if model is None:
-        #     db.session.add(SettingsModel())
-        #     db.session.commit()
-        # from backend.models.bot import BotModel
-        # model = BotModel.query.first()
-        # if model is None:
-        #     db.session.add(BotModel())
-        #     db.session.commit()
+        from backend.models.system import SystemModel
+        model = SystemModel.query.first()
+        if model is None: db.session.add(SystemModel(version=self.config['VERSION']))
+        
+        from backend.models.keys import KeysModel
+        
+        db.session.commit()
         pass
 
     def _setup_plugins(self):

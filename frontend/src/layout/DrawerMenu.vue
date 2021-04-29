@@ -7,7 +7,6 @@
       class="pt-4"
       color="dark"
       mini-variant
-      temporary
     >
       <v-badge bottom overlap bordered color="green" v-if="this.$store.getters.online">
         <v-icon large>mdi-currency-usd</v-icon>
@@ -56,7 +55,7 @@
 
     </v-navigation-drawer>
     <v-app-bar dense flat class="app-bar-thing">
-      <v-btn @click="drawer = !drawer" class="menu-btn-open" color="accent" :disabled="drawer"><v-icon large>mdi-menu</v-icon></v-btn>
+      <v-btn @click="drawer = !drawer" class="menu-btn-open" color="accent" :disabled="drawer || !this.$store.getters.authenticated"><v-icon large>mdi-menu</v-icon></v-btn>
       <knightrider :txt="`PyNance - ${this.$router.currentRoute.name.toLowerCase()}`"></knightrider>
     </v-app-bar>
   </div>
