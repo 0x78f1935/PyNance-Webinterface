@@ -56,6 +56,7 @@
                             v-model="MPWD"
                             :disabled="!$store.getters.tos"
                             type="password"
+                            autofocus
                         ></v-text-field>
                     </v-form>
                     <v-form v-on:submit.prevent>
@@ -86,6 +87,7 @@
                                 label="Coinmarketcal API-Key"
                                 placeholder="coinmarketcal API-Key"
                                 v-model="coinmarketcal"
+                                autofocus
                             ></v-text-field>
                         </v-form>
                     </p>

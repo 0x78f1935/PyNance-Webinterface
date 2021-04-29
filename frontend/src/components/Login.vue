@@ -20,6 +20,7 @@
                                 placeholder="Provide your master password"
                                 v-model="MPWD"
                                 type="password"
+                                autofocus
                             ></v-text-field>
                         </v-form>
                     </v-card-text>
