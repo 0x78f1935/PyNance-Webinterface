@@ -130,6 +130,7 @@
 </template>
 
 <script>
+    /*global sk*/
     import Knightrider from './Knightrider.vue';
     import axios from 'axios';
 
@@ -201,7 +202,7 @@
                                     this.$store.dispatch('coinmarketcal', this.$data.coinmarketcal);
                                     this.$data.step += 1;
                                 }
-                            }).catch(resp => {
+                            }).catch(() => {
                                 alert('The provided API-Key seems to be invalid, please check your API key.');
                             });
                         }

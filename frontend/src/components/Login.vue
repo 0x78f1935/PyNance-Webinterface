@@ -37,6 +37,7 @@
 </template>
 
 <script>
+    /*global sk*/
     import axios from 'axios';
     import Knightrider from './Knightrider.vue';
 
