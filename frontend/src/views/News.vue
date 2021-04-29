@@ -1,6 +1,6 @@
 <template>
     <div>
-        coinmarketcal.com News
+        <h1>News</h1>
         <coin-market-cal></coin-market-cal>
     </div>
 </template>

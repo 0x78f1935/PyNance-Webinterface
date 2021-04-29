@@ -33,14 +33,37 @@ class CoinMarketApiView(FlaskView):
     def events(self):
         from backend.models.keys import KeysModel
         model = KeysModel.query.filter(KeysModel.value == 'coinmarketcal').first()
-        url = "https://developers.coinmarketcal.com/v1/events"
-        querystring = {"max":"5"}
-        payload = ""
-        headers = {
-            'x-api-key': model.key,
-            'Accept-Encoding': "deflate, gzip",
-            'Accept': "application/json"
-        }
-        response = requests.request("GET", url, data=payload, headers=headers, params=querystring)
-        return jsonify({'error': False}), 200
+        if model is not None:
+            url = "https://developers.coinmarketcal.com/v1/events"
+            querystring = {
+                "max": request.json['max'],
+                "page": request.json['page'],
+                "sortBy": request.json['sortBy'],
+                "showOnly": request.json['showOnly']
+            }
+            payload = ""
+            headers = {
+                'x-api-key': model.key,
+                'Accept-Encoding': "deflate, gzip",
+                'Accept': "application/json"
+            }
+            response = requests.request("GET", url, data=payload, headers=headers, params=querystring)
+            data = response.json()
+            return jsonify({
+                'pagecount': data['_metadata']['page_count'],
+                'total_items': data['_metadata']['total_count'],
+                'events': [
+                    {
+                        'title': i['title']['en'] if 'title' in i.keys() and 'en' in i['title'].keys() else '',
+                        'coins': i['coins'] if 'coins' in i.keys() else [],
+                        'date_event': i['date_event'] if 'date_event' in i.keys() else '',
+                        'can_occur_before': i['can_occur_before'] if 'can_occur_before' in i.keys() else False,
+                        'created': i['created_date'] if 'created_date' in i.keys() else '',
+                        'categories': [y['name'] for y in i['categories']] if 'categories' in i.keys() else [],
+                        'proof': i['proof'] if 'proof' in i.keys() else '',
+                        'source': i['source'] if 'source' in i.keys() else '',
+
+                    } for i in data['body']
+                ]
+            }), 200
 
