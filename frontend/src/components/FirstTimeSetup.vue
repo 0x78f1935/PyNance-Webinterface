@@ -198,7 +198,7 @@
                                 if(response.data.error){
                                     alert('The provided API-Key seems to be invalid, please check your API key.');    
                                 } else {
-                                    this.$store.dispatch('SET_CONMARKETCAL', this.$data.coinmarketcal);
+                                    this.$store.dispatch('coinmarketcal', this.$data.coinmarketcal);
                                     this.$data.step += 1;
                                 }
                             }).catch(resp => {

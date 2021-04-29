@@ -23,7 +23,11 @@ class CoinMarketApiView(FlaskView):
         response = requests.request("GET", url, data=payload, headers=headers, params=querystring)
         if response.status_code == 200: 
             from backend.models.keys import KeysModel
-            model = KeysModel(value="coinmarketcal", key=request.args['api-key'])
+            model = KeysModel.query.filter(KeysModel.value=="coinmarketcal").first()
+            if model is None:
+                model = KeysModel(value="coinmarketcal", key=request.args['api-key'])
+            else:
+                model.key = request.args['api-key']
             db.session.add(model)
             db.session.commit()
             return jsonify({'error': False}), 200

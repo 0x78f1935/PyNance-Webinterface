@@ -25,30 +25,32 @@
 
       <!-- <v-btn class="menu-btn" color="accent"><v-icon large>mdi-camera-metering-spot</v-icon></v-btn>
       <v-btn class="menu-btn" color="accent"><v-icon large>mdi-graph</v-icon></v-btn> -->
-      <router-link to="/trades">
+      <router-link to="/trades" tag="button">
         <v-btn class="menu-btn" color="accent"><v-icon large>mdi-trademark</v-icon></v-btn>
       </router-link>
 
       <v-spacer class="mb-4"></v-spacer>
-      <router-link to="/wallet">
+      <router-link to="/wallet" tag="button">
         <v-btn class="menu-btn" color="accent"><v-icon large>mdi-wallet</v-icon></v-btn>
       </router-link>
-      <router-link to="/statistics">
+      <router-link to="/statistics" tag="button">
         <v-btn class="menu-btn" color="accent"><v-icon large>mdi-chart-line</v-icon></v-btn>
       </router-link>
-      <router-link to="/news">
-        <v-btn class="menu-btn" color="accent"><v-icon large>mdi-newspaper</v-icon></v-btn>
+      <router-link to="/news" tag="button" :disabled="this.$store.getters.coinmarketcal.length <= 0 ? true : false">
+        <v-btn class="menu-btn" color="accent" :disabled="this.$store.getters.coinmarketcal.length <= 0 ? true : false">
+          <v-icon large>mdi-newspaper</v-icon>
+        </v-btn>
       </router-link>
       <v-spacer class="mb-4"></v-spacer>
       <v-btn class="menu-btn" color="accent" @click="window.open('https://github.com/0x78f1935/PyNance-Webinterface/tree/master', '_blank');"><v-icon large>mdi-github</v-icon></v-btn>
       <v-btn class="menu-btn" color="accent"><v-icon large>mdi-discord</v-icon></v-btn>
       <v-spacer class="mb-4"></v-spacer>
-      <router-link to="/config">
+      <router-link to="/config" tag="button">
         <v-btn class="menu-btn" color="accent"><v-icon large>mdi-cog</v-icon></v-btn>
       </router-link>
       <v-btn class="menu-btn" color="accent"><v-icon large>mdi-lock</v-icon></v-btn>
       <v-spacer class="mb-4"></v-spacer>
-      <router-link to="/guide">
+      <router-link to="/guide" tag="button">
         <v-btn class="menu-btn" color="accent"><v-icon large>mdi-help</v-icon></v-btn>
       </router-link>
       <v-btn class="menu-btn" color="accent" @click="drawer = !drawer"><v-icon large>mdi-backburger</v-icon></v-btn>
