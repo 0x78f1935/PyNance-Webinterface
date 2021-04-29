@@ -28,3 +28,19 @@ class CoinMarketApiView(FlaskView):
             db.session.commit()
             return jsonify({'error': False}), 200
         else: return jsonify({'error': True}), 400
+
+    @route('/events', methods=['POST'])
+    def events(self):
+        from backend.models.keys import KeysModel
+        model = KeysModel.query.filter(KeysModel.value == 'coinmarketcal').first()
+        url = "https://developers.coinmarketcal.com/v1/events"
+        querystring = {"max":"5"}
+        payload = ""
+        headers = {
+            'x-api-key': model.key,
+            'Accept-Encoding': "deflate, gzip",
+            'Accept': "application/json"
+        }
+        response = requests.request("GET", url, data=payload, headers=headers, params=querystring)
+        return jsonify({'error': False}), 200
+

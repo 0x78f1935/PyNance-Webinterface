@@ -18,9 +18,12 @@ const keysModule: Module<any, any> = {
         loadKeys(state) {
             if(state.getters.authenticated){
                 axios.get(`/api/v1/keys/`, {headers: {'token': state.getters.token}}).then(response => {
-                    response.data.forEach(element => {
+                    response.data.forEach((element: any) => {
                         for (const [key, value] of Object.entries(element)) {
-                            state.commit(key, value);
+                            if(Object.keys(state.getters).includes(key))
+                            {
+                                state.commit(key, value);
+                            }
                             // console.log(`${key}: ${value}`);
                         }
                     });
