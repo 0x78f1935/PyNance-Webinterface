@@ -53,6 +53,10 @@ class Webserver(Flask):
     def _setup_database(self):
         db.init_app(self)
         migrate.init_app(self, db)
+
+        from backend.models.keys import KeysModel
+        from backend.models.system import SystemModel
+
         with self.app_context():
             try:
                 self._setup_first_time_database_system_configuration()
@@ -62,9 +66,7 @@ class Webserver(Flask):
         from backend.models.system import SystemModel
         model = SystemModel.query.first()
         if model is None: db.session.add(SystemModel(version=self.config['VERSION']))
-        
-        from backend.models.keys import KeysModel
-        
+       
         db.session.commit()
         pass
 
