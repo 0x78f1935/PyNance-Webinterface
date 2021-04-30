@@ -1,21 +1,6 @@
 <template>
     <v-row>
         <v-col
-            class="mt-2"
-            cols="4"
-        >
-            <v-btn :disabled="page <= 1 || loading" @click="previousPage" class="mr-2">Previous Page</v-btn>
-            <v-btn :disabled="page >= total_pages || loading" @click="nextPage" class="mr-2">Next Page</v-btn>
-            <span class="mr-2">{{ page }} / {{ total_pages }}</span>
-            <v-progress-circular
-                v-if="loading"
-                indeterminate
-                color="accent"
-                class="mr-2"
-            ></v-progress-circular>
-        </v-col>
-        
-        <v-col
             cols="4"
             class="mt-2"
         >
@@ -50,6 +35,22 @@
                 thumb-label
             ></v-slider>
 
+        </v-col>
+
+        <v-col
+            class="mt-2"
+            cols="4"
+            style="text-align: end"
+        >
+            <v-progress-circular
+                v-if="loading"
+                indeterminate
+                color="accent"
+                class="mr-2"
+            ></v-progress-circular>
+            <v-btn :disabled="page <= 1 || loading" @click="previousPage" class="mr-2">Previous Page</v-btn>
+            <v-btn :disabled="page >= total_pages || loading" @click="nextPage" class="mr-2">Next Page</v-btn>
+            <span class="mr-2">{{ page }} / {{ total_pages }}</span>
         </v-col>
 
         <v-col
