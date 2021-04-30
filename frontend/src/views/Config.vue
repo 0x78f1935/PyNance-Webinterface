@@ -4,7 +4,7 @@
             <v-row>
                 <v-text-field
                     v-model="coinmarketcalApiKey"
-                    :append-icon="showCoinmarketcal ? 'mdi-eye' : 'mdi-eye-off'"
+                    :append-icon="showCoinmarketcal ? 'mdi-eye-off' : 'mdi-eye'"
                     append-outer-icon="mdi-content-save"
                     :type="showCoinmarketcal ? 'text' : 'password'"
                     name="input-10-1"
