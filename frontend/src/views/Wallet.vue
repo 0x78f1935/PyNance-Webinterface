@@ -26,7 +26,7 @@
             <v-col
                 v-else
                 v-for="coin, index in coins"
-                :class="coin.coin.toUpperCase().includes(search.toUpperCase()) ? 'visible' : 'collapse'"
+                :class="coin.coin.toUpperCase().includes(search.toUpperCase()) || coin.name.toUpperCase().includes(search.toUpperCase()) ? 'visible' : 'collapse'"
                 :key="index"
                 cols="6"
                 md="2"
