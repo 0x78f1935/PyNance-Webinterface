@@ -1,8 +1,7 @@
 <template>
     <v-card
-        class="mx-auto"
+        class="mx-auto custom_card"
         max-width="374"
-        :class="isVisible ? 'visible' : `hidden` "
     >
     <template slot="progress">
         <v-progress-linear
@@ -26,25 +25,25 @@
             <table>
                 <thead>
                     <tr>
-                        <td>Type</td>
-                        <td>Amount</td>
+                        <th class="title_custom">Type</th>
+                        <th>Amount</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Available</td>
+                        <td class="title_custom">Available</td>
                         <td>{{ parseInt(free) + parseInt(locked) }}</td>
                     </tr>
                     <tr>
-                        <td>Free</td>
+                        <td class="title_custom">Free</td>
                         <td>{{ free }}</td>
                     </tr>
                     <tr>
-                        <td>Locked</td>
+                        <td class="title_custom">Locked</td>
                         <td>{{ locked }}</td>
                     </tr>
                     <tr>
-                        <td>Freezed</td>
+                        <td class="title_custom">Freezed</td>
                         <td>{{ freezed }}</td>
                     </tr>
                 </tbody>
@@ -53,7 +52,7 @@
 
         <v-divider class="mx-4"></v-divider>
 
-        <v-card-actions style="justify-content:space-between !important">
+        <!-- <v-card-actions style="justify-content:space-between !important">
             <v-btn
                 color="accent lighten-2"
                 text
@@ -66,7 +65,7 @@
             >
                 Test
             </v-btn>
-        </v-card-actions>
+        </v-card-actions> -->
     </v-card>
 </template>
 
@@ -95,16 +94,6 @@
                 required: true
             }
         },
-        data() {
-            return {
-                isVisible: true
-            }
-        },
-        methods: {
-            toggle(value) {
-                this.$data.isVisible = value;
-            },
-        },
     }
 </script>
 
@@ -113,7 +102,16 @@ table, th, td {
     border: 1px solid black;
     width: 100%;
 }
-.hidden {
-    display: none;
+
+td {
+    text-align: center;
+}
+th.title_custom, td.title_custom {
+    text-align: left !important;
+    padding-left: 5px !important;
+}
+
+.custom_card {
+    padding: 8px !important;
 }
 </style>

@@ -8,7 +8,6 @@
                 <v-text-field
                     :disabled="loading"
                     v-model="search"
-                    @change="searching"
                 >
                     <v-icon
                         slot="prepend"
@@ -26,6 +25,7 @@
             <v-col
                 v-else
                 v-for="coin, index in coins"
+                :class="coin.coin.toUpperCase().includes(search.toUpperCase()) ? 'visible' : 'collapse'"
                 :key="index"
                 cols="6"
                 md="2"
@@ -64,19 +64,6 @@
                 this.$data.coins = response.data.wallet;
                 this.$data.loading = false;
             });
-        },
-        methods: {
-            searching() {
-                for(let i = 0; i < Object.keys(this.$refs).length; i++){
-                    if(Object.keys(this.$refs)[i].includes(this.$data.search)){
-                        console.log('Match', Object.keys(this.$refs)[i]);
-                        this.$refs[Object.keys(this.$refs)[i]][0].toggle(true);
-                    } else {
-                        console.log('NO Match', Object.keys(this.$refs)[i]);
-                        this.$refs[Object.keys(this.$refs)[i]][0].toggle(false);
-                    }
-                }
-            }
         },
     }
 </script>
