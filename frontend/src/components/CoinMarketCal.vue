@@ -2,10 +2,10 @@
     <v-row>
         <v-col
             class="mt-2"
-            cols="9"
+            cols="4"
         >
-            <v-btn :disabled="page <= 1" @click="previousPage" class="mr-2">Previous Page</v-btn>
-            <v-btn :disabled="page >= total_pages" @click="nextPage" class="mr-2">Next Page</v-btn>
+            <v-btn :disabled="page <= 1 || loading" @click="previousPage" class="mr-2">Previous Page</v-btn>
+            <v-btn :disabled="page >= total_pages || loading" @click="nextPage" class="mr-2">Next Page</v-btn>
             <span class="mr-2">{{ page }} / {{ total_pages }}</span>
             <v-progress-circular
                 v-if="loading"
@@ -14,11 +14,30 @@
                 class="mr-2"
             ></v-progress-circular>
         </v-col>
+        
+        <v-col
+            cols="4"
+            class="mt-2"
+        >
+            <v-text-field
+                :disabled="loading"
+                v-model="search"
+                label="Search for news item"
+            >
+                <v-icon
+                    slot="prepend"
+                    color="accent"
+                >mdi-magnify
+                </v-icon>
+            </v-text-field>
+        </v-col>
+
         <v-col
             class="mt-2"
-            cols="3"
+            cols="4"
         >
             <v-slider
+                :disabled="loading"
                 v-model="max"
                 label="Total items on page"
                 :hint="max_items.toString()"
@@ -39,6 +58,7 @@
         >
             <v-combobox
                 solo
+                :disabled="loading"
                 label="Sort By"
                 v-model="_sortBy"
                 :items="sortByOptions"
@@ -55,6 +75,7 @@
                 label="Show Only"
                 v-model="_showOnly"
                 :items="showOnlyOptions"
+                :disabled="loading"
                 clearable
                 hide-selected
             ></v-combobox>
@@ -63,6 +84,7 @@
         <v-col
             v-for="event, index in events"
             :key="index"
+            :class="isCollapsed(event, search)"
             cols="6"
             md="2"
         >
@@ -143,6 +165,7 @@
             sortByOptions: ['created_desc', 'hot_events', 'trending_events', 'significant_events'],
             showOnly: null,
             showOnlyOptions: ['hot_events', 'trending_events', 'significant_events'],
+            search: ''
         }),
         mounted () {
             this.fetchData();
@@ -168,9 +191,18 @@
                     this.$data._showOnly = value;
                     this.fetchData();
                 }
-            }
+            },
         },
         methods: {
+            isCollapsed(event, s) {
+                console.log(event.title.toUpperCase().includes(s.toUpperCase()));
+                if (event.coins.map(x => x.name).join('|').toString().toUpperCase().includes(s.toUpperCase()) ||
+                    event.title.toUpperCase().includes(s.toUpperCase())
+                ) {
+                    return 'visible';
+                }
+                return 'collapse';
+            },
             fetchData(){
                 this.$data.loading = true;
                 axios.post(`/api/v1/coinmarketcal/events`, {

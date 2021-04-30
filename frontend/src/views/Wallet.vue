@@ -8,6 +8,7 @@
                 <v-text-field
                     :disabled="loading"
                     v-model="search"
+                    label="Search for asset"
                 >
                     <v-icon
                         slot="prepend"
