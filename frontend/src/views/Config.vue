@@ -3,12 +3,17 @@
         <v-form v-on:submit.prevent>
             <v-row>
                 <v-text-field
-                    label="Coinmarketcal API-Key"
-                    placeholder="coinmarketcal API-Key"
                     v-model="coinmarketcalApiKey"
+                    :append-icon="showCoinmarketcal ? 'mdi-eye' : 'mdi-eye-off'"
+                    append-outer-icon="mdi-content-save"
+                    :type="showCoinmarketcal ? 'text' : 'password'"
+                    name="input-10-1"
+                    label="Coinmarketcal API-Key"
+                    hint="Get yours at https://coinmarketcal.com/en/api"
                     autofocus
+                    @click:append="showCoinmarketcal = !showCoinmarketcal"
+                    @click:append-outer="setApiKeyCoinmarketcal"
                 ></v-text-field>
-                <v-btn dark x-large color="accent" @click="setApiKeyCoinmarketcal"> SAVE </v-btn>
             </v-row>
         </v-form>
     </v-container>
@@ -20,6 +25,7 @@
     export default {
         data: () => ({
             coinmarketcal: '',
+            showCoinmarketcal: false
         }),
         computed: {
             coinmarketcalApiKey: {
