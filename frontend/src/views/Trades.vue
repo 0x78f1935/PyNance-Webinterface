@@ -97,6 +97,22 @@
                     </template>
                 </v-slider>
             </v-col>
+
+            <v-col cols="6">
+                <v-subheader>
+                    The following value is used to suppress the lowest average price for a buy order by {{$store.getters.belowAverage}}%
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-text-field
+                    v-model="belowAverage"
+                    label="Suppression"
+                    :hint="`Lowest average - ${$store.getters.belowAverage}% = Max buy price`"
+                    type="number"
+                    persistent-hint
+                ></v-text-field>
+            </v-col>
         </v-row>
     </v-container>
 </template>
@@ -119,6 +135,10 @@
             walletAmount: {
                 get() { return this.$store.getters.walletAmount },
                 set(value) { this.$store.commit('SET_WALLET_AMOUNT', value); }
+            },
+            belowAverage: {
+                get() { return this.$store.getters.belowAverage },
+                set(value) { this.$store.commit('SET_BELOW_AVERAGE', value); }
             }
         },
     }
