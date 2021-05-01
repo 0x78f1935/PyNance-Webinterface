@@ -18,7 +18,7 @@ class ConfigModel(db.Model):
     candle_interval = db.Column(db.Integer, default=100)
     wallet_amount = db.Column(db.Float, default=100)
     below_average = db.Column(db.Float, default=5)
-    profit_margin = db.Column(db.Float, default=100)
+    profit_margin = db.Column(db.Float, default=35)
     profit_as = db.Column(db.Text, default="USDT")
 
     def update_data(self, data: dict):

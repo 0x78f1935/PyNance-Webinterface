@@ -113,6 +113,39 @@
                     persistent-hint
                 ></v-text-field>
             </v-col>
+
+            <v-col cols="6">
+                <v-subheader>
+                    Set the minimal expected profit margin before placing a sell order
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-text-field
+                    v-model="profitMargin"
+                    label="Minimal profit margin"
+                    :hint="`Current expected profit ${$store.getters.profitMargin}%`"
+                    type="number"
+                    persistent-hint
+                ></v-text-field>
+            </v-col>
+
+            <v-col cols="6">
+                <v-subheader>
+                    Show profits as {{ $store.getters.profitAs }}, this has no impact PyNance algorithm
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-autocomplete
+                    :items="this.$store.getters.assets"
+                    v-model="profitAs"
+                    label="Show profits as"
+                    :hint="`Currently selected ${$store.getters.profitAs}`"
+                    persistent-hint
+                >
+                </v-autocomplete>
+            </v-col>
         </v-row>
     </v-container>
 </template>
@@ -139,6 +172,14 @@
             belowAverage: {
                 get() { return this.$store.getters.belowAverage },
                 set(value) { this.$store.commit('SET_BELOW_AVERAGE', value); }
+            },
+            profitMargin: {
+                get() { return this.$store.getters.profitMargin },
+                set(value) { this.$store.commit('SET_PROFIT_MARGIN', value); }
+            },
+            profitAs: {
+                get() { return this.$store.getters.profitAs },
+                set(value) { this.$store.commit('SET_PROFIT_AS', value); }
             }
         },
     }
