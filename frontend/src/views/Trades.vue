@@ -3,7 +3,7 @@
         Trade
         <v-combobox
             :items="this.$store.getters.symbolsChoices"
-            v-model="value"
+            v-model="selectedSymbols"
             label="Symbols"
             hint="Select symbols you would like to trade with PyNance"
             persistent-hint
@@ -21,9 +21,14 @@
 
 <script>
     export default {
-        data: () => ({
-            value: [],
-        }),
+        computed: {
+            selectedSymbols: {
+                get() { return this.$store.getters.symbols },
+                set(value) {
+                    this.$store.commit('SET_SYMBOLS', value);
+                }
+            }
+        },
     }
 </script>
 
