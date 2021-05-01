@@ -37,7 +37,7 @@ const tradesModule: Module<any, any> = {
         SET_CANDLE_INTERVAL(state, value) { state.candleInterval = value; },
         SET_WALLET_AMOUNT(state, value) { state.walletAmount = value; },
         SET_BELOW_AVERAGE(state, value) { state.belowAverage = value; },
-        SET_BELOW_PROFIT_MARGIN(state, value) { state.profitMargin = value; },
+        SET_PROFIT_MARGIN(state, value) { state.profitMargin = value; },
         SET_PROFIT_AS(state, value) { state.profitAs = value; },
     },
 
@@ -52,7 +52,7 @@ const tradesModule: Module<any, any> = {
                 state.commit('SET_CANDLE_INTERVAL', response.data["candle-interval"]);
                 state.commit('SET_WALLET_AMOUNT', response.data["wallet-amount"]);
                 state.commit('SET_BELOW_AVERAGE', response.data["below-average"]);
-                state.commit('SET_BELOW_PROFIT_MARGIN', response.data["profit-margin"]);
+                state.commit('SET_PROFIT_MARGIN', response.data["profit-margin"]);
                 state.commit('SET_PROFIT_AS', response.data["profit-as"]);
                 console.log(response.data);
             });
