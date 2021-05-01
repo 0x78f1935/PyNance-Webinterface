@@ -39,6 +39,7 @@ const systemModule: Module<any, any> = {
                 state.commit('SET_TOKEN', response.data.token);
             });
             state.dispatch('loadKeys');
+            state.dispatch('loadTrades');
         }
     }
 }

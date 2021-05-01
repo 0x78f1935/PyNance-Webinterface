@@ -38,3 +38,6 @@ class ViewManager(object):
 
         from backend.views.api.wallet import WalletApiView
         WalletApiView.register(self.server, route_base=f'{self.prefix+self.version}/wallet')
+
+        from backend.views.api.trades import TradesApiView
+        TradesApiView.register(self.server, route_base=f'{self.prefix+self.version}/trades')
