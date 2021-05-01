@@ -1,12 +1,24 @@
 <template>
-    <div>
+    <v-container fluid>
         Statistics
-    </div>
+        <trading-vue :data="this.$data"></trading-vue>
+    </v-container>
 </template>
 
 <script>
+    import TradingVue from 'trading-vue-js'
+
     export default {
-        
+        components: {
+            TradingVue,
+        },
+        data() {
+            return {
+                ohlcv: [
+                    
+                ]
+            }
+        },
     }
 </script>
 

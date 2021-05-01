@@ -174,12 +174,12 @@
             </v-col>
 
             <!-- TODO enable when finished -->
-            <!-- <v-col cols="6">
+            <v-col cols="6">
                 <v-switch
                     v-model="spot"
                     :label="$store.getters.spot ? 'Trading in Spot!' : 'Trading USDT-M futures!'"
                 ></v-switch>
-            </v-col> -->
+            </v-col>
         </v-row>
     </v-container>
 </template>
@@ -191,7 +191,7 @@
                 if(confirm('Are you sure you would like to save your changes? PyNance will go offline after submitting changes, Remember to put PyNance back online!')){
                     this.$store.dispatch('saveTradeConfig');
                 }
-            }
+            },
         },
         computed: {
             selectedSymbols: {
@@ -222,11 +222,19 @@
                 get() { return this.$store.getters.profitAs },
                 set(value) { this.$store.commit('SET_PROFIT_AS', value); }
             },
-            spot: {
+            spot: { 
                 get() { return this.$store.getters.spot },
-                set(value) { this.$store.commit('SET_SPOT', value); }
+                set(value) { 
+                    if(value == false){
+                        if(confirm("Are you sure you would like to enable USDT-M futures? USDT-M futures involves a higher risk, you could potentionally lose money with USDT-M futures.")){
+                            this.$store.commit('SET_SPOT', false);
+                        } else { 
+                            this.$store.commit('SET_SPOT', true);
+                        }
+                    } else { this.$store.commit('SET_SPOT', value); }
+                }
             }
-        },
+        }
     }
 </script>
 
