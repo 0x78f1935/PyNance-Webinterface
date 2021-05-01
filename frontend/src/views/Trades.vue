@@ -53,7 +53,7 @@
                     thumb-color="accent"
                     thumb-label="always"
                     :thumb-size="20"
-                    hint="Max 1000 candles"
+                    :hint="`Max 1000 candles - Currently ${$store.getters.candleInterval} candles`"
                     max="1000"
                     min="1"
                     persistent-hint
@@ -61,6 +61,35 @@
                     <template v-slot:append>
                         <v-text-field
                             v-model="candleInterval"
+                            class="mt-0 pt-0"
+                            type="number"
+                            style="width: 60px"
+                        ></v-text-field>
+                    </template>
+                </v-slider>
+            </v-col>
+
+            <v-col cols="6">
+                <v-subheader>
+                    The total amount of your wallet used on the selected symbol when placing a buy order
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-slider
+                    v-model="walletAmount"
+                    label="Wallet amount"
+                    thumb-color="accent"
+                    thumb-label="always"
+                    :thumb-size="24"
+                    :hint="`Max 100% - Currently ${$store.getters.walletAmount}%`"
+                    max="100"
+                    min="1"
+                    persistent-hint
+                >
+                    <template v-slot:append>
+                        <v-text-field
+                            v-model="walletAmount"
                             class="mt-0 pt-0"
                             type="number"
                             style="width: 60px"
@@ -86,6 +115,10 @@
             candleInterval: {
                 get() { return this.$store.getters.candleInterval },
                 set(value) { this.$store.commit('SET_CANDLE_INTERVAL', value); }
+            },
+            walletAmount: {
+                get() { return this.$store.getters.walletAmount },
+                set(value) { this.$store.commit('SET_WALLET_AMOUNT', value); }
             }
         },
     }
