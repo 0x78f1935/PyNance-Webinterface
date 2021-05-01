@@ -16,7 +16,7 @@ Mako==1.1.4
 MarkupSafe==1.1.1
 pycparser==2.20
 PyMySQL==1.0.2
-PyNance @ git+https://github.com/0x78f1935/PyNance.git@16c8decefa0058f53975b73205e6d3277cea478b
+PyNance @ git+https://github.com/0x78f1935/PyNance.git@b30845a199218a2de67d8c07381ba00e5c4cd025
 python-dateutil==2.8.1
 python-editor==1.0.4
 requests==2.25.1
