@@ -19,7 +19,9 @@
                 >
                 </v-combobox>
             </v-col>
-
+        </v-row>
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
             <v-col cols="6">
                 <v-subheader>
                     Select the timeframe to use when calculating the lowest average for a buy order
@@ -39,7 +41,9 @@
                     single-line
                 ></v-select>
             </v-col>
-
+        </v-row>
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
             <v-col cols="6">
                 <v-subheader>
                     Select the total amount of candles to take into account when calculating the lowest average for a buy order
@@ -68,7 +72,9 @@
                     </template>
                 </v-slider>
             </v-col>
-
+        </v-row>
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
             <v-col cols="6">
                 <v-subheader>
                     The total amount of your wallet used on the selected symbol when placing a buy order
@@ -86,6 +92,7 @@
                     max="100"
                     min="1"
                     persistent-hint
+                    class="hideOnMobile"
                 >
                     <template v-slot:append>
                         <v-text-field
@@ -97,7 +104,9 @@
                     </template>
                 </v-slider>
             </v-col>
-
+        </v-row>
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
             <v-col cols="6">
                 <v-subheader>
                     The following value is used to suppress the lowest average price for a buy order by {{$store.getters.belowAverage}}%
@@ -113,7 +122,9 @@
                     persistent-hint
                 ></v-text-field>
             </v-col>
-
+        </v-row>
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
             <v-col cols="6">
                 <v-subheader>
                     Set the minimal expected profit margin before placing a sell order
@@ -129,7 +140,9 @@
                     persistent-hint
                 ></v-text-field>
             </v-col>
-
+        </v-row>
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
             <v-col cols="6">
                 <v-subheader>
                     Show profits as {{ $store.getters.profitAs }}, this has no impact PyNance algorithm
@@ -186,5 +199,16 @@
 </script>
 
 <style lang="scss" scoped>
-
+@media only screen and (max-width: 600px) {
+    .cdiv {
+        display: flex !important;
+        margin-bottom: 50px !important;
+        border-color: transparent !important;
+    }
+}
+.cdiv {
+    display: none;
+    margin-bottom: 0px;
+    border-color: transparent;
+}
 </style>
