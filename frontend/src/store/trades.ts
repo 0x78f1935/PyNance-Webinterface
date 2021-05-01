@@ -7,8 +7,7 @@ const tradesModule: Module<any, any> = {
         symbols: [],
         symbolsChoices: [],
         timeframeChoices: [],
-        candleIntervalChoices: [],
-        timeframe: 0,
+        timeframe: '',
         candleInterval: 0,
         walletAmount: 0,
         belowAverage: 0,
@@ -21,7 +20,6 @@ const tradesModule: Module<any, any> = {
         symbols: state => state.symbols,
         symbolsChoices: state => state.symbolsChoices,
         timeframeChoices: state => state.timeframeChoices,
-        candleIntervalChoices: state => state.candleIntervalChoices,
         timeframe: state => state.timeframe,
         candleInterval: state => state.candleInterval,
         walletAmount: state => state.walletAmount,
@@ -35,7 +33,6 @@ const tradesModule: Module<any, any> = {
         SET_SYMBOLS(state, value) { state.symbols = value; },
         SET_SYMBOLS_CHOICES(state, value) { state.symbolsChoices = value; },
         SET_TIMEFRAME_CHOICES(state, value) { state.timeframeChoices = value; },
-        SET_CANDLE_INTERVAL_CHOICES(state, value) { state.candleIntervalChoices = value; },
         SET_TIMEFRAME(state, value) { state.timeframe = value; },
         SET_CANDLE_INTERVAL(state, value) { state.candleInterval = value; },
         SET_WALLET_AMOUNT(state, value) { state.walletAmount = value; },
@@ -51,7 +48,6 @@ const tradesModule: Module<any, any> = {
                 state.commit('SET_SYMBOLS', response.data.symbols);
                 state.commit('SET_SYMBOLS_CHOICES', response.data["symbols-choices"]);                
                 state.commit('SET_TIMEFRAME_CHOICES', response.data["timeframe-choices"]);
-                state.commit('SET_CANDLE_INTERVAL_CHOICES', response.data["candle-interval-choices"]);
                 state.commit('SET_TIMEFRAME', response.data["timeframe"]);
                 state.commit('SET_CANDLE_INTERVAL', response.data["candle-interval"]);
                 state.commit('SET_WALLET_AMOUNT', response.data["wallet-amount"]);
