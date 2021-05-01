@@ -56,6 +56,17 @@ const tradesModule: Module<any, any> = {
                 state.commit('SET_PROFIT_AS', response.data["profit-as"]);
                 console.log(response.data);
             });
+        },
+        saveTradeConfig(state) {
+            axios.post(`/api/v1/trades/`, {
+                symbols: state.getters.symbols,
+                timeframe: state.getters.timeframe,
+                candle_interval: state.getters.candleInterval,
+                wallet_amount: state.getters.walletAmount,
+                below_average: state.getters.belowAverage,
+                profit_margin: state.getters.profitMargin,
+                profit_as: state.getters.profitAs,
+            },{headers: {'token': state.getters.token}});
         }
     }
 }

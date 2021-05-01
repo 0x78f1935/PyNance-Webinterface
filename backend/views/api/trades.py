@@ -6,7 +6,7 @@ from backend import db, pynance
 
 class TradesApiView(FlaskView):
     
-    decorators = [ ]
+    decorators = [ login_required ]
 
     def get(self):
         """Loads the current configuration and loads it into the store in the frontend.
@@ -46,3 +46,13 @@ class TradesApiView(FlaskView):
             'profit-margin': config.profit_margin,
             'profit-as': config.profit_as
         }), 200
+
+    def post(self):
+        """Saves the users trade configuration which is used while trading
+        """
+        # TODO turn bot offline
+        data = request.json
+        from backend.models.config import ConfigModel
+        config = ConfigModel.query.first()
+        config.update_data({**data})
+        return jsonify({}), 200

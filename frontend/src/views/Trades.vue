@@ -159,12 +159,32 @@
                 >
                 </v-autocomplete>
             </v-col>
+
+            <v-col cols="6">
+                <v-btn
+                    color="accent"
+                    depressed
+                    @click="save"
+                >
+                    <v-icon left>
+                        mdi-content-save
+                    </v-icon>
+                    Save
+                </v-btn>
+            </v-col>
         </v-row>
     </v-container>
 </template>
 
 <script>
     export default {
+        methods: {
+            save() {
+                if(confirm('Are you sure you would like to save your changes? PyNance will go offline after submitting changes, Remember to put PyNance back online!')){
+                    this.$store.dispatch('saveTradeConfig');
+                }
+            }
+        },
         computed: {
             selectedSymbols: {
                 get() { return this.$store.getters.symbols },

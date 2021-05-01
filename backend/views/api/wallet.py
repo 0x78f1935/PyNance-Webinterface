@@ -6,7 +6,7 @@ from backend import db, pynance
 
 class WalletApiView(FlaskView):
     
-    decorators = [ ]
+    decorators = [ login_required ]
 
     def get(self):
         """Returns wallet balance"""
