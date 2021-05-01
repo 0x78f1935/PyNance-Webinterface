@@ -20,6 +20,7 @@ class ConfigModel(db.Model):
     below_average = db.Column(db.Float, default=5)
     profit_margin = db.Column(db.Float, default=35)
     profit_as = db.Column(db.Text, default="USDT")
+    spot = db.Column(db.Boolean, default=True)
 
     def update_data(self, data: dict):
         """"Just throw in a json object, each key that can be mapped will be updated"

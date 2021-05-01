@@ -172,6 +172,14 @@
                     Save
                 </v-btn>
             </v-col>
+
+            <!-- TODO enable when finished -->
+            <!-- <v-col cols="6">
+                <v-switch
+                    v-model="spot"
+                    :label="$store.getters.spot ? 'Trading in Spot!' : 'Trading USDT-M futures!'"
+                ></v-switch>
+            </v-col> -->
         </v-row>
     </v-container>
 </template>
@@ -213,6 +221,10 @@
             profitAs: {
                 get() { return this.$store.getters.profitAs },
                 set(value) { this.$store.commit('SET_PROFIT_AS', value); }
+            },
+            spot: {
+                get() { return this.$store.getters.spot },
+                set(value) { this.$store.commit('SET_SPOT', value); }
             }
         },
     }

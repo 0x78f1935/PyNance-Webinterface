@@ -12,7 +12,8 @@ const tradesModule: Module<any, any> = {
         walletAmount: 0,
         belowAverage: 0,
         profitMargin: 0,
-        profitAs: ''
+        profitAs: '',
+        spot: true
     },
 
     getters: {
@@ -26,6 +27,7 @@ const tradesModule: Module<any, any> = {
         belowAverage: state => state.belowAverage,
         profitMargin: state => state.profitMargin,
         profitAs: state => state.profitAs,
+        spot: state => state.spot,
     },
 
     mutations: {
@@ -39,6 +41,7 @@ const tradesModule: Module<any, any> = {
         SET_BELOW_AVERAGE(state, value) { state.belowAverage = value; },
         SET_PROFIT_MARGIN(state, value) { state.profitMargin = value; },
         SET_PROFIT_AS(state, value) { state.profitAs = value; },
+        SET_SPOT(state, value) { state.spot = value; },
     },
 
     actions: {
@@ -54,6 +57,7 @@ const tradesModule: Module<any, any> = {
                 state.commit('SET_BELOW_AVERAGE', response.data["below-average"]);
                 state.commit('SET_PROFIT_MARGIN', response.data["profit-margin"]);
                 state.commit('SET_PROFIT_AS', response.data["profit-as"]);
+                state.commit('SET_SPOT', response.data["spot"]);
                 console.log(response.data);
             });
         },
@@ -66,6 +70,7 @@ const tradesModule: Module<any, any> = {
                 below_average: state.getters.belowAverage,
                 profit_margin: state.getters.profitMargin,
                 profit_as: state.getters.profitAs,
+                spot: state.getters.spot,
             },{headers: {'token': state.getters.token}});
         }
     }

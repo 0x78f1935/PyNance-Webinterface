@@ -44,7 +44,8 @@ class TradesApiView(FlaskView):
             'wallet-amount': config.wallet_amount,
             'below-average': config.below_average,
             'profit-margin': config.profit_margin,
-            'profit-as': config.profit_as
+            'profit-as': config.profit_as,
+            'spot': config.spot
         }), 200
 
     def post(self):
