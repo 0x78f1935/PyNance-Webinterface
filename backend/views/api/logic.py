@@ -22,3 +22,11 @@ class LogicApiView(FlaskView):
         option = request.json['online']
         bot.update_data({'online': option})
         return jsonify({'online': bot.online})
+
+    @route('systembar', methods=['GET'])
+    def systembar(self):
+        """Gets called often to retrieve the status of the bot
+        """
+        from backend.models.bot import BotModel
+        bot = BotModel.query.first()
+        return jsonify(bot.status.to_dict(['id']))
