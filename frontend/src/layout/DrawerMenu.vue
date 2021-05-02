@@ -17,14 +17,12 @@
 
       <v-spacer class="mt-4"></v-spacer>
 
-      <v-btn class="menu-btn" color="accent">
+      <v-btn class="menu-btn" color="accent" @click="toggleOnline">
         <v-icon large v-if="this.$store.getters.online">mdi-currency-usd-off</v-icon>
         <v-icon large v-else>mdi-currency-usd</v-icon>
       </v-btn>
       <v-spacer class="mb-4"></v-spacer>
 
-      <!-- <v-btn class="menu-btn" color="accent"><v-icon large>mdi-camera-metering-spot</v-icon></v-btn>
-      <v-btn class="menu-btn" color="accent"><v-icon large>mdi-graph</v-icon></v-btn> -->
       <router-link to="/trades" tag="button">
         <v-btn class="menu-btn" color="accent"><v-icon large>mdi-trademark</v-icon></v-btn>
       </router-link>
@@ -73,6 +71,11 @@ import Knightrider from '../components/Knightrider.vue'
         data: () => ({
           drawer: false
         }),
+        methods: {
+          toggleOnline() {
+            this.$store.dispatch('toggleOnline', !this.$store.getters.online);
+          }
+        },
     }
 </script>
 

@@ -12,3 +12,13 @@ class LogicApiView(FlaskView):
 
     def get(self):
         return jsonify({})
+
+    @route('toggle', methods=['POST'])
+    def toggle(self):
+        """Toggles the bot offline and online
+        """
+        from backend.models.bot import BotModel
+        bot = BotModel.query.first()
+        option = request.json['online']
+        bot.update_data({'online': option})
+        return jsonify({'online': bot.online})

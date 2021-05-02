@@ -189,6 +189,7 @@
         methods: {
             save() {
                 if(confirm('Are you sure you would like to save your changes? PyNance will go offline after submitting changes, Remember to put PyNance back online!')){
+                    this.$store.dispatch('toggleOnline', false);
                     this.$store.dispatch('saveTradeConfig');
                 }
             },

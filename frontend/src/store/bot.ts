@@ -15,8 +15,8 @@ const botModule: Module<any, any> = {
     },
 
     actions: {
-        setOnline({ commit, getters }, data) {
-          axios.post(`/api/v1/system/`, {'online': data}, {headers: {'token': getters.token}}).then(response => {
+        toggleOnline({ commit, getters }, data) {
+          axios.post(`/api/v1/logic/toggle`, {'online': data}, {headers: {'token': getters.token}}).then(response => {
             commit('SET_ONLINE', response.data.online);
           });
         },
