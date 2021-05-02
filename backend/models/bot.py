@@ -50,6 +50,12 @@ class BotModel(db.Model):
         """
         self.status.message = message
         db.session.commit()
+
+    def update_target(self, symbol: str):
+        """Updates the current selected symbol in the statusbar table
+        """
+        self.status.target = symbol
+        db.session.commit()
     
     def finished_order(self):
         """Increment the status model with +1

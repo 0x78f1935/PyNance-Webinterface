@@ -15,6 +15,7 @@ class StatusModel(db.Model):
 
     bot = db.relationship("BotModel", back_populates="status")
 
+    target = db.Column(db.Text, default="NO TARGET")
     message = db.Column(db.Text, default="Offline")
     total_orders = db.Column(db.Integer, default=0)
     average = db.Column(db.Float, default=0.0)

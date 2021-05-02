@@ -11,17 +11,18 @@ class KlinesApiView(FlaskView):
 
     def get(self):
         from backend.models.bot import BotModel
+        from backend.models.orders import OrdersModel
         bot = BotModel.query.first()
         klines = pynance.assets.klines('LTCUSDT', timeframe=bot.config.timeframe, total_candles=bot.config.candle_interval)
-        # TODO make data dynamic
+        order = OrdersModel.query.filter(OrdersModel.symbol == bot.status.target).first()
         return jsonify({
             'klines': klines, 
-            'target': 'LTCUSDT', 
-            'current_target': 270.00, 
-            'target_type': 'BUY TARGET',
+            'target': bot.status.target,
+            'current_target': bot.status.average, 
+            'target_type': 'BUY TARGET' if order.buying else 'SELL TARGET',
             'status': {
-                'target': 'LTCUSDT', 
-                'current_target': 270.00, 
-                'target_type': 'buy',
+                'target': bot.status.target, 
+                'current_target': bot.status.average, 
+                'target_type': 'buy' if order.buying else 'selling',
             }
         })

@@ -53,6 +53,7 @@ class LogicApiView(FlaskView):
 
         # Iterate over each symbol
         for symbol in bot.config.symbols:
+            bot.update_target(symbol)
             # Update the current average
             bot.chat(f"CURRENT SYMBOL SELECTED - {symbol}")
             average = pynance.assets.average(symbol, bot.config.timeframe, bot.config.candle_interval)
@@ -80,7 +81,7 @@ class LogicApiView(FlaskView):
                 base_balance = [i for i in balance.json if i['coin'] == base_asset][0]
                 balance_free = float(round(float(base_balance['free']), 8))
                 if balance_free < 10:
-                    bot.chat(f"NOT ENOUGH {base_asset} TO BUY - {quote_asset} - {balance_free} {base_asset} AVAILABLE NEED 10 {base_asset}")
+                    bot.chat(f"NOT ENOUGH {base_asset} TO BUY {quote_asset} - {balance_free} {base_asset} AVAILABLE NEED 10 {base_asset}")
                     return jsonify({
                         'online': True,
                         'execution_time': str(datetime.now()-stopwatch),
