@@ -43,9 +43,46 @@ class BotModel(db.Model):
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs if c.key not in blacklist}
     
     def chat(self, message: str):
+        """Updates the statusbar in the frontend
+
+        Args:
+            message (str): [The message which you would like to make appear]
+        """
         self.status.message = message
         db.session.commit()
     
     def finished_order(self):
+        """Increment the status model with +1
+        """
         self.status.total_orders += 1
         db.session.commit()
+
+    def update_average(self, average: float):
+        """Keeps track of the current selected symbol average
+
+        Args:
+            average (float): [The average of the selected symbol]
+        """
+        self.status.average = average
+        db.session.commit()
+    
+    def get_order(self, symbol: str):
+        """Gets the order which we want to trade, if not existing we create one
+
+        Args:
+            symbol (str): [The symbol which we would like to trade]
+
+        Returns:
+            [OrderModel]: [representing order]
+        """
+        orders = [i for i in self.orders if i.symbol == symbol]
+        if orders: order = orders.pop(0)
+        else:
+            from backend.models.orders import OrdersModel
+            order = OrdersModel(
+                bot_id=self.id,
+                symbol=symbol
+            )
+            db.session.add(order)
+            db.session.commit()
+        return order

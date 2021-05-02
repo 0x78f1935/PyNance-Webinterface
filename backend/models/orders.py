@@ -15,9 +15,10 @@ class OrdersModel(db.Model):
     bot_id = db.Column(db.Integer, db.ForeignKey('Bot.id'))
     
     symbol = db.Column(db.Text, nullable=False)
-    brought_price = db.Column(db.Float, nullable=False)
-    quantity = db.Column(db.Float, nullable=False)
-    sold_for = db.Column(db.Float, nullable=False)
+    brought_price = db.Column(db.Float, default=0.0)
+    quantity = db.Column(db.Float, default=0.0)
+    sold_for = db.Column(db.Float, default=0.0)
+    buying = db.Column(db.Boolean, default=True)
 
     def update_data(self, data: dict):
         """"Just throw in a json object, each key that can be mapped will be updated"

@@ -17,6 +17,7 @@ class StatusModel(db.Model):
 
     message = db.Column(db.Text, default="Offline")
     total_orders = db.Column(db.Integer, default=0)
+    average = db.Column(db.Float, default=0.0)
 
     def update_data(self, data: dict):
         """"Just throw in a json object, each key that can be mapped will be updated"

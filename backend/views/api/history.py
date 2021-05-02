@@ -13,4 +13,4 @@ class HistoryApiView(FlaskView):
     def get(self):
         from backend.models.bot import BotModel
         bot = BotModel.query.first()
-        return jsonify([i.to_dict(['bot_id', 'id']) for i in bot.orders])
+        return jsonify([i.to_dict(['bot_id', 'id', 'buying']) for i in bot.orders])
