@@ -156,6 +156,7 @@
                     label="Show profits as"
                     :hint="`Currently selected ${$store.getters.profitAs}`"
                     persistent-hint
+                    :disabled="true"
                 >
                 </v-autocomplete>
             </v-col>
