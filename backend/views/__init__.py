@@ -47,3 +47,6 @@ class ViewManager(object):
 
         from backend.views.api.history import HistoryApiView
         HistoryApiView.register(self.server, route_base=f'{self.prefix+self.version}/history')
+
+        from backend.views.api.logic import LogicApiView
+        LogicApiView.register(self.server, route_base=f'{self.prefix+self.version}/logic')
