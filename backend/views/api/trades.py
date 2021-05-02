@@ -34,6 +34,9 @@ class TradesApiView(FlaskView):
             config = ConfigModel()
             db.session.add(config)
             db.session.commit()
+            from backend.models.bot import BotModel
+            db.session.add(BotModel(config_id=config.id))
+            db.session.commit()
         return jsonify({
             'assets': assets,
             'symbols': config.symbols,

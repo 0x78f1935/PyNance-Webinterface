@@ -10,9 +10,9 @@ class KlinesApiView(FlaskView):
     decorators = [ login_required ]
 
     def get(self):
-        from backend.models.config import ConfigModel
-        config = ConfigModel.query.first()
-        klines = pynance.assets.klines('LTCUSDT', timeframe=config.timeframe, total_candles=config.candle_interval)
+        from backend.models.bot import BotModel
+        bot = BotModel.query.first()
+        klines = pynance.assets.klines('LTCUSDT', timeframe=bot.config.timeframe, total_candles=bot.config.candle_interval)
         # TODO make data dynamic
         return jsonify({
             'klines': klines, 

@@ -56,6 +56,7 @@ class Webserver(Flask):
 
         from backend.models.keys import KeysModel
         from backend.models.system import SystemModel
+        from backend.models.bot import BotModel
         from backend.models.config import ConfigModel
 
         with self.app_context():
