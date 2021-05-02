@@ -48,7 +48,7 @@
       <router-link to="/config" tag="button">
         <v-btn class="menu-btn" color="accent"><v-icon large>mdi-cog</v-icon></v-btn>
       </router-link>
-      <v-btn class="menu-btn" color="accent"><v-icon large>mdi-lock</v-icon></v-btn>
+      <v-btn class="menu-btn" color="accent" @click="$router.go()"><v-icon large>mdi-lock</v-icon></v-btn>
       <v-spacer class="mb-4"></v-spacer>
       <router-link to="/guide" tag="button">
         <v-btn class="menu-btn" color="accent"><v-icon large>mdi-help</v-icon></v-btn>
@@ -83,6 +83,10 @@ import Knightrider from '../components/Knightrider.vue'
   width: 100%;
   max-width: 53px !important;
   min-width: 0 !important;
+}
+
+button {
+  border-radius: 0px !important;
 }
 
 .menu-btn-open {

@@ -5,21 +5,14 @@ from sqlalchemy import inspect
 from uuid import uuid4
 
 
-class BotModel(db.Model):
-    """BotModel keeps track of the bots status"""
-    __tablename__ = "Bot"
+class OrdersModel(db.Model):
+    """KeysModel keeps track of API keys which can extend features within PyNance"""
+    __tablename__ = "Orders"
     id = db.Column(db.Integer, primary_key=True)
+    created = db.Column(db.DateTime, default=datetime.utcnow)
     updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    config_id = db.Column(db.Integer, db.ForeignKey('Config.id'))
-    config = db.relationship("ConfigModel", back_populates="bot")
-
-    status_id = db.Column(db.Integer, db.ForeignKey('Status.id'))
-    status = db.relationship("StatusModel", back_populates="bot")
-
-    orders = db.relationship("OrdersModel")
-
-    online = db.Column(db.Boolean, default=False, onupdate=False)
+    bot_id = db.Column(db.Integer, db.ForeignKey('Bot.id'))
 
     def update_data(self, data: dict):
         """"Just throw in a json object, each key that can be mapped will be updated"
