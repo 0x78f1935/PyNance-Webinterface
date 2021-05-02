@@ -89,25 +89,23 @@ class LogicApiView(FlaskView):
             # Check if we are buying or if we are selling
             # One full cycle if buying asset B and selling asset B for asset A
             if order.buying:
-                if base_balance_free < required_amount:
+                if quote_balance_free < required_amount:
                     bot.chat(f"NOT ENOUGH {quote_asset} TO BUY {base_asset} - {base_balance_free} {quote_asset} AVAILABLE NEED MINIMUM OF {required_amount} {quote_asset}")
                 else:
                     current_price = float(round(float(pynance.assets.symbols(symbol).json['price']), 8))
                     if current_price <= average:
                         quantity = float(float(float(float(quote_balance_free / current_price) / 100) * float(bot.config.wallet_amount)))
                         bot.chat(f"{base_asset} REACHED TARGET PRICE - BUYING {quantity} {base_asset}")
-                        # TODO test buy order
-                        # buy_order = pynance.orders.create(symbol, float(round(float(quantity - float(quantity/100)), precision)), order_id='pynanceBuyOrder')
-                        buy_order = None # TODO enable
+                        buy_order = pynance.orders.create(symbol, float(round(float(quantity - float(quantity/100)), precision)), order_id='pynanceBuyOrder')
                         if buy_order is not None:
                             data = buy_order.json['fills'][0]
-                            brought_price = float(round(float(data['price'] * quantity), 8))
+                            brought_price = float(round(float(data['price'])* quantity, 8))
                             order.update_data({
                                 'brought_price': brought_price,
                                 'quantity': quantity,
                                 'buying': False
                             })
-                            bot.chat(f"BROUGHT ({float(round(float(order.quantity), 8))}) {base_asset} FOR AN AMAZING ({float(round(float(sold_price), 8))}) {quote_asset}")
+                            bot.chat(f"BROUGHT ({float(round(float(order.quantity), 8))}) {base_asset} FOR AN AMAZING ({float(round(float(brought_price), 8))}) {quote_asset}")
                         else: bot.chat(f"UNABLE TO PLACE A BUY ORDER FOR ({float(round(float(quantity), 8))}) {base_asset}")
                         print('\n\n')
                         print('-'*50)
