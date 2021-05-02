@@ -10,8 +10,7 @@ import math
 
 class LogicApiView(FlaskView):
     
-    # TODO enable
-    # decorators = [ login_required ]
+    decorators = [ login_required ]
 
     def get(self):
         """This method is the brain of the bot, places orders etc

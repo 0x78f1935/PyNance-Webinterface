@@ -27,7 +27,7 @@
         },
         methods: {
             updateSysBar() {
-                axios.get(`/api/v1/logic/systembar`, {headers: {'token': this.$store.getters.token}}).then(response => {
+                axios.get(`/api/v1/logic/systembar`, {headers: {'token': localStorage['sk']}}).then(response => {
                     this.$data.message = response.data.message;
                     this.$data.total_orders = response.data.total_orders;
                     this.$data.updated = new Date(response.data.updated);

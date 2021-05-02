@@ -16,12 +16,12 @@ const botModule: Module<any, any> = {
 
     actions: {
         toggleOnline({ commit, getters }, data) {
-          axios.post(`/api/v1/logic/toggle`, {'online': data}, {headers: {'token': getters.token}}).then(response => {
+          axios.post(`/api/v1/logic/toggle`, {'online': data}, {headers: {'token': localStorage['sk']}}).then(response => {
             commit('SET_ONLINE', response.data.online);
           });
         },
         getOnlineStatus({ commit, getters }){
-            axios.get(`/api/v1/logic/toggle`, {headers: {'token': getters.token}}).then(response => {
+            axios.get(`/api/v1/logic/toggle`, {headers: {'token': localStorage['sk']}}).then(response => {
                 commit('SET_ONLINE', response.data.online);
             });
         }
