@@ -15,14 +15,18 @@
                     @click:append-outer="setApiKeyCoinmarketcal"
                 ></v-text-field>
             </v-row>
+
+            <backup></backup>
         </v-form>
     </v-container>
 </template>
 
 <script>
     import axios from 'axios';
+    import backup from '@/components/Backup.vue';
 
     export default {
+        components: { backup },
         data: () => ({
             coinmarketcal: '',
             showCoinmarketcal: false
