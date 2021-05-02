@@ -41,3 +41,6 @@ class ViewManager(object):
 
         from backend.views.api.trades import TradesApiView
         TradesApiView.register(self.server, route_base=f'{self.prefix+self.version}/trades')
+
+        from backend.views.api.klines import KlinesApiView
+        KlinesApiView.register(self.server, route_base=f'{self.prefix+self.version}/klines')
