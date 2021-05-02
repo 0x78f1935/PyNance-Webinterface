@@ -107,11 +107,6 @@ class LogicApiView(FlaskView):
                             })
                             bot.chat(f"BROUGHT ({float(round(float(order.quantity), 8))}) {base_asset} FOR AN AMAZING ({float(round(float(brought_price), 8))}) {quote_asset}")
                         else: bot.chat(f"UNABLE TO PLACE A BUY ORDER FOR ({float(round(float(quantity), 8))}) {base_asset}")
-                        print('\n\n')
-                        print('-'*50)
-                        print("BUYING")
-                        print('-'*50)
-                        print('\n\n')
                     else: bot.chat(f"CURRENT {base_asset} NOT AT BUY TARGET OF {average} - SKIPPING BUYING {base_asset}")
             else: # Trying to sell
                 brought_price = order.brought_price
@@ -123,9 +118,7 @@ class LogicApiView(FlaskView):
                 bot.update_average(ask_price)
                 if current_price >= ask_price:
                     bot.chat(f"{base_asset} REACHED TARGET PRICE - SELLING {order.quantity} {base_asset}")
-                    # TODO test sell order
                     sell_order = pynance.orders.create(symbol, float(round(float(order.quantity - float(float(order.quantity/100)*2.5)), precision)), buy=False, order_id='pynanceSellEntry')
-                    # sell_order = None
                     if sell_order is not None:
                         sold_price = float(round(float(current_price) * order.quantity, 8))
                         order.update_data({
@@ -133,11 +126,6 @@ class LogicApiView(FlaskView):
                             'sold_for': sold_price
                         })
                         bot.chat(f"SOLD ({float(round(float(order.quantity), 8))}) {base_asset} FOR AN AMAZING ({float(round(float(sold_price), 8))}) {quote_asset}")
-                        print('\n\n')
-                        print('-'*50)
-                        print("SELLING")
-                        print('-'*50)
-                        print('\n\n')
                     else: bot.chat(f"UNABLE TO PLACE A SELL ORDER FOR ({float(round(float(order.quantity), 8))}) {base_asset}")
                 else: bot.chat(f"CURRENT {base_asset} NOT AT SELL TARGET OF {ask_price} - SKIPPING SELLING {base_asset}")
         return jsonify({
