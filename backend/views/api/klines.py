@@ -13,7 +13,7 @@ class KlinesApiView(FlaskView):
         from backend.models.bot import BotModel
         from backend.models.orders import OrdersModel
         bot = BotModel.query.first()
-        klines = pynance.assets.klines('LTCUSDT', timeframe=bot.config.timeframe, total_candles=bot.config.candle_interval)
+        klines = pynance.assets.klines(bot.status.target, timeframe=bot.config.timeframe, total_candles=bot.config.candle_interval)
         order = OrdersModel.query.filter(OrdersModel.symbol == bot.status.target).first()
         return jsonify({
             'klines': klines, 

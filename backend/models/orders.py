@@ -19,6 +19,7 @@ class OrdersModel(db.Model):
     quantity = db.Column(db.Float, default=0.0)
     sold_for = db.Column(db.Float, default=0.0)
     buying = db.Column(db.Boolean, default=True)
+    active = db.Column(db.Boolean, default=True)
 
     def update_data(self, data: dict):
         """"Just throw in a json object, each key that can be mapped will be updated"
@@ -40,3 +41,7 @@ class OrdersModel(db.Model):
             blacklist ([list]): [Columns you don't want to include in the dict]
         """
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs if c.key not in blacklist}
+    
+    def set_active(self, value: bool):
+        self.active = value
+        db.session.commit()

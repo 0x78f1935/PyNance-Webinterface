@@ -64,4 +64,6 @@ class TradesApiView(FlaskView):
         from backend.models.config import ConfigModel
         config = ConfigModel.query.first()
         config.update_data({**data})
+        [i.set_active(False) for i in bot.orders if i.symbol not in config.symbols]
+        [i.set_active(True) for i in bot.orders if i.symbol in config.symbols]
         return jsonify({}), 200
