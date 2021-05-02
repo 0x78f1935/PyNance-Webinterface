@@ -135,6 +135,11 @@ class LogicApiView(FlaskView):
                             'sold_for': sold_price
                         })
                         bot.chat(f"SOLD ({float(round(float(order.quantity), 8))}) {base_asset} FOR AN AMAZING ({float(round(float(sold_price), 8))}) {quote_asset}")
+                        print('\n\n')
+                        print('-'*50)
+                        print("SELLING")
+                        print('-'*50)
+                        print('\n\n')
                     else: bot.chat(f"UNABLE TO PLACE A SELL ORDER FOR ({float(round(float(order.quantity), 8))}) {base_asset}")
 
         return jsonify({
