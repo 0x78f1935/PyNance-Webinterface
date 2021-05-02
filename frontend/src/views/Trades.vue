@@ -179,7 +179,7 @@
                 <v-switch
                     v-model="spot"
                     :label="$store.getters.spot ? 'Trading in Spot!' : 'Trading USDT-M futures!'"
-                    :disable="true"
+                    readonly
                 ></v-switch>
             </v-col>
         </v-row>
