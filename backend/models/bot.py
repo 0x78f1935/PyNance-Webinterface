@@ -81,7 +81,7 @@ class BotModel(db.Model):
         Returns:
             [OrderModel]: [representing order]
         """
-        orders = [i for i in self.orders if i.symbol == symbol]
+        orders = [i for i in self.orders if i.symbol == symbol and i.active]
         if orders: order = orders.pop(0)
         else:
             from backend.models.orders import OrdersModel

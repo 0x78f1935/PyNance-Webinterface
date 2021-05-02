@@ -52,7 +52,7 @@ class LogicApiView(FlaskView):
             })
 
         # Iterate over each symbol
-        for symbol in [i.symbol for i in bot.orders if i.active]:
+        for symbol in [i.symbol for i in bot.orders if i.active == True or i.symbol in bot.config.symbols]:
             print('\n\n')
             print('-'*50)
             print(symbol)
@@ -64,7 +64,6 @@ class LogicApiView(FlaskView):
             bot.chat(f"CURRENT SYMBOL SELECTED - {symbol}")
             average = pynance.assets.average(symbol, bot.config.timeframe, bot.config.candle_interval)
             if bot.config.below_average > 0: average = float(average - float(float(average/100) * bot.config.below_average))
-            bot.update_average(average)
 
             # Check if this symbol has any open orders
             order = bot.get_order(symbol)
@@ -89,6 +88,7 @@ class LogicApiView(FlaskView):
             # Check if we are buying or if we are selling
             # One full cycle if buying asset B and selling asset B for asset A
             if order.buying:
+                bot.update_average(average)
                 if quote_balance_free < required_amount:
                     bot.chat(f"NOT ENOUGH {quote_asset} TO BUY {base_asset} - {base_balance_free} {quote_asset} AVAILABLE NEED MINIMUM OF {required_amount} {quote_asset}")
                 else:
@@ -118,16 +118,16 @@ class LogicApiView(FlaskView):
                 minimal_profit = bot.config.profit_margin
                 asset_fees = pynance.assets.fees(symbol)  # makerCommission | takerCommission
                 fee_percentage = float(asset_fees.json[0]['makerCommission'])
-                minimum_ask_price = float(round(brought_price + float(float(brought_price) * fee_percentage), 8))
-                ask_price = float(round(float(float(minimum_ask_price) * minimal_profit), 8))
                 current_price = float(round(float(pynance.assets.symbols(symbol).json['price']), 8))
-                if current_price >= average:
+                ask_price = float(brought_price + float(float(brought_price / order.quantity) / 100) * float(minimal_profit + fee_percentage)) / order.quantity
+                bot.update_average(ask_price)
+                if current_price >= ask_price:
                     bot.chat(f"{base_asset} REACHED TARGET PRICE - SELLING {order.quantity} {base_asset}")
                     # TODO test sell order
-                    # sell_order = pynance.orders.create(symbol, float(round(float(quantity - float(float(quantity/100)*2.5)), precision)), buy=False, order_id='pynanceSellEntry')
-                    sell_order = None
+                    sell_order = pynance.orders.create(symbol, float(round(float(order.quantity - float(float(order.quantity/100)*2.5)), precision)), buy=False, order_id='pynanceSellEntry')
+                    # sell_order = None
                     if sell_order is not None:
-                        sold_price = float(round(float(current_price * order.quantity), 8))
+                        sold_price = float(round(float(current_price) * order.quantity, 8))
                         order.update_data({
                             'active': False,
                             'sold_for': sold_price
@@ -139,7 +139,7 @@ class LogicApiView(FlaskView):
                         print('-'*50)
                         print('\n\n')
                     else: bot.chat(f"UNABLE TO PLACE A SELL ORDER FOR ({float(round(float(order.quantity), 8))}) {base_asset}")
-
+                else: bot.chat(f"CURRENT {base_asset} NOT AT SELL TARGET OF {ask_price} - SKIPPING SELLING {base_asset}")
         return jsonify({
             'online': True,
             'execution_time': str(datetime.now()-stopwatch),
