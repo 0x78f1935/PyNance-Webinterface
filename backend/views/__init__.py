@@ -44,3 +44,6 @@ class ViewManager(object):
 
         from backend.views.api.klines import KlinesApiView
         KlinesApiView.register(self.server, route_base=f'{self.prefix+self.version}/klines')
+
+        from backend.views.api.history import HistoryApiView
+        HistoryApiView.register(self.server, route_base=f'{self.prefix+self.version}/history')

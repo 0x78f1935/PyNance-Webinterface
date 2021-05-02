@@ -2,7 +2,7 @@
     <v-container fluid>
         Statistics
         <v-row>
-            <v-col col="9">
+            <v-col cols="6">
                 <trading-vue 
                     app
                     :data="this.$data"
@@ -10,7 +10,7 @@
                     :class="isVisible?'visible':'collapse'"
                 ></trading-vue>
             </v-col>
-            <v-col col="3">
+            <v-col cols="6">
                 <v-card
                     class="transition-fast-in-fast-out v-card--reveal"
                     style="height: 100%;"
@@ -20,7 +20,7 @@
                     </v-card-text>
 
                         <v-row>
-                            <v-col col="6">
+                            <v-col>
                                 <table class="table table-dark">
                                     <thead>
                                         <tr>
@@ -36,7 +36,7 @@
                                     </tbody>
                                 </table>
                             </v-col>
-                            <v-col col="6">
+                            <v-col>
                                 <table class="table table-dark">
                                     <thead>
                                         <tr>
@@ -62,6 +62,15 @@
                             </v-col>
                     </v-row>
                 </v-card>
+            </v-col>
+
+            <v-col cols="12">
+                <v-data-table
+                    :headers="orders.headers"
+                    :items="orders.body"
+                    :items-per-page="5"
+                    class="elevation-1"
+                ></v-data-table>
             </v-col>
         </v-row>
     </v-container>
@@ -98,17 +107,19 @@
             drawingMode: false,
             isVisible: true,
             status: {},
-            polling: null
-            // ohlcv: [],
+            polling: null,
+            orders: {},
         }),
         mounted () {
             if(/Android|webOS|iPhone|iPad|Mac|Macintosh|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && window.screen.width <= 1000) {
                 this.$data.isVisible = false;
             }
             this.updateKlines();
+            this.updateOrders();
             this.polling = setInterval(() => {
                 console.log('Fetching data');
                 this.updateKlines();
+                this.updateOrders();
             }, 3000)
         },
         beforeDestroy () {
@@ -124,7 +135,21 @@
                     this.$data.onchart[0].name = response.data.target_type;
                     this.$data.status = response.data.status;
                 });
-                
+            },
+            updateOrders() {
+                axios.get(`/api/v1/history/orders`, {headers: {'token': this.$store.getters.token}}).then(response => {
+                    if(response.data.length > 0) {
+                        this.$data.orders = {
+                            headers: Object.keys(response.data[0]).map(key => {return {
+                                text: key, 
+                                align: 'start', 
+                                sortable: true, 
+                                value: key
+                            }}),
+                            body: response.data
+                        }
+                    }
+                })
             }
         },
     }
