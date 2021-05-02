@@ -41,3 +41,11 @@ class BotModel(db.Model):
             blacklist ([list]): [Columns you don't want to include in the dict]
         """
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs if c.key not in blacklist}
+    
+    def chat(self, message: str):
+        self.status.message = message
+        db.session.commit()
+    
+    def finished_order(self):
+        self.status.total_orders += 1
+        db.session.commit()
