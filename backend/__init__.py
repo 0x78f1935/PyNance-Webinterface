@@ -58,6 +58,7 @@ class Webserver(Flask):
         from backend.models.system import SystemModel
         from backend.models.bot import BotModel
         from backend.models.config import ConfigModel
+        from backend.models.status import StatusModel
 
         with self.app_context():
             try:

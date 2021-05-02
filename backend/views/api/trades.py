@@ -33,9 +33,12 @@ class TradesApiView(FlaskView):
         if config is None:
             config = ConfigModel()
             db.session.add(config)
+            from backend.models.status import StatusModel
+            status = StatusModel()
+            db.session.add(status)
             db.session.commit()
             from backend.models.bot import BotModel
-            db.session.add(BotModel(config_id=config.id))
+            db.session.add(BotModel(config_id=config.id, status_id=status.id))
             db.session.commit()
         return jsonify({
             'assets': assets,
@@ -54,7 +57,9 @@ class TradesApiView(FlaskView):
     def post(self):
         """Saves the users trade configuration which is used while trading
         """
-        # TODO turn bot offline
+        from backend.models.bot import BotModel
+        bot = BotModel.query.first()
+        bot.update_data({'online': False})
         data = request.json
         from backend.models.config import ConfigModel
         config = ConfigModel.query.first()

@@ -2,22 +2,21 @@ from datetime import datetime
 from backend import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import inspect
+from sqlalchemy.ext.mutable import MutableList
+from sqlalchemy import PickleType
 from uuid import uuid4
 
 
-class BotModel(db.Model):
-    """BotModel keeps track of the bots status"""
-    __tablename__ = "Bot"
+class StatusModel(db.Model):
+    """StatusModel keeps track of the statusbar"""
+    __tablename__ = "Status"
     id = db.Column(db.Integer, primary_key=True)
     updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    config_id = db.Column(db.Integer, db.ForeignKey('Config.id'))
-    config = db.relationship("ConfigModel", back_populates="bot")
+    bot = db.relationship("BotModel", back_populates="status")
 
-    status_id = db.Column(db.Integer, db.ForeignKey('Status.id'))
-    status = db.relationship("StatusModel", back_populates="bot")
-
-    online = db.Column(db.Boolean, default=False, onupdate=False)
+    message = db.Column(db.Text, default="")
+    total_orders = db.Column(db.Integer, default=0)
 
     def update_data(self, data: dict):
         """"Just throw in a json object, each key that can be mapped will be updated"
