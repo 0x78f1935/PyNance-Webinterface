@@ -36,3 +36,9 @@
         },
     }
 </script>
+
+<style scoped>
+.v-system-bar {
+    justify-content: center;
+}
+</style>

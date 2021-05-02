@@ -20,6 +20,11 @@ const botModule: Module<any, any> = {
             commit('SET_ONLINE', response.data.online);
           });
         },
+        getOnlineStatus({ commit, getters }){
+            axios.get(`/api/v1/logic/toggle`, {headers: {'token': getters.token}}).then(response => {
+                commit('SET_ONLINE', response.data.online);
+            });
+        }
     }
 }
 
