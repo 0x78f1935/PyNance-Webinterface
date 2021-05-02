@@ -15,7 +15,7 @@ class StatusModel(db.Model):
 
     bot = db.relationship("BotModel", back_populates="status")
 
-    message = db.Column(db.Text, default="")
+    message = db.Column(db.Text, default="Offline")
     total_orders = db.Column(db.Integer, default=0)
 
     def update_data(self, data: dict):
