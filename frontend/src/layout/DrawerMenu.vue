@@ -7,6 +7,7 @@
       class="pt-4"
       color="dark"
       mini-variant
+      temporary
     >
       <v-badge bottom overlap bordered color="green" v-if="this.$store.getters.online">
         <v-icon large>mdi-currency-usd</v-icon>
@@ -40,8 +41,9 @@
         </v-btn>
       </router-link>
       <v-spacer class="mb-4"></v-spacer>
-      <v-btn class="menu-btn" color="accent" @click="window.open('https://github.com/0x78f1935/PyNance-Webinterface/tree/master', '_blank');"><v-icon large>mdi-github</v-icon></v-btn>
-      <v-btn class="menu-btn" color="accent"><v-icon large>mdi-discord</v-icon></v-btn>
+      <v-btn class="menu-btn" color="accent" @click="redirectGithub"><v-icon large>mdi-github</v-icon></v-btn>
+      <v-btn class="menu-btn" color="accent" @click="showDiscord=true"><v-icon large>mdi-discord</v-icon></v-btn>
+      <discord :show="showDiscord" @reset="showDiscord=false"></discord>
       <v-spacer class="mb-4"></v-spacer>
       <router-link to="/config" tag="button">
         <v-btn class="menu-btn" color="accent"><v-icon large>mdi-cog</v-icon></v-btn>
@@ -62,19 +64,25 @@
 </template>
 
 <script>
-import Knightrider from '../components/Knightrider.vue'
+    import Knightrider from '../components/Knightrider.vue'
+    import discord from '../components/discord.vue'
     export default {
         name: 'drawer-menu',
         components: {
           Knightrider,
+          discord
         },
         data: () => ({
-          drawer: false
+          drawer: false,
+          showDiscord: false,
         }),
         methods: {
           toggleOnline() {
             this.$store.dispatch('toggleOnline', !this.$store.getters.online);
-          }
+          },
+          redirectGithub(){
+            window.open('https://github.com/0x78f1935/PyNance-Webinterface/tree/master', '_blank');
+          },
         },
     }
 </script>
