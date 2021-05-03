@@ -20,6 +20,7 @@
             this.polling = setInterval(() => {
                 console.log('Fetching data');
                 this.updateSysBar();
+                this.$store.dispatch('getOnlineStatus');
             }, 3000)
         },
         beforeDestroy () {

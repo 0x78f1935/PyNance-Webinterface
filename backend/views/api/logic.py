@@ -10,7 +10,7 @@ import math
 
 class LogicApiView(FlaskView):
     
-    decorators = [ login_required ]
+    # decorators = [ login_required ]
 
     def get(self):
         """This method is the brain of the bot, places orders etc
@@ -110,7 +110,7 @@ class LogicApiView(FlaskView):
             else: # Trying to sell
                 brought_price = order.brought_price
                 minimal_profit = bot.config.profit_margin
-                asset_fees = pynance.assets.fees(symbol)  # makerCommission | takerCommission
+                asset_fees = pynance.assets.fees(symbol) # makerCommission | takerCommission
                 fee_percentage = float(asset_fees.json[0]['makerCommission'])
                 current_price = float(round(float(pynance.assets.symbols(symbol).json['price']), 8))
                 ask_price = float(brought_price + float(float(brought_price / order.quantity) / 100) * float(minimal_profit + fee_percentage)) / order.quantity

@@ -19,8 +19,15 @@
                         indeterminate
                     ></v-progress-linear>
                 </template>
+
                 <v-icon size="250">mdi-download</v-icon>
-                <v-card-title>Download backup</v-card-title>
+                
+                <v-card-text>
+                    <v-checkbox
+                        v-model="backup_passwords"
+                        label="Backup passwords"
+                    ></v-checkbox>
+                </v-card-text>
                 <v-card-actions>
                     <v-btn @click="downloadBackup" :disabled="loading" width="100%">Download backup</v-btn>
                 </v-card-actions>
@@ -67,16 +74,18 @@
         data() {
             return {
                 loading: false,
+                backup_passwords: false,
                 backupfile: null
             }
         },
         methods: {
             downloadBackup() {
-                this.$store.dispatch('backup');
+                this.$store.dispatch('backup', this.$data.backup_passwords);
             },
             restoreBackup() {
-                // this.$store.dispatch('restoreBackup', {})
-                console.log(1)
+                this.$store.dispatch('restore', {
+                    backup: this.$data.backupfile, 
+                });
             },
         },
     }
