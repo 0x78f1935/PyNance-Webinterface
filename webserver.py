@@ -1,4 +1,4 @@
-from backend import Webserver
+from backend import Webserver, db
 from sqlalchemy.sql import text
 from backend.cli import register
 
@@ -19,4 +19,5 @@ def create_server() -> object:
     return server
 
 server = Webserver()
+_database = db # In use by the listener
 register(server)

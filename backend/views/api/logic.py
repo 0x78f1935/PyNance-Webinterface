@@ -5,7 +5,7 @@ from backend.utils.auth import login_required
 from backend import db, pynance
 
 from datetime import datetime
-import math
+import math, time
 
 
 class LogicApiView(FlaskView):
@@ -51,7 +51,8 @@ class LogicApiView(FlaskView):
             })
 
         # Iterate over each symbol
-        for symbol in [i.symbol for i in bot.orders if i.active == True or i.symbol in bot.config.symbols]:
+        for symbol in list(set([i.symbol for i in bot.orders if i.symbol in bot.config.symbols or i.active] + [y for y in bot.config.symbols])):
+            time.sleep(1)
             print('\n\n')
             print('-'*50)
             print(symbol)
@@ -80,53 +81,57 @@ class LogicApiView(FlaskView):
 
             # Check for each asset selected what we have available in the wallet
             balance = pynance.wallet.balance()
-            base_balance = [i for i in balance.json if i['coin'] == base_asset][0]
-            base_balance_free = float(round(float(base_balance['free']), 8))
-            quote_balance = [i for i in balance.json if i['coin'] == quote_asset][0]
-            quote_balance_free = float(round(float(quote_balance['free']), 8))
-            # Check if we are buying or if we are selling
-            # One full cycle if buying asset B and selling asset B for asset A
-            if order.buying:
-                bot.update_average(average)
-                if quote_balance_free < required_amount:
-                    bot.chat(f"NOT ENOUGH {quote_asset} TO BUY {base_asset} - {base_balance_free} {quote_asset} AVAILABLE NEED MINIMUM OF {required_amount} {quote_asset}")
-                else:
+            _base_balance = [i for i in balance.json if i['coin'] == base_asset]
+            _quote_balance = [i for i in balance.json if i['coin'] == quote_asset]
+            if _base_balance and _quote_balance:
+                base_balance = _base_balance[0]
+                base_balance_free = float(round(float(base_balance['free']), 8))
+                quote_balance = _quote_balance[0]
+                quote_balance_free = float(round(float(quote_balance['free']), 8))
+                # Check if we are buying or if we are selling
+                # One full cycle if buying asset B and selling asset B for asset A
+                if order.buying:
+                    bot.update_average(average)
+                    if quote_balance_free < required_amount:
+                        bot.chat(f"NOT ENOUGH {quote_asset} TO BUY {base_asset} - {base_balance_free} {quote_asset} AVAILABLE NEED MINIMUM OF {required_amount} {quote_asset}")
+                    else:
+                        current_price = float(round(float(pynance.assets.symbols(symbol).json['price']), 8))
+                        if current_price <= average:
+                            quantity = float(float(float(float(quote_balance_free / current_price) / 100) * float(bot.config.wallet_amount)))
+                            bot.chat(f"{base_asset} REACHED TARGET PRICE - BUYING {quantity} {base_asset}")
+                            buy_order = pynance.orders.create(symbol, float(round(float(quantity - float(quantity/100)), precision)), order_id='pynanceBuyOrder')
+                            if buy_order is not None:
+                                data = buy_order.json['fills'][0]
+                                brought_price = float(round(float(data['price'])* quantity, 8))
+                                order.update_data({
+                                    'brought_price': brought_price,
+                                    'quantity': quantity,
+                                    'buying': False
+                                })
+                                bot.chat(f"BROUGHT ({float(round(float(order.quantity), 8))}) {base_asset} FOR AN AMAZING ({float(round(float(brought_price), 8))}) {quote_asset}")
+                            else: bot.chat(f"UNABLE TO PLACE A BUY ORDER FOR ({float(round(float(quantity), 8))}) {base_asset}")
+                        else: bot.chat(f"CURRENT {base_asset} NOT AT BUY TARGET OF {average} - SKIPPING BUYING {base_asset}")
+                else: # Trying to sell
+                    brought_price = order.brought_price
+                    minimal_profit = bot.config.profit_margin
+                    asset_fees = pynance.assets.fees(symbol) # makerCommission | takerCommission
+                    fee_percentage = float(asset_fees.json[0]['makerCommission'])
                     current_price = float(round(float(pynance.assets.symbols(symbol).json['price']), 8))
-                    if current_price <= average:
-                        quantity = float(float(float(float(quote_balance_free / current_price) / 100) * float(bot.config.wallet_amount)))
-                        bot.chat(f"{base_asset} REACHED TARGET PRICE - BUYING {quantity} {base_asset}")
-                        buy_order = pynance.orders.create(symbol, float(round(float(quantity - float(quantity/100)), precision)), order_id='pynanceBuyOrder')
-                        if buy_order is not None:
-                            data = buy_order.json['fills'][0]
-                            brought_price = float(round(float(data['price'])* quantity, 8))
+                    ask_price = float(brought_price + float(float(brought_price / order.quantity) / 100) * float(minimal_profit + fee_percentage)) / order.quantity
+                    bot.update_average(ask_price)
+                    if current_price >= ask_price:
+                        bot.chat(f"{base_asset} REACHED TARGET PRICE - SELLING {order.quantity} {base_asset}")
+                        sell_order = pynance.orders.create(symbol, float(round(float(order.quantity - float(float(order.quantity/100)*2.5)), precision)), buy=False, order_id='pynanceSellEntry')
+                        if sell_order is not None:
+                            sold_price = float(round(float(current_price) * order.quantity, 8))
                             order.update_data({
-                                'brought_price': brought_price,
-                                'quantity': quantity,
-                                'buying': False
+                                'active': False,
+                                'sold_for': sold_price
                             })
-                            bot.chat(f"BROUGHT ({float(round(float(order.quantity), 8))}) {base_asset} FOR AN AMAZING ({float(round(float(brought_price), 8))}) {quote_asset}")
-                        else: bot.chat(f"UNABLE TO PLACE A BUY ORDER FOR ({float(round(float(quantity), 8))}) {base_asset}")
-                    else: bot.chat(f"CURRENT {base_asset} NOT AT BUY TARGET OF {average} - SKIPPING BUYING {base_asset}")
-            else: # Trying to sell
-                brought_price = order.brought_price
-                minimal_profit = bot.config.profit_margin
-                asset_fees = pynance.assets.fees(symbol) # makerCommission | takerCommission
-                fee_percentage = float(asset_fees.json[0]['makerCommission'])
-                current_price = float(round(float(pynance.assets.symbols(symbol).json['price']), 8))
-                ask_price = float(brought_price + float(float(brought_price / order.quantity) / 100) * float(minimal_profit + fee_percentage)) / order.quantity
-                bot.update_average(ask_price)
-                if current_price >= ask_price:
-                    bot.chat(f"{base_asset} REACHED TARGET PRICE - SELLING {order.quantity} {base_asset}")
-                    sell_order = pynance.orders.create(symbol, float(round(float(order.quantity - float(float(order.quantity/100)*2.5)), precision)), buy=False, order_id='pynanceSellEntry')
-                    if sell_order is not None:
-                        sold_price = float(round(float(current_price) * order.quantity, 8))
-                        order.update_data({
-                            'active': False,
-                            'sold_for': sold_price
-                        })
-                        bot.chat(f"SOLD ({float(round(float(order.quantity), 8))}) {base_asset} FOR AN AMAZING ({float(round(float(sold_price), 8))}) {quote_asset}")
-                    else: bot.chat(f"UNABLE TO PLACE A SELL ORDER FOR ({float(round(float(order.quantity), 8))}) {base_asset}")
-                else: bot.chat(f"CURRENT {base_asset} NOT AT SELL TARGET OF {ask_price} - SKIPPING SELLING {base_asset}")
+                            bot.chat(f"SOLD ({float(round(float(order.quantity), 8))}) {base_asset} FOR AN AMAZING ({float(round(float(sold_price), 8))}) {quote_asset}")
+                        else: bot.chat(f"UNABLE TO PLACE A SELL ORDER FOR ({float(round(float(order.quantity), 8))}) {base_asset}")
+                    else: bot.chat(f"CURRENT {base_asset} NOT AT SELL TARGET OF {ask_price} - SKIPPING SELLING {base_asset}")
+            else: bot.chat(f"SYMBOL {symbol} SEEMS TO BE BROKEN ON BINANCE SIDE")
         return jsonify({
             'online': True,
             'execution_time': str(datetime.now()-stopwatch),

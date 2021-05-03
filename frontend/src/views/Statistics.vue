@@ -120,7 +120,7 @@
                 console.log('Fetching data');
                 this.updateKlines();
                 this.updateOrders();
-            }, 3000)
+            }, 1000)
         },
         beforeDestroy () {
             clearInterval(this.polling);
