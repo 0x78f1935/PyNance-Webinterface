@@ -73,7 +73,6 @@
         name: 'backup',
         data() {
             return {
-                loading: false,
                 backup_passwords: false,
                 backupfile: null
             }
@@ -87,6 +86,11 @@
                     backup: this.$data.backupfile, 
                 });
             },
+        },
+        computed: {
+            loading() {
+                return this.$store.getters.backupping;
+            }
         },
     }
 </script>
