@@ -1,5 +1,6 @@
 import { Module } from "vuex";
 import axios from 'axios';
+import router from "@/router";
 
 const BackupModule: Module<any, any> = { 
     state: {
@@ -41,7 +42,7 @@ const BackupModule: Module<any, any> = {
                 }
             }).then((response) => {
                 alert(response.data.msg);
-                state.commit('SET_BACKUPPING', false);
+                router.go(0);
             });
         }
     }

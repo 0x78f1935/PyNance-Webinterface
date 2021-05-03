@@ -41,6 +41,7 @@ export default Vue.extend({
 
   mounted () {
     this.$store.dispatch('loadDashboard');
+    this.$store.commit('SET_BACKUPPING', false);
   },
 });
 </script>
