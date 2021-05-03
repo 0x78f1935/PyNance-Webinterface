@@ -7,7 +7,7 @@ ADD ./listener.py .
 ADD ./backend/config/docker/entrypoint_listener.sh .
 # Update system
 RUN apt-get update && apt-get upgrade -y
-RUN pip install requests
+RUN pip install requests flask sqlalchemy
 
 # Setup server environment
 ENV PYTHONUNBUFFERED=1
