@@ -18,3 +18,5 @@ before_install:
 
 script:
   - docker-compose up --build -d
+  - docker ps -a
+  - docker images
