@@ -9,6 +9,8 @@
 | Webinterface 	| [![Build Status](https://www.travis-ci.com/0x78f1935/PyNance-Webinterface.svg?branch=master)](https://www.travis-ci.com/0x78f1935/PyNance-Webinterface) | Master | [Visit](https://github.com/0x78f1935/PyNance-Webinterface/tree/master) |
 | Webinterface 	| [![Build Status](https://www.travis-ci.com/0x78f1935/PyNance-Webinterface.svg?branch=master)](https://www.travis-ci.com/0x78f1935/PyNance-Webinterface) | Development | [Visit](https://github.com/0x78f1935/PyNance-Webinterface/tree/development) |
 
+- Required HDD space: +- 2.5GB
+
 <div class="text-white bg-blue mb-2">
   CAUTION
 
