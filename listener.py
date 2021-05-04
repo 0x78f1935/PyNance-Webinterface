@@ -1,5 +1,4 @@
 from requests.exceptions import ConnectionError
-from backend.models.system import SystemModel
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import ProgrammingError
@@ -15,21 +14,28 @@ class Listener(Flask):
         self.config.from_object(Config())
 
 listener = Listener()
-DEBUG = bool(listener.config['DEBUG'])
+DEBUG = bool(listener.config['TESTING'])
 if DEBUG: endpoint = 'http://127.0.0.1:5000/api/v1/logic/'
 else: endpoint = 'http://pn_dashboard:5000/api/v1/logic/'
-engine = create_engine(listener.config['SQLALCHEMY_DATABASE_URI'])
+print(endpoint)
+database_uri = listener.config['SQLALCHEMY_DATABASE_URI']
+
 del listener
 
-session = Session(engine)
-
-def get_token(session):
+def get_token(database_uri):
+    engine = create_engine(database_uri)
+    session = Session(engine)
+    from backend.models.system import SystemModel
     try: system = session.query(SystemModel).first()
     except ProgrammingError: system = None
-    if system is not None: return system.token
+    if system is not None: 
+        token = system.token
+        session.close()
+        return token
+    session.close()
     return None
 
-_token = get_token(session)
+_token = get_token(database_uri)
 if _token is None or _token == '': print("Looks like first time use, waiting for setup to be completed ...")
 
 while True:
@@ -43,8 +49,7 @@ while True:
         j = req.json()
         print(f"{datetime.utcnow()} [{req.status_code}] -> Execution time: {j['execution_time']} | Online: {j['online']}")
     else:
-        _token = get_token(session)
-        if _token is not None:
-            session.close()
+        print('Trying to obtain token')            
+        _token = get_token(database_uri)
 
     time.sleep(5)

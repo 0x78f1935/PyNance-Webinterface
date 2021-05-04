@@ -19,6 +19,7 @@ class OrdersModel(db.Model):
     quantity = db.Column(db.Float, default=0.0)
     sold_for = db.Column(db.Float, default=0.0)
     buying = db.Column(db.Boolean, default=True)
+    spot = db.Column(db.Boolean, default=True)
     active = db.Column(db.Boolean, default=True)
 
     def update_data(self, data: dict):

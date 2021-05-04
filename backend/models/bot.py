@@ -81,13 +81,14 @@ class BotModel(db.Model):
         Returns:
             [OrderModel]: [representing order]
         """
-        orders = [i for i in self.orders if i.symbol == symbol and i.active]
+        orders = [i for i in self.orders if i.symbol == symbol and i.active and i.spot == self.config.spot]
         if orders: order = orders.pop(0)
         else:
             from backend.models.orders import OrdersModel
             order = OrdersModel(
                 bot_id=self.id,
-                symbol=symbol
+                symbol=symbol,
+                spot=self.config.spot
             )
             db.session.add(order)
             db.session.commit()
