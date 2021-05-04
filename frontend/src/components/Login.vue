@@ -70,6 +70,8 @@
                         this.$data.show = false;
                         this.$data.MPWD = "";
                         this.$store.dispatch('loadDashboard');
+                        this.$store.dispatch('loadKeys');
+                        this.$store.dispatch('loadTrades');
                     }
                 });
 

@@ -2,7 +2,7 @@
 
 export FLASK_APP=webserver.py
 
-while ! curl -o - database:3306; do sleep 1; done
+while ! curl -o - pn_database:3306; do sleep 1; done
 
 {
     flask db init

@@ -18,6 +18,8 @@
     <script>
       const sk = '{{ secret_key() }}';
       localStorage.setItem('sk', sk);
+      const backend = '{{ server_backend() }}';
+      localStorage.setItem('backend', backend);
     </script>
   </body>
 </html>

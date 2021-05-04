@@ -10,7 +10,7 @@ class Config(System):
     System should super at the end of the init file
     """
     def __init__(self) -> None:
-        self.DEBUG = True
+        self.DEBUG = False
         self.VERSION = "3.0.0"
         self.PROJECT_NAME = "PyNance - Webinterface"
 
@@ -25,7 +25,6 @@ class Config(System):
 
         self.BINANCE_API_KEY = None
         self.BINANCE_API_SECRET = None
-        self.BINANCE_ENDPOINT = None
 
         # Load system configuration
         System.__init__(self)

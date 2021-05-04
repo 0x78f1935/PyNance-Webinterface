@@ -134,6 +134,7 @@
                     this.$data.title = response.data.target;
                     this.$data.onchart[0].name = response.data.target_type;
                     this.$data.status = response.data.status;
+                    this.$data.spot = response.data.spot;
                 });
             },
             updateOrders() {

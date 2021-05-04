@@ -38,17 +38,22 @@ class Webserver(Flask):
         )
         self.config.from_object(Config())
 
+        if len(self.config['BINANCE_API_KEY']) <= 10: raise Exception('Binance API KEY invalid')
+        if len(self.config['BINANCE_API_SECRET']) <= 10: raise Exception('Binance API SECRET invalid')
+
         self._setup_cors()
         self._setup_views()
         self._setup_database()
         self._setup_plugins()
         self._setup_jinja()
+        self._is_populated = False
 
     def _setup_cors(self):
         cors.init_app(self, resources={r'/*': {'origins': ['*', 'https://developers.coinmarketcal.com/']}})
 
     def _setup_views(self):
-        ViewManager(self).register()
+        viewmanager = ViewManager(self)
+        viewmanager.register()
 
     def _setup_database(self):
         db.init_app(self)
@@ -61,19 +66,6 @@ class Webserver(Flask):
         from backend.models.status import StatusModel
         from backend.models.orders import OrdersModel
 
-        with self.app_context():
-            try:
-                self._setup_first_time_database_system_configuration()
-            except Exception as e: print(e)
-
-    def _setup_first_time_database_system_configuration(self):
-        from backend.models.system import SystemModel
-        model = SystemModel.query.first()
-        if model is None: db.session.add(SystemModel(version=self.config['VERSION']))
-       
-        db.session.commit()
-        pass
-
     def _setup_plugins(self):
         pynance.init_app(self)
 
@@ -84,4 +76,42 @@ class Webserver(Flask):
         """
         self.jinja_env.globals.update(
             secret_key=CustomFunctions.secret_key,
+            server_backend=CustomFunctions.server_backend
         )
+
+    def __call__(self, environ, start_response):
+        if not self._is_populated:
+            with self.app_context():
+                from backend.models.system import SystemModel
+                system = SystemModel.query.first()
+                if system is None:
+                    system = SystemModel(version=self.config['VERSION'])
+                    db.session.add(system)
+                    db.session.commit()
+
+                from backend.models.config import ConfigModel
+                config = ConfigModel.query.first()
+                if config is None:
+                    config = ConfigModel()
+                    db.session.add(config)
+                    db.session.commit()
+
+                from backend.models.status import StatusModel
+                status = StatusModel.query.first()
+                if status is None:
+                    status = StatusModel()
+                    db.session.add(status)
+                    db.session.commit()
+
+                from backend.models.bot import BotModel
+                bot = BotModel.query.first()
+                if bot is None:
+                    db.session.add(BotModel(config_id=config.id, status_id=status.id))
+                    db.session.commit()
+                
+                if system is not None and \
+                    config is not None and \
+                    status is not None and \
+                    bot is not None:
+                    self._is_populated = True
+        return super().__call__(environ, start_response)

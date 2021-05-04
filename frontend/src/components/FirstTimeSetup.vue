@@ -218,6 +218,8 @@
             tearDown(){
                 this.$data.step = this.$data.finalStep;
                 this.$store.commit('SET_AUTHENTICATION', true);
+                this.$store.dispatch('loadKeys');
+                this.$store.dispatch('loadTrades');
             },
             rulesMasterPWD(value) {
                 if (/^[\w\[\]`!@#$%\^&*()={}:;<>+'-]*$/.test(value)){

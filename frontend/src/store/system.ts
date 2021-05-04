@@ -38,9 +38,6 @@ const systemModule: Module<any, any> = {
                 state.commit('SET_AUTHENTICATION', response.data.authentication);
                 state.commit('SET_TOKEN', response.data.token);
             });
-            state.dispatch('getOnlineStatus');
-            state.dispatch('loadKeys');
-            state.dispatch('loadTrades');
         }
     }
 }

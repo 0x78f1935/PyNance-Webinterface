@@ -1,17 +1,17 @@
 <template>
   <v-app>
-    <v-container class="mb-1">
+    <v-container class="mb-1" v-if="this.$store.getters.authenticated">
       <system-bar></system-bar>
     </v-container>
     <drawer-menu></drawer-menu>
 
-    <v-main>
+    <v-main v-if="this.$store.getters.authenticated">
       <v-container fluid>
         <router-view/>
       </v-container>
     </v-main>
 
-    <v-footer app>
+    <v-footer app v-if="this.$store.getters.authenticated">
       Version: {{ $store.getters.version }}
     </v-footer>
 

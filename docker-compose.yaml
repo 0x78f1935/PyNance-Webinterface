@@ -1,24 +1,24 @@
 version: '3.7'
 services:
-  database:
+  pn_database:
     build:
       context: .
       dockerfile: ./backend/config/docker/database.dockerfile
     restart: always
     command: --default-authentication-plugin=mysql_native_password
-    container_name: database
-    hostname: database
+    container_name: pn_database
+    hostname: pn_database
     environment: 
-      MYSQL_ROOT_PASSWORD: "Y0uShoulDchAngETHIS!2!!2!"
+      MYSQL_ROOT_PASSWORD: "PyNanceV3"
       MYSQL_DATABASE: "PYNANCE"
     volumes:
       - ./backend/config/docker/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
     networks:
       - pynance
   
-  dashboard:
-    container_name: dashboard
-    hostname: dashboard  
+  pn_dashboard:
+    container_name: pn_dashboard
+    hostname: pn_dashboard  
     build:
       context: .
       dockerfile: ./backend/config/docker/dashboard.dockerfile
@@ -27,22 +27,24 @@ services:
       FLASK_APP: "webserver.py:create_server()"
       FLASK_RUN_HOST: 0.0.0.0
     depends_on:
-      - database
+      - pn_database
     links:
-      - database
+      - pn_database
     networks:
       - pynance
     restart: on-failure
   
-  listener:
-    container_name: listener
+  pn_listener:
+    container_name: pn_listener
     build:
       context: .
       dockerfile: ./backend/config/docker/listener.dockerfile
     depends_on: 
-      - dashboard
+      - pn_database
+      - pn_dashboard
     links:
-      - dashboard
+      - pn_database
+      - pn_dashboard
     networks:
       - pynance
     restart: always
@@ -53,9 +55,9 @@ services:
     volumes:
       - ./backend/config/docker/nginx.conf:/etc/nginx/nginx.conf
     depends_on: 
-      - dashboard
+      - pn_dashboard
     links:
-      - dashboard
+      - pn_dashboard
     ports:
       - 1337:5000
     networks:

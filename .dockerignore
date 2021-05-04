@@ -306,3 +306,5 @@ frontend/node_modules
 dist/
 .github
 .git
+
+./migrations
