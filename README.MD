@@ -104,7 +104,7 @@ You can double check by using a command like this.
     docker logs 6ae3900af49f
 
 Note: the ID put into `docker logs` is the ID retrieved from `docker ps -a` which represents the pynance dashboard.
-When running docker logs you have to see the message `PyNance is ready for use...`. If this is the case https://127.0.0.1:1337 should be available to you.
+When running docker logs you have to see the message `PyNance is ready for use...`. This works also for the listener ID. If this is the case https://127.0.0.1:1337 should be available to you.
 
 If the containers have the status `Exited` for some reason you can just use `docker-compose up` without the `--build` option. This way you don't lose any data.
 
