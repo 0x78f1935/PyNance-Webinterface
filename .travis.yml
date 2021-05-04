@@ -1,0 +1,29 @@
+sudo: required
+language: bash
+
+services:
+  - docker
+
+env:
+  global:
+    - DOCKER_ENGINE_VERSION=20.10.5
+    - DOCKER_COMPOSE_VERSION=1.29.0
+
+before_install:
+  - sudo sh -c 'echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" > /etc/apt/sources.list.d/docker.list'
+  - sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+  - sudo apt-get update
+  - sudo apt-key update
+  - sudo apt-get install -qqy --force-yes linux-image-extra-$(uname -r) apparmor
+  - sudo apt-get install -qqy --force-yes -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" docker-engine=${DOCKER_ENGINE_VERSION}\*
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - docker --version
+  - docker-compose --version
+
+install:
+  - pip install -r requirements.txt
+
+script:
+  - docker-compose up --build -d
