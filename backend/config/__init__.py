@@ -18,7 +18,6 @@ class Config(System):
         self.SERVER_BACKEND = None
         self.LOCALE = None
         self.FALLBACK_LOCALE = None
-        self.SERVER_DOCKER = None
 
         self.SQLALCHEMY_DATABASE_URI = None
         self.SQLALCHEMY_TRACK_MODIFICATIONS = None
