@@ -11,8 +11,7 @@
 
 - Required HDD space: +- 2.5GB
 
-<div class="text-white bg-blue mb-2">
-  CAUTION
+## CAUTION
 
   Scammers are very active in the crypto space. PyNance will never ask for your contact details nor account information. 
   PyNance relies on your **API credentials** which should be located in `.env.production`. Avoid any other repository that claims to be PyNance which tries to mimic the original. The original repo is `github.com/0x78f1935/PyNance-Webinterface`. Trade with caution,... Trade safe.
@@ -28,9 +27,6 @@ PyNance is not a money printing tool. You are responsible for your own trades. W
 
 # <a name="pre-read"></a>PRE-READ
 Before we get started, this README file includes "two" editions. The First part will explain how PyNance works and how to get it running in a production build. This part of the readme file is ment for people who have no experience with code. The second part of this README file is ment for people that would like to modify PyNance to there likings. This wil part will show you how to setup a development environment.
-
-
-(You can skip this) -> People who actually might have seen the previous documentation probably noticed the warning notice about the security risks involved with people on the same network. Version 2.0.0 introduces a new feature to solve this problem!. You can configure a `master key` within your **PyNance** dashboard to prevent people from accessing your **PyNance** dashboard and internal endpoints! More on that later. All you need to know for now is that it has been fixed!
 
 # Table of Contents
 
@@ -64,7 +60,7 @@ Open the `.env.production` file and read through it. You can look into `.env.dev
 | ENVIRONMENT                    	| This environment variable can be ignored                                                                 	|
 | BINANCE_API_KEY                	| Your Binance API Key, You can make an account [here](https://www.binance.com/en/register?ref=73051759)   	|
 | BINANCE_API_SECRET             	| Your Binance API secret which matches your API Key                                                       	|
-| LOCALE                         	| The default language of the application. You options are [en, nl, fr, fil]                               	|
+| LOCALE                         	| The default language of the application. You options are [en]                               	|
 | SQLALCHEMY_DATABASE_URI        	| This is the connection string to the internal database. You should change its password to be extra safe. 	|
 | SQLALCHEMY_TRACK_MODIFICATIONS 	| Turn on or off database logging                                                                          	|
 
@@ -72,13 +68,23 @@ Open the `.env.production` file and read through it. You can look into `.env.dev
 
 # <a name="run-pynance"></a>Run PyNance
 
-Its recommended to run **PyNance** in `production` mode with docker which you can [install here](https://docs.docker.com/get-docker/).
+Its recommended to run **PyNance** in `production` mode with docker which you can [install here](https://docs.docker.com/get-docker/). Make sure to install docker with WSL2 and not with Hyper-V.
 Once docker is configured correctly there is only one step between you and **PyNance**.
-Open a terminal and navigate to the root directory of this project. Double check your `.env.production` file before executing the next step. The next step takes a while. Type in your terminal the following command to run **PyNance**
+Open a terminal and navigate to the root directory of this project. Double check your `.env.production` file before executing the next step. The next step takes a while and if your Binance API credentials are invalid you might need to rebuild **PyNance**.. Type in your terminal the following command to run **PyNance**
 
     docker-compose up --build -d
 
-Give it a small moment, Once its all done you can check if everything is running with the following command
+Once docker-compose is building PyNance, check if your API-Key has the correct restrictions. Open up Binance and go to the API-Manager.
+
+- Enable Reading
+- Enable Spot & Margin Trading
+- Enable Futures
+
+You can also restrict access to only allow making request from any IP you put into the <strong>Restrict access to trusted IPs only (Recommended)</strong> field.<br>
+A google search <code>what is my ip</code> can help you out with what your IP is to fill in.
+
+You build might still be building at this point, Once its all done you should see a message which ends with `done`.
+You can check if everything is running with the following command.
 
     docker ps -a
 
@@ -92,6 +98,13 @@ The output of `docker ps -a` should look something like this
 
 
 To open the application navigate to https://127.0.0.1:1337.
+If it doesnt work go get some coffee. It might still be building.
+You can double check by using a command like this.
+
+    docker logs 6ae3900af49f
+
+Note: the ID put into `docker logs` is the ID retrieved from `docker ps -a` which represents the pynance dashboard.
+When running docker logs you have to see the message `PyNance is ready for use...`. If this is the case https://127.0.0.1:1337 should be available to you.
 
 If the containers have the status `Exited` for some reason you can just use `docker-compose up` without the `--build` option. This way you don't lose any data.
 
@@ -106,7 +119,7 @@ When you get asked to enter `(y/N)` type in `Y` and hit enter.
 Everything should be clean right now.
 
 If you have some issues with closing PyNance or building PyNance you might want to reset docker.
-Be warned the `reset_docker.bat` cleans almost everything within docker. Images and containers.
+Be warned the `reset_docker.bat` cleans almost everything within docker. Images and containers. Run this script instead.
 
 <div class="text-white bg-blue mb-2">
   The following section will explain a bit more about the functionality within <strong>PyNance</strong>. For the development version <a href='#dev-build'>click here</a>
@@ -116,11 +129,11 @@ Be warned the `reset_docker.bat` cleans almost everything within docker. Images 
 
 ## <a name="backups"></a>Backups
 
-Make regular backups. When you remove the containers you also will remove your data. By making a backup you only make a backup of the orders placed by **PyNance**. You can import the backup in any running instance to recover your orders which allows the bot to continue where it left off.
+Make regular backups. When you remove the containers you also will remove your data. By making a backup you prevent data loss. You can import the backup in any running instance to recover your orders which allows the bot to continue where it left off. Backups can contain password and or tokens if the backup was exported that way.
 
 ## <a name="masterpwd"></a>Master password
 
-A master password can be set to prevent other users on the network from using your **PyNance** instance. There is no option in the UI to recover your lost password. Matter in fact, there is no option at all to recover a lost password since this is considered a security breach. When a master password is set, endpoints used internally will require a token in order to function. **PyNance** handles this all for you.
+A master password has to be set at first time use to prevent other users on the network from using your **PyNance** instance. There is no option in the UI to recover your lost password. Matter in fact, there is no option at all to recover a lost password since this is considered a security breach. When a master password is set, endpoints used internally will require a token in order to function. **PyNance** handles this all for you.
 
 - But I still need to recover my password, what do I do?
 
@@ -134,12 +147,17 @@ Once inside the container, execute the following command to remove the master pa
 
 ## Other settings
 
-**PyNance** will come with various settings so you can configure when the bot needs to place a buy or sell order. Make sure to read the tooltips.
-
+**PyNance** will come with various settings so you can configure when the bot needs to place a buy or sell order. Make sure to get yourself familiar before diving deep into this.
 
 <div class="text-white bg-blue mb-2">
-  The following section will include information about the development environment. If you have a production setup up and running you can close the documenation here. The next part is for the nerds.
+  The following section will include information about the development environment. If you have a production setup-up running you can close the documenation here. The next part is for the nerds.
 </div><br/>
+
+## <a name="git"></a>Git
+
+I want you all to be safe,. Please make sure to untrack your `.env.production` file.
+
+    git update-index --assume-unchanged .env.production 
 
 
 # <a name="dev-build"></a>Development Build (localhost)
@@ -166,7 +184,7 @@ When node is installed open a terminal and navigate to the `/frontend` folder. F
 
 ### <a name="install-py"></a>python
 
-Pynance exists out of three different parts; `PyNance-Core`, `PyNance-Webinterface` and `PyNance-Listener`. All three of those elements need to be created and / or configured in order to enable the development environment. Since version `2.0.0` the `PyNance-Core` is included in the requirements.txt as a git repo.
+Pynance exists out of two different parts; `PyNance-Core`, `PyNance-Webinterface`. All those elements need to be created and / or configured in order to enable the development environment. Since version `2.0.0` the `PyNance-Core` is included in the requirements.txt as a git repo.
 
 #### <a name="virtualenv"></a>Virtualenv
 
@@ -184,7 +202,7 @@ Open a terminal and navigate to the root folder of this project and install the 
 
 ## <a name="listener"></a>Listener
 
-The `PyNance-Listener` triggers an endpoint which do the work within docker. Once building a production environment you want the `debug` value in the `listener.py` to be **False**. If you are testing things locally you need to put this value on **True**. Just so you are calling the right endpoint.
+Previously you had to keep track of a debug boolean in the listener. Since version 3.0 this bool is the same as the bool in `backend/config/__init__.py`. This bool is the only one to keep in mind. When building a production build in docker you want this bool to be `False`. Otherwise if you want to work on PyNance webinterface you want the `DEBUG` boolean in `backend/config/__init__.py` to be `True`.
 
 ## <a name="dashboard"></a>Dashboard
 
@@ -287,9 +305,3 @@ Once the database is set you can use **FLASK** to setup all the tables and such
     flask db init
     flask db migrate
     flask db upgrade
-
-## <a name="git"></a>Git
-
-I want you all to be safe,. Please make sure to untrack your `.env.production` file.
-
-    git update-index --assume-unchanged .env.production 
