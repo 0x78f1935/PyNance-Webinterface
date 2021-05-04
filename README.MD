@@ -1,5 +1,7 @@
 # Some information might be incorrect since this branch is under development
 
+[![Build Status](https://www.travis-ci.com/0x78f1935/PyNance-Webinterface.svg?branch=development)](https://www.travis-ci.com/0x78f1935/PyNance-Webinterface)
+
 ## PyNance
 
 <div class="text-white bg-blue mb-2">
