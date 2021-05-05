@@ -27,8 +27,8 @@ class LogicApiView(FlaskView):
 
         if bot.config.spot:
             trade = Spot()
-        # else:
-            # trade = Futures()
+        else:
+            trade = Futures()
 
         if trade.can_trade:
             for symbol in trade.get_active_symbols:
@@ -38,8 +38,8 @@ class LogicApiView(FlaskView):
                 print(symbol)
                 print('-'*50)
                 print('\n\n')
-                trade.prepare(symbol) # Not created for Futures yet
-                trade.start() # Not created for Futures yet
+                # trade.prepare(symbol) # Not created for Futures yet
+                # trade.start() # Not created for Futures yet
 
         return jsonify(trade.fetch_results())
 
