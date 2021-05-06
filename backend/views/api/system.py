@@ -20,7 +20,9 @@ class SystemApiView(FlaskView):
             }
         """
         from backend.models.system import SystemModel
+        from backend.models.bot import BotModel
         system = SystemModel.query.first()
+        bot = BotModel.query.first()
         return jsonify(system.to_dict(['id', 'updated', 'password'])), 200
 
     @route('/create', methods=['POST'])

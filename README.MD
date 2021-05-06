@@ -15,7 +15,8 @@
 
   Scammers are very active in the crypto space. PyNance will never ask for your contact details nor account information. 
   PyNance relies on your **API credentials** which should be located in `.env.production`. Avoid any other repository that claims to be PyNance which tries to mimic the original. The original repo is `github.com/0x78f1935/PyNance-Webinterface`. Trade with caution,... Trade safe.
-</div>
+
+  >> NEVER BUY BOT CONFIGURATIONS WHICH ARE PASSWORD PROTECTED; [MORE INFO](masterpwd)
 
 # <a name="disclaimer"></a> Disclaimer
 

@@ -23,7 +23,20 @@ class ConfigModel(db.Model):
     profit_margin = db.Column(db.Float, default=35)
     profit_as = db.Column(db.Text, default="USDT")
     spot = db.Column(db.Boolean, default=True)
+    sandbox = db.Column(db.Boolean, default=True)
 
+    # Futures
+    expected_leverage = db.Column(db.Float, default=5)
+    volume_timeframe = db.Column(db.Text, default="5m")
+    total_volume = db.Column(db.Integer, default=30)
+    margin_type = db.Column(db.Text, default="ISOLATED")
+    default_stop_loss = db.Column(db.Float, default=0.02)
+    in_green = db.Column(db.Float, default=2)
+    move_stop_loss = db.Column(db.Float, default=1)
+    total_tp = db.Column(db.Float, default=5)
+    take_profit = db.Column(db.Float, default=5)
+    use_average = db.Column(db.Boolean, default=False)
+    
     def update_data(self, data: dict):
         """"Just throw in a json object, each key that can be mapped will be updated"
 
@@ -44,3 +57,8 @@ class ConfigModel(db.Model):
             blacklist ([list]): [Columns you don't want to include in the dict]
         """
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs if c.key not in blacklist}
+    
+    def remove_sandbox(self):
+        from backend.models.orders import OrdersModel
+        sandbox_items = OrdersModel.query.filter(OrdersModel.sandbox == True).delete()
+        db.session.commit()

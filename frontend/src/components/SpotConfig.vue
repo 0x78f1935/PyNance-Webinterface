@@ -59,7 +59,7 @@
                     :thumb-size="20"
                     :hint="`Max 1000 candles - Currently ${$store.getters.candleInterval} candles`"
                     max="1000"
-                    min="1"
+                    min="2"
                     persistent-hint
                 >
                     <template v-slot:append>
@@ -92,7 +92,6 @@
                     max="100"
                     min="1"
                     persistent-hint
-                    class="hideOnMobile"
                 >
                     <template v-slot:append>
                         <v-text-field
@@ -174,11 +173,18 @@
                 </v-btn>
             </v-col>
 
-            <v-col cols="6">
+            <v-col cols="3">
                 <v-switch
                     v-model="spot"
                     :label="$store.getters.spot ? 'Trading in Spot!' : 'Trading USDT-M futures!'"
                 ></v-switch>
+            </v-col>
+
+            <v-col cols="3">
+                <v-checkbox
+                    v-model="sandbox"
+                    :label="$store.getters.sandbox ? 'Sandbox-Mode enabled' : 'Sandbox-Mode disabled'"
+                ></v-checkbox>
             </v-col>
         </v-row>
     </v-container>
@@ -235,7 +241,11 @@
                         }
                     } else { this.$store.commit('SET_SPOT', value); }
                 }
-            }
+            },
+            sandbox: {
+                get() { return this.$store.getters.sandbox },
+                set(value) { this.$store.commit('SET_SANDBOX', value); }
+            },
         }
     }
 </script>

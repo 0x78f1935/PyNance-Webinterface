@@ -10,7 +10,7 @@
                     :class="isVisible?'visible':'collapse'"
                 ></trading-vue>
             </v-col>
-            <v-col cols="6">
+            <v-col cols="2">
                 <v-card
                     class="transition-fast-in-fast-out v-card--reveal"
                     style="height: 100%;"
@@ -18,52 +18,111 @@
                     <v-card-text class="pb-0">
 
                     </v-card-text>
-
-                        <v-row>
-                            <v-col>
-                                <table class="table table-dark">
-                                    <thead>
-                                        <tr>
-                                            <th>Status</th>
-                                            <th>Value</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="item, index in Object.entries(status)" :key="index">
-                                            <td>{{ item[0] }}</td>
-                                            <td>{{ item[1] }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </v-col>
-                            <v-col>
-                                <table class="table table-dark">
-                                    <thead>
-                                        <tr>
-                                            <th>Graph Legend</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <v-slider min="0" max="50" value="50" readonly dense color="#1E90FF"></v-slider>
-                                            </td>
-                                            <td>Current price</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <v-slider min="0" max="50" value="50" readonly dense color="#ff4081"></v-slider>
-                                            </td>
-                                            <td>Order target</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </v-col>
-                    </v-row>
+                    <table class="table table-dark">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item, index in Object.entries(status)" :key="index">
+                                <td>{{ item[0] }}</td>
+                                <td>{{ item[1] }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </v-card>
             </v-col>
+            <v-col cols="2">
+                <v-card
+                    class="transition-fast-in-fast-out v-card--reveal"
+                    style="height: 100%;"
+                >
+                    <v-card-text class="pb-0">
+                    </v-card-text>
+                        <table class="table table-dark">
+                            <thead>
+                                <tr>
+                                    <th>Graph Legend</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <v-slider min="0" max="50" value="50" readonly dense color="#1E90FF"></v-slider>
+                                    </td>
+                                    <td>Current price</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <v-slider min="0" max="50" value="50" readonly dense color="#ff4081"></v-slider>
+                                    </td>
+                                    <td>Order target</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                </v-card>
+            </v-col>
+            <v-col cols="2" v-if="this.$store.getters.graph_type">
+                <v-card
+                    class="transition-fast-in-fast-out v-card--reveal"
+                    style="height: 100%;"
+                >
+                    <v-card-text class="pb-0">
 
+                    </v-card-text>
+                    <table class="table table-dark">
+                        <thead>
+                            <tr>
+                                <th>Graph options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <v-select
+                                        :items="this.$store.getters.graph_type_choices"
+                                        v-model="graph_type"
+                                        hint="Timeframe"
+                                        item-text="state"
+                                        item-value="abbr"
+                                        label="Select"
+                                        persistent-hint
+                                        return-object
+                                        single-line
+                                    ></v-select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <v-slider
+                                        v-model="graph_interval"
+                                        label="Graph Interval"
+                                        thumb-color="accent"
+                                        thumb-label="always"
+                                        :thumb-size="24"
+                                        :hint="`Max 5000 - Currently ${$store.getters.graph_interval}`"
+                                        max="5000"
+                                        min="2"
+                                        persistent-hint
+                                    >
+                                        <template v-slot:append>
+                                            <v-text-field
+                                                v-model="graph_interval"
+                                                class="mt-0 pt-0"
+                                                type="number"
+                                                style="width: 60px"
+                                            ></v-text-field>
+                                        </template>
+                                    </v-slider>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </v-card>
+            </v-col>
             <v-col cols="12">
                 <v-data-table
                     :headers="orders.headers"
@@ -110,6 +169,9 @@
             polling: null,
             orders: {},
         }),
+        created () {
+            this.$store.dispatch('getGraphInterval');
+        },
         mounted () {
             if(/Android|webOS|iPhone|iPad|Mac|Macintosh|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && window.screen.width <= 1000) {
                 this.$data.isVisible = false;
@@ -153,6 +215,26 @@
                 })
             }
         },
+        computed: {
+            graph_type: {
+                get() { return this.$store.getters.graph_type },
+                set(value) { 
+                    this.$store.dispatch('setGraph', {
+                        'graph-type': value,
+                        'graph-interval': this.$store.getters.graph_interval
+                    }); 
+                }
+            },
+            graph_interval: {
+                get() { return this.$store.getters.graph_interval },
+                set(value) { 
+                    this.$store.dispatch('setGraph', {
+                        'graph-type': this.$store.getters.graph_type,
+                        'graph-interval': value
+                    }); 
+                }
+            },
+        }
     }
 </script>
 

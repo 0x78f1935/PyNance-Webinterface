@@ -15,8 +15,9 @@ class KlinesApiView(FlaskView):
         bot = BotModel.query.first()
         target = bot.status.target
         if target == "NO TARGET": target = "ADAUSDT"
-        klines = pynance.assets.klines(target, timeframe=bot.config.timeframe, total_candles=bot.config.candle_interval)
         order = OrdersModel.query.filter(OrdersModel.symbol == bot.status.target).first()
+        if order.spot: klines = pynance.assets.klines(target, timeframe=bot.graph_type, total_candles=bot.graph_interval)
+        else: klines = pynance.futures.assets.klines(target, timeframe=bot.graph_type, total_candles=bot.graph_interval)
         target_type = 'WAITING FOR CONFIG'
         trade_type = 'NONE'
         target_type_status = 'NO TRADE CONFIG'
@@ -37,3 +38,14 @@ class KlinesApiView(FlaskView):
                 'target_type': target_type_status,
             }
         })
+
+    @route('/graph', methods=['GET', 'POST'])
+    def set_graph(self):
+        """Saves the graph view on the statistic page
+        """
+        from backend.models.bot import BotModel
+        bot = BotModel.query.first()
+        if request.method == 'POST':
+            data = request.json
+            bot.update_data({'online': bot.online, 'graph_type': data['graph-type'], 'graph_interval': data['graph-interval']})
+        return jsonify({'graph-type': bot.graph_type, 'graph-interval': bot.graph_interval}), 200

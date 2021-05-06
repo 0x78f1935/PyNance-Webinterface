@@ -31,6 +31,7 @@ class TradesApiView(FlaskView):
         from backend.models.config import ConfigModel
         config = ConfigModel.query.first()
         return jsonify({
+            'sandbox': config.sandbox,
             'assets': assets,
             'symbols': config.symbols,
             'symbols-choices': symbols,
@@ -41,7 +42,17 @@ class TradesApiView(FlaskView):
             'below-average': config.below_average,
             'profit-margin': config.profit_margin,
             'profit-as': config.profit_as,
-            'spot': config.spot
+            'spot': config.spot,
+            'default-stop-loss': config.default_stop_loss,
+            'total-TP': config.total_tp,            
+            'in-green': config.in_green,
+            'move-stop-loss': config.move_stop_loss,
+            'take-profit': config.take_profit,
+            'use-average': config.use_average,
+            'expected-leverage': config.expected_leverage,
+            'volume-timeframe': config.volume_timeframe,
+            'total-volume': config.total_volume,
+            'margin-type': config.margin_type,
         }), 200
 
     def post(self):
@@ -56,4 +67,5 @@ class TradesApiView(FlaskView):
         config.update_data({**data})
         [i.set_active(False) for i in bot.orders if i.symbol not in config.symbols]
         [i.set_active(True) for i in bot.orders if i.symbol in config.symbols and i.sold_for == 0]
+        if not config.sandbox: config.remove_sandbox()
         return jsonify({}), 200

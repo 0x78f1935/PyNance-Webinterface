@@ -13,7 +13,8 @@ const tradesModule: Module<any, any> = {
         belowAverage: 0,
         profitMargin: 0,
         profitAs: '',
-        spot: true
+        spot: true,
+        sandbox: true
     },
 
     getters: {
@@ -28,6 +29,7 @@ const tradesModule: Module<any, any> = {
         profitMargin: state => state.profitMargin,
         profitAs: state => state.profitAs,
         spot: state => state.spot,
+        sandbox: state => state.sandbox,
     },
 
     mutations: {
@@ -42,11 +44,13 @@ const tradesModule: Module<any, any> = {
         SET_PROFIT_MARGIN(state, value) { state.profitMargin = value; },
         SET_PROFIT_AS(state, value) { state.profitAs = value; },
         SET_SPOT(state, value) { state.spot = value; },
+        SET_SANDBOX(state, value) { state.sandbox = value; },
     },
 
     actions: {
         loadTrades(state) {
             axios.get(`/api/v1/trades/`, {headers: {'token': localStorage['sk']}}).then(response => {
+                state.commit('SET_SANDBOX', response.data.sandbox);
                 state.commit('SET_ASSETS', response.data.assets);
                 state.commit('SET_SYMBOLS', response.data.symbols);
                 state.commit('SET_SYMBOLS_CHOICES', response.data["symbols-choices"]);                
@@ -58,11 +62,22 @@ const tradesModule: Module<any, any> = {
                 state.commit('SET_PROFIT_MARGIN', response.data["profit-margin"]);
                 state.commit('SET_PROFIT_AS', response.data["profit-as"]);
                 state.commit('SET_SPOT', response.data["spot"]);
+                state.commit('SET_EXPECTED_LEVERAGE', response.data["expected-leverage"]);
+                state.commit('SET_DEFAULT_STOP_LOSS', response.data["default-stop-loss"]);
+                state.commit('SET_TOTAL_TP', response.data["total-TP"]);
+                state.commit('SET_IN_GREEN', response.data["in-green"]);
+                state.commit('SET_MOVE_STOP_LOSS', response.data["move-stop-loss"]);
+                state.commit('SET_TAKE_PROFIT', response.data["take-profit"]);
+                state.commit('SET_USE_AVERAGE', response.data["use-average"]);
+                state.commit('SET_VOLUME_TIME_FRAME', response.data["volume-timeframe"]);
+                state.commit('SET_TOTAL_VOLUME', response.data["total-volume"]);
+                state.commit('SET_MARGIN_TYPE', response.data["margin-type"]);
                 console.log(response.data);
             });
         },
         saveTradeConfig(state) {
             axios.post(`/api/v1/trades/`, {
+                sandbox: state.getters.sandbox,
                 symbols: state.getters.symbols,
                 timeframe: state.getters.timeframe,
                 candle_interval: state.getters.candleInterval,
@@ -71,6 +86,16 @@ const tradesModule: Module<any, any> = {
                 profit_margin: state.getters.profitMargin,
                 profit_as: state.getters.profitAs,
                 spot: state.getters.spot,
+                default_stop_loss: state.getters.default_stop_loss,
+                in_green: state.getters.in_green,
+                move_stop_loss: state.getters.move_stop_loss,
+                total_tp: state.getters.total_tp,
+                take_profit: state.getters.take_profit,
+                use_average: state.getters.useAverage,
+                expected_leverage: state.getters.expectedLeverage,
+                volume_timeframe: state.getters.volumeTimeFrame,
+                total_volume: state.getters.totalVolume,
+                margin_type: state.getters.marginType,
             },{headers: {'token': state.getters.token}});
         }
     }

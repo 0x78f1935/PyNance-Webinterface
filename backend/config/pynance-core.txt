@@ -1,1 +1,1 @@
-PyNance @ git+https://github.com/0x78f1935/PyNance.git@1ef248a5dcea8c08b473b938e80094921034c63e
+PyNance @ git+https://github.com/0x78f1935/PyNance.git@0929554bdc76e8fd6d51304f19aac5be443ec902

@@ -248,6 +248,11 @@
                                 In order to switch you have to disable the <code>Trading in Spot!</code> button.
                             </p>
 
+                            <p>
+                                There is also an option called <strong>sandbox</strong>. When enabled PyNance would run like normal but would not place any order.<br>
+                                This option allows you to test your configuration before you try it for real.
+                            </p>
+
                             <p class="mb-0">
                                 Each parameter that can be configured on this page is different for SPOT and for future trading other then <code>Symbols</code>. <br>
                                 Symbols is used to select the "symbols" you would like to trade. For example <strong>LTCUSDT</strong> or <strong>ADAUSDT</strong>. <br>

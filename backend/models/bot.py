@@ -19,6 +19,8 @@ class BotModel(db.Model):
 
     orders = db.relationship("OrdersModel")
 
+    graph_type = db.Column(db.Text, default='5m')
+    graph_interval = db.Column(db.Integer, default=30)
     online = db.Column(db.Boolean, default=False, onupdate=False)
 
     def update_data(self, data: dict):
@@ -81,14 +83,16 @@ class BotModel(db.Model):
         Returns:
             [OrderModel]: [representing order]
         """
-        orders = [i for i in self.orders if i.symbol == symbol and i.active and i.spot == self.config.spot]
+        if self.config.sandbox: orders = [i for i in self.orders if i.symbol == symbol and i.active and i.spot == self.config.spot and i.sandbox == True]
+        else: orders = [i for i in self.orders if i.symbol == symbol and i.active and i.spot == self.config.spot]
         if orders: order = orders.pop(0)
         else:
             from backend.models.orders import OrdersModel
             order = OrdersModel(
                 bot_id=self.id,
                 symbol=symbol,
-                spot=self.config.spot
+                spot=self.config.spot,
+                sandbox=self.config.sandbox
             )
             db.session.add(order)
             db.session.commit()

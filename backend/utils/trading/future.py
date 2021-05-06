@@ -1,4 +1,6 @@
 from backend.utils.trading import Trading
+from backend import pynance
+import math
 
 class Futures(Trading):
     def __init__(self):
@@ -11,3 +13,107 @@ class Futures(Trading):
             if item.symbol in self.bot.config.symbols and item.active and not item.spot:
                 target_symbols.append(item.symbol)
         return list(set([i for i in self.bot.config.symbols] + target_symbols))
+
+    def closest(self, lst, value):
+        """Returns the closest value from a list"""
+        return lst[min(range(len(lst)), key=lambda i: abs(lst[i]-value))]
+
+    @property
+    def average(self):
+        """self.prepare needs to run before this method can be called
+
+        Returns:
+            Average based on configuration parameters
+        """
+        # Calculate the lowest average based on the total amount of candles and the timeframe
+        average = pynance.futures.assets.average(self.symbol, self.bot.config.timeframe, self.bot.config.candle_interval)
+        # If supression is on, calculate the average - x% of the average
+        if self.bot.config.below_average > 0:
+            average = float(average - float(float(average/100) * self.bot.config.below_average))
+        return average
+
+    def prepare(self, symbol):
+        self._prepare(symbol)
+
+        # Fetch exchange information
+        asset_exchange_info = pynance.futures.assets.exchange_info(symbol).json['symbols'].pop(0)
+        # Calculate the precision size of the symbol
+        stepSize = [ i for i in asset_exchange_info['filters'] if i['filterType'] == 'LOT_SIZE'][0]['stepSize']
+        self.precision = int(round(-math.log(float(stepSize), 10), 0))
+        if self.precision == 0: self.precision = 8
+        # Check the amount needed in order to place a minimum order
+        self.required_amount = float(round(float([ i for i in asset_exchange_info['filters'] if i['filterType'] == 'MIN_NOTIONAL'][0]['notional']), self.precision))
+        # Get the asset names
+        self.base_asset = asset_exchange_info['baseAsset']
+        self.quote_asset = asset_exchange_info['quoteAsset']
+
+        # Check for each asset selected what we have available in the wallet
+        balance = pynance.futures.wallet.balance()
+        bb = [i for i in balance.json if i['asset'] == self.base_asset]
+        bq = [i for i in balance.json if i['asset'] == self.quote_asset]
+        self.base_balance_free = float(round(float(bb[0]['balance']), self.precision)) if bb else 0
+        self.quote_balance_free = float(round(float(bq[0]['balance']), self.precision)) if bq else 0
+
+        # Calculate volume / Position
+        volume = pynance.futures.assets.volume(symbol, period=self.bot.config.volume_timeframe, limit=self.bot.config.total_volume)
+        if len(volume.json) <= 0 : 
+            self.bot.chat(f'SYMBOL {symbol} SEEMS TO BE NON-EXISTING IN BINANCE-FUTURES')
+            return False
+        highest_long_vol = min(list(sorted(volume.json, key=lambda x: x['timestamp'])), key=lambda x:abs(x['buySellRatio']-2))
+        lowest_short_vol = min(list(sorted(volume.json, key=lambda x: x['timestamp'])), key=lambda x:abs(x['buySellRatio']-0))
+        average_volume_ratio = sum([volume.json[i]['buySellRatio'] for i in range(len(volume.json))]) / len(volume.json)
+        self.position = 'LONG' if self.closest([0, 2], average_volume_ratio) == 2 else 'SHORT'
+
+        # Set leverage
+        leverage_bracket = pynance.futures.leverage_bracket(symbol)
+        available_leverages = [ i['initialLeverage'] for i in leverage_bracket.json[0]['brackets']]
+        selected_leverage = self.closest(available_leverages, self.bot.config.expected_leverage)
+        lev = pynance.futures.change_leverage(symbol, selected_leverage)
+        if lev.info['status_code'] != 200:
+            self.bot.chat(f"UNABLE TO SET {selected_leverage}X LEVERAGE FOR {symbol}")
+            return False
+        self.bot.chat(f"LEVERAGE HAS BEEN SET - {selected_leverage}X FOR {symbol}")
+
+        # Set margin type
+        marg = pynance.futures.change_margin_type(symbol, self.bot.config.margin_type)
+        if marg.json['msg'] not in ['No need to change margin type.', 'success']:
+            self.bot.chat(f"UNABLE TO SET MARGIN TYPE {self.bot.config.margin_type} FOR {symbol}")
+            return False
+        self.bot.chat(f"MARGIN HAS BEEN SET FOR {symbol} - {self.bot.config.margin_type} {selected_leverage}X")
+        return True
+
+    def start(self):
+        open_orders = pynance.futures.orders.open(self.symbol)
+        if open_orders.json: self.bot.chat(f"FOUND OPEN ORDER FOR {self.symbol} - SKIPPING")
+        else:
+            if self.quote_balance < self.required_amount: self.bot.chat(f"NOT ENOUGH {self.quote_asset} TO PLACE A {self.position} - {self.quote_balance} {self.quote_asset} AVAILABLE NEED MINIMUM OF {self.required_amount} {self.quote_asset}")
+            else:
+                if self._average_check and \
+                    self._volume_check:
+                    self.place_order()
+                else:
+                    print("SKIP")
+    
+    @property
+    def _average_check(self):
+        if self.bot.config.use_average:
+            self.bot.update_average(self.average)
+            if self.current_price <= self.average: return True
+            else: 
+                self.bot.chat(f"CURRENT {self.base_asset} NOT AT BUY TARGET OF {self.average} - SKIPPING PLACING {self.position}")
+                return False
+        else: self.bot.update_average(self.current_price)
+        return True
+    
+    @property
+    def _volume_check(self):
+        volume = pynance.futures.assets.volume(self.symbol, period=self.bot.config.volume_timeframe, limit=self.bot.config.total_volume)
+        average_volume_ratio = sum([volume.json[i]['buySellRatio'] for i in range(len(volume.json))]) / len(volume.json)
+        position = 'LONG' if self.closest([0, 2], average_volume_ratio) == 2 else 'SHORT'
+        if self.position == position: return True
+        else:
+            self.bot.chat(f"UNCERTAIN ABOUT {self.position} POSITION ON {self.symbol} - SKIPPING")
+        return False
+
+    def place_order(self):
+        self.bot.chat(f"OPENED A {self.position} POSITION ON {self.symbol}")

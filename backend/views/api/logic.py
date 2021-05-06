@@ -38,8 +38,9 @@ class LogicApiView(FlaskView):
                 print(symbol)
                 print('-'*50)
                 print('\n\n')
-                # trade.prepare(symbol) # Not created for Futures yet
-                # trade.start() # Not created for Futures yet
+                can_still_trade = trade.prepare(symbol)
+                if can_still_trade:
+                    trade.start()
 
         return jsonify(trade.fetch_results())
 

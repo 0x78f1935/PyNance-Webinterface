@@ -23,6 +23,403 @@
         <v-divider inset class="cdiv"></v-divider>
         <v-row align="center">
             <v-col cols="6">
+                <v-subheader>
+                    Expected leverage is {{$store.getters.expectedLeverage}}X if available otherwise it takes a leverage close to the expected leverage.
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-slider
+                    v-model="expectedLeverage"
+                    label="Expected Leverage"
+                    thumb-color="accent"
+                    thumb-label="always"
+                    :thumb-size="16"
+                    :hint="`Max 125x - Currently ${$store.getters.expectedLeverage}X`"
+                    max="125"
+                    min="1"
+                    persistent-hint
+                >
+                    <template v-slot:append>
+                        <v-text-field
+                            v-model="expectedLeverage"
+                            class="mt-0 pt-0"
+                            type="number"
+                            style="width: 60px"
+                        ></v-text-field>
+                    </template>
+                </v-slider>
+            </v-col>
+        </v-row>
+
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
+            <v-col cols="6">
+                <v-subheader>
+                    Select the timeframe to use when calculating the average of the buy/sell volume ratio
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-select
+                    :items="this.$store.getters.volumeTimeFrameSelection"
+                    v-model="selectedVolumeTimeframe"
+                    hint="The timeframe corresponds to the timeframe available in the graphs within Binance"
+                    item-text="state"
+                    item-value="abbr"
+                    label="Select"
+                    persistent-hint
+                    return-object
+                    single-line
+                ></v-select>
+            </v-col>
+        </v-row>
+
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
+            <v-col cols="6">
+                <v-subheader>
+                    Total volume candles to take into account when calculating LONG or SHORT position
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-slider
+                    v-model="totalVolume"
+                    label="Total candles in volume to take into account"
+                    thumb-color="accent"
+                    thumb-label="always"
+                    :thumb-size="16"
+                    :hint="`Max 500 - Currently ${$store.getters.totalVolume}`"
+                    max="500"
+                    min="2"
+                    persistent-hint
+                >
+                    <template v-slot:append>
+                        <v-text-field
+                            v-model="totalVolume"
+                            class="mt-0 pt-0"
+                            type="number"
+                            style="width: 60px"
+                        ></v-text-field>
+                    </template>
+                </v-slider>
+            </v-col>
+        </v-row>
+
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
+            <v-col cols="6">
+                <v-subheader>
+                    Set the selected margin type. ISOLATED is recommended.
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-select
+                    :items="this.$store.getters.marginTypeChoices"
+                    v-model="marginType"
+                    hint="The timeframe corresponds to the timeframe available in the graphs within Binance"
+                    item-text="state"
+                    item-value="abbr"
+                    label="Select"
+                    persistent-hint
+                    return-object
+                    single-line
+                ></v-select>
+            </v-col>
+        </v-row>
+
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
+            <v-col cols="6">
+                <v-subheader>
+                    When {{$store.getters.defaultStopLoss}}% in the red, cancel order
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-slider
+                    v-model="defaultStopLoss"
+                    label="Default Stop-Loss"
+                    thumb-color="accent"
+                    thumb-label="always"
+                    :thumb-size="24"
+                    :hint="`Max 1% - Currently ${$store.getters.defaultStopLoss}%`"
+                    max="1"
+                    min="0.02"
+                    step=0.01
+                    persistent-hint
+                >
+                    <template v-slot:append>
+                        <v-text-field
+                            v-model="defaultStopLoss"
+                            class="mt-0 pt-0"
+                            type="number"
+                            style="width: 60px"
+                        ></v-text-field>
+                    </template>
+                </v-slider>
+            </v-col>
+        </v-row>
+
+
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
+            <v-col cols="6">
+                <v-subheader>
+                    When {{$store.getters.inGreen}}% in profit move stop-loss {{$store.getters.moveStopLoss}}% to increase profit
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-slider
+                    v-model="inGreen"
+                    label="Trailing Stop-Loss"
+                    thumb-color="accent"
+                    thumb-label="always"
+                    :thumb-size="24"
+                    :hint="`${$store.getters.inGreen}% profit to move SL`"
+                    max="5"
+                    min="0.02"
+                    step=0.01
+                    persistent-hint
+                >
+                    <template v-slot:append>
+                        <v-text-field
+                            v-model="inGreen"
+                            class="mt-0 pt-0"
+                            type="number"
+                            style="width: 60px"
+                        ></v-text-field>
+                    </template>
+                </v-slider>
+            </v-col>
+        </v-row>
+
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
+            <v-col cols="6">
+                <v-subheader>
+                    Moves the stop-loss {{$store.getters.moveStopLoss}}% when the order is {{$store.getters.inGreen}}% in profit
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-slider
+                    v-model="moveStopLoss"
+                    label="Move stop-loss"
+                    thumb-color="accent"
+                    thumb-label="always"
+                    :thumb-size="24"
+                    :hint="`Max ${$store.getters.inGreen + 0.01}% - Currently ${$store.getters.moveStopLoss}%`"
+                    :max="$store.getters.inGreen + 0.01"
+                    min="0.01"
+                    step=0.01
+                    persistent-hint
+                >
+                    <template v-slot:append>
+                        <v-text-field
+                            v-model="moveStopLoss"
+                            class="mt-0 pt-0"
+                            type="number"
+                            style="width: 60px"
+                        ></v-text-field>
+                    </template>
+                </v-slider>
+            </v-col>
+        </v-row>
+
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
+            <v-col cols="6">
+                <v-subheader>
+                    Total amount of take profit {{$store.getters.totalTP}} * {{$store.getters.takeProfit}}% == {{$store.getters.totalTP * $store.getters.takeProfit}}% (total) In steps (of {{$store.getters.totalTP}}), finally sell all leftovers
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-slider
+                    v-model="totalTP"
+                    label="Total amount of Take Profits"
+                    thumb-color="accent"
+                    thumb-label="always"
+                    :thumb-size="24"
+                    :hint="`Max 10 - Currently ${$store.getters.totalTP}`"
+                    max="10"
+                    min="1"
+                    persistent-hint
+                >
+                    <template v-slot:append>
+                        <v-text-field
+                            v-model="totalTP"
+                            class="mt-0 pt-0"
+                            type="number"
+                            style="width: 60px"
+                        ></v-text-field>
+                    </template>
+                </v-slider>
+            </v-col>
+        </v-row>
+
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
+            <v-col cols="6">
+                <v-subheader>
+                    Total % to sell for each Take Profit ({{$store.getters.totalTP}}). The final blow will sell all leftovers
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-slider
+                    v-model="takeProfit"
+                    label="Total amount to Take Profit"
+                    thumb-color="accent"
+                    thumb-label="always"
+                    :thumb-size="24"
+                    :hint="`Max 50% - Currently ${$store.getters.takeProfit}%`"
+                    max="50"
+                    min="1"
+                    persistent-hint
+                >
+                    <template v-slot:append>
+                        <v-text-field
+                            v-model="takeProfit"
+                            class="mt-0 pt-0"
+                            type="number"
+                            style="width: 60px"
+                        ></v-text-field>
+                    </template>
+                </v-slider>
+            </v-col>
+        </v-row>
+
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
+            <v-col cols="6">
+                <v-subheader>
+                    The total amount of your wallet used on the selected symbol when placing a buy order
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-slider
+                    v-model="walletAmount"
+                    label="Wallet amount"
+                    thumb-color="accent"
+                    thumb-label="always"
+                    :thumb-size="24"
+                    :hint="`Max 100% - Currently ${$store.getters.walletAmount}%`"
+                    max="100"
+                    min="1"
+                    persistent-hint
+                >
+                    <template v-slot:append>
+                        <v-text-field
+                            v-model="walletAmount"
+                            class="mt-0 pt-0"
+                            type="number"
+                            style="width: 60px"
+                        ></v-text-field>
+                    </template>
+                </v-slider>
+            </v-col>
+        </v-row>
+
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
+            <v-col cols="6">
+                <v-subheader>
+                    Use SPOT strategy when deciding to place a buy order
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-checkbox
+                    v-model="spot_average"
+                    :label="$store.getters.useAverage ? 'Dubble check average before placing any order' : 'Skipping extra average check, enable to configure'"
+                ></v-checkbox>
+            </v-col>
+        </v-row>
+
+        <v-container v-if="$store.getters.useAverage">
+            <v-divider inset class="cdiv"></v-divider>
+            <v-row align="center">
+                <v-col cols="6">
+                    <v-subheader>
+                        Select the timeframe to use when calculating the lowest average for a buy order
+                    </v-subheader>
+                </v-col>
+
+                <v-col cols="6">
+                    <v-select
+                        :items="this.$store.getters.timeframeChoices"
+                        v-model="selectedTimeframe"
+                        hint="The timeframe corresponds to the timeframe available in the graphs within Binance"
+                        item-text="state"
+                        item-value="abbr"
+                        label="Select"
+                        persistent-hint
+                        return-object
+                        single-line
+                    ></v-select>
+                </v-col>
+            </v-row>
+            <v-divider inset class="cdiv"></v-divider>
+            <v-row align="center">
+                <v-col cols="6">
+                    <v-subheader>
+                        Select the total amount of candles to take into account when calculating the lowest average for a buy order
+                    </v-subheader>
+                </v-col>
+
+                <v-col cols="6">
+                    <v-slider
+                        v-model="candleInterval"
+                        label="Amount of candles"
+                        thumb-color="accent"
+                        thumb-label="always"
+                        :thumb-size="20"
+                        :hint="`Max 1000 candles - Currently ${$store.getters.candleInterval} candles`"
+                        max="1000"
+                        min="2"
+                        persistent-hint
+                    >
+                        <template v-slot:append>
+                            <v-text-field
+                                v-model="candleInterval"
+                                class="mt-0 pt-0"
+                                type="number"
+                                style="width: 60px"
+                            ></v-text-field>
+                        </template>
+                    </v-slider>
+                </v-col>
+            </v-row>
+
+            <v-divider inset class="cdiv"></v-divider>
+            <v-row align="center">
+                <v-col cols="6">
+                    <v-subheader>
+                        The following value is used to suppress the lowest average price for a buy order by {{$store.getters.belowAverage}}%
+                    </v-subheader>
+                </v-col>
+
+                <v-col cols="6">
+                    <v-text-field
+                        v-model="belowAverage"
+                        label="Suppression"
+                        :hint="`Lowest average - ${$store.getters.belowAverage}% = Max buy price`"
+                        type="number"
+                        persistent-hint
+                    ></v-text-field>
+                </v-col>
+            </v-row>
+        </v-container>
+
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
+            <v-col cols="6">
                 <v-btn
                     color="accent"
                     depressed
@@ -35,11 +432,18 @@
                 </v-btn>
             </v-col>
 
-            <v-col cols="6">
+            <v-col cols="3">
                 <v-switch
                     v-model="spot"
                     :label="$store.getters.spot ? 'Trading in Spot!' : 'Trading USDT-M futures!'"
                 ></v-switch>
+            </v-col>
+
+            <v-col cols="3">
+                <v-checkbox
+                    v-model="sandbox"
+                    :label="$store.getters.sandbox ? 'Sandbox-Mode enabled' : 'Sandbox-Mode disabled'"
+                ></v-checkbox>
             </v-col>
         </v-row>
     </v-container>
@@ -57,9 +461,49 @@
             },
         },
         computed: {
+            expectedLeverage: {
+                get() { return this.$store.getters.expectedLeverage },
+                set(value) { this.$store.commit('SET_EXPECTED_LEVERAGE', value); }
+            },
+            selectedVolumeTimeframe: {
+                get() { return this.$store.getters.volumeTimeFrame },
+                set(value) { this.$store.commit('SET_VOLUME_TIME_FRAME', value); }
+            },
+            totalVolume: {
+                get() { return this.$store.getters.totalVolume },
+                set(value) { this.$store.commit('SET_TOTAL_VOLUME', value); }
+            },
+            defaultStopLoss: {
+                get() { return this.$store.getters.defaultStopLoss },
+                set(value) { this.$store.commit('SET_DEFAULT_STOP_LOSS', value); }
+            },
+            inGreen: {
+                get() { return this.$store.getters.inGreen },
+                set(value) { this.$store.commit('SET_IN_GREEN', value); }
+            },
+            moveStopLoss: {
+                get() { return this.$store.getters.moveStopLoss },
+                set(value) { this.$store.commit('SET_MOVE_STOP_LOSS', value); }
+            },
+            marginType: {
+                get() { return this.$store.getters.marginType },
+                set(value) { this.$store.commit('SET_MARGIN_TYPE', value); }
+            },
             selectedSymbols: {
                 get() { return this.$store.getters.symbols },
                 set(value) { this.$store.commit('SET_SYMBOLS', value); }
+            },
+            totalTP: {
+                get() { return this.$store.getters.totalTP },
+                set(value) { this.$store.commit('SET_TOTAL_TP', value); }
+            },
+            takeProfit: {
+                get() { return this.$store.getters.takeProfit },
+                set(value) { this.$store.commit('SET_TAKE_PROFIT', value); }
+            },
+            spot_average: {
+                get() { return this.$store.getters.useAverage },
+                set(value) { this.$store.commit('SET_USE_AVERAGE', value); }
             },
             selectedTimeframe: {
                 get() { return this.$store.getters.timeframe },
@@ -77,14 +521,6 @@
                 get() { return this.$store.getters.belowAverage },
                 set(value) { this.$store.commit('SET_BELOW_AVERAGE', value); }
             },
-            profitMargin: {
-                get() { return this.$store.getters.profitMargin },
-                set(value) { this.$store.commit('SET_PROFIT_MARGIN', value); }
-            },
-            profitAs: {
-                get() { return this.$store.getters.profitAs },
-                set(value) { this.$store.commit('SET_PROFIT_AS', value); }
-            },
             spot: { 
                 get() { return this.$store.getters.spot },
                 set(value) { 
@@ -96,7 +532,11 @@
                         }
                     } else { this.$store.commit('SET_SPOT', value); }
                 }
-            }
+            },
+            sandbox: {
+                get() { return this.$store.getters.sandbox },
+                set(value) { this.$store.commit('SET_SANDBOX', value); }
+            },
         }
     }
 </script>
