@@ -22,32 +22,34 @@
         <v-divider class="mx-4"></v-divider>
 
         <v-card-text>
-            <table>
-                <thead>
-                    <tr>
-                        <th class="title_custom">Type</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="title_custom">Available</td>
-                        <td>{{ parseInt(free) + parseInt(locked) }}</td>
-                    </tr>
-                    <tr>
-                        <td class="title_custom">Free</td>
-                        <td>{{ free }}</td>
-                    </tr>
-                    <tr>
-                        <td class="title_custom">Locked</td>
-                        <td>{{ locked }}</td>
-                    </tr>
-                    <tr>
-                        <td class="title_custom">Freezed</td>
-                        <td>{{ freezed }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <v-simple-table>
+                <template v-slot:default>
+                    <thead>
+                        <tr>
+                            <th class="title_custom">Type</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="title_custom">Available</td>
+                            <td>{{ $store.getters.spot ? parseInt(free) + parseInt(locked) : free }}</td>
+                        </tr>
+                        <tr>
+                            <td class="title_custom">Free</td>
+                            <td>{{ free }}</td>
+                        </tr>
+                        <tr>
+                            <td class="title_custom">Locked</td>
+                            <td>{{ locked }}</td>
+                        </tr>
+                        <tr>
+                            <td class="title_custom">Freezed</td>
+                            <td>{{ freezed }}</td>
+                        </tr>
+                    </tbody>
+                </template>
+            </v-simple-table>
         </v-card-text>
 
         <v-divider class="mx-4"></v-divider>

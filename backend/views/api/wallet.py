@@ -10,7 +10,10 @@ class WalletApiView(FlaskView):
 
     def get(self):
         """Returns wallet balance"""
-        data = pynance.wallet.balance()
+        from backend.models.bot import BotModel
+        bot = BotModel.query.first()
+        if bot.config.spot: data = pynance.wallet.balance()
+        else: data = pynance.futures.wallet.balance()
         return jsonify({
             'status': data.response_info['status_code'],
             'wallet': data.json

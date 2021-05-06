@@ -26,18 +26,18 @@
             <v-col
                 v-else
                 v-for="coin, index in coins"
-                :class="coin.coin.toUpperCase().includes(search.toUpperCase()) || coin.name.toUpperCase().includes(search.toUpperCase()) ? 'visible' : 'collapse'"
+                :class="$store.getters.spot ? coin.coin.toUpperCase().includes(search.toUpperCase()) || coin.name.toUpperCase().includes(search.toUpperCase()) ? 'visible' : 'collapse' : coin.asset.toUpperCase().includes(search.toUpperCase()) ? 'visible' : 'collapse'"
                 :key="index"
                 cols="6"
                 md="2"
             >
                 <wallet-info
-                    :ref="coin.coin"
-                    :coinName="coin.coin"
-                    :projectName="coin.name"
-                    :free="coin.free"
-                    :freezed="coin.freeze"
-                    :locked="coin.locked"
+                    :ref="$store.getters.spot ? coin.coin : coin.asset"
+                    :coinName="$store.getters.spot ? coin.coin : coin.asset"
+                    :projectName="$store.getters.spot ? coin.name : ''"
+                    :free="$store.getters.spot ? coin.free : coin.availableBalance"
+                    :freezed="$store.getters.spot ? coin.freeze : 'Not used in Futures'"
+                    :locked="$store.getters.spot ? coin.locked : 'Not used in Futures'"
                 ></wallet-info>
             </v-col>
         </v-row>
