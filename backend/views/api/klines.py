@@ -1,6 +1,6 @@
 from flask import render_template, jsonify, current_app, request
 from flask_classful import FlaskView, route
-
+from sqlalchemy import and_
 from backend.utils.auth import login_required
 from backend import db, pynance
 
@@ -13,31 +13,44 @@ class KlinesApiView(FlaskView):
         from backend.models.bot import BotModel
         from backend.models.orders import OrdersModel
         bot = BotModel.query.first()
-        target = bot.status.target
-        if target == "NO TARGET": target = "ADAUSDT"
-        order = OrdersModel.query.filter(OrdersModel.symbol == bot.status.target).first()
-        if order.spot: klines = pynance.assets.klines(target, timeframe=bot.graph_type, total_candles=bot.graph_interval)
-        else: klines = pynance.futures.assets.klines(target, timeframe=bot.graph_type, total_candles=bot.graph_interval)
-        target_type = 'WAITING FOR CONFIG'
-        trade_type = 'NONE'
-        target_type_status = 'NO TRADE CONFIG'
-        if order is not None:
-            target_type = 'BUY TARGET' if order.buying else 'SELL TARGET'
-            trade_type = 'SPOT' if order.spot else 'FUTURE'
-            target_type_status = 'buy' if order.buying else 'selling'
 
-        return jsonify({
-            'klines': klines, 
-            'target': bot.status.target,
-            'current_target': bot.status.average, 
-            'target_type': target_type,
-            'trade_type': trade_type,
-            'status': {
-                'target': bot.status.target, 
-                'current_target': bot.status.average, 
-                'target_type': target_type_status,
-            }
-        })
+        order = OrdersModel.query.filter(and_(
+            OrdersModel.symbol==bot.status.target,
+            OrdersModel.spot==bot.config.spot,
+            OrdersModel.sandbox==bot.config.sandbox
+        )).first()
+
+        response_data = {
+            'target_type': 'WAITING FOR ONLINE STATUS',
+            'trade_type': 'NONE',
+            'target_type_status': 'NOT RUNNING',
+        }
+        kline_headers = ["Open time", "Open", "High", "Low", "Close", "Volume", "Close time", "Quote asset volume", "Number of trades", "Taker buy base asset volume", "Taker buy quote asset volume", "Ignore"]
+        if order is None: response_data['order'] = False
+        else: 
+            response_data['order'] = True
+            response_data['symbol'] = order.symbol
+            response_data['price_target'] = bot.status.average
+            if order.spot:
+                response_data['trade_type'] = 'SPOT'
+                response_data['target_type'] = 'BUYING' if order.buying else 'SELLING'
+                klines_data = list(sorted(
+                    pynance.assets.klines(order.symbol, timeframe=bot.graph_type, total_candles=bot.graph_interval),
+                    key=lambda x: x[0]
+                ))
+                klines_data.insert(0, kline_headers)
+                response_data['klines'] = klines_data
+            else:
+                response_data['trade_type'] = 'FUTURES'
+                response_data['target_type'] = 'BUYING' if order.buying else 'PROCESSING'
+                klines_data = list(sorted(
+                    pynance.futures.assets.klines(order.symbol, timeframe=bot.graph_type, total_candles=bot.graph_interval),
+                    key=lambda x: x[0]
+                ))
+                klines_data.insert(0, kline_headers)
+                response_data['klines'] = klines_data
+
+        return jsonify(response_data)
 
     @route('/graph', methods=['GET', 'POST'])
     def set_graph(self):

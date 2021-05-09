@@ -38,9 +38,8 @@ class Futures(Trading):
         # Fetch exchange information
         asset_exchange_info = pynance.futures.assets.exchange_info(symbol).json['symbols'].pop(0)
         # Calculate the precision size of the symbol
-        stepSize = [ i for i in asset_exchange_info['filters'] if i['filterType'] == 'LOT_SIZE'][0]['stepSize']
-        self.precision = int(round(-math.log(float(stepSize), 10), 0))
-        if self.precision == 0: self.precision = 8
+        self.precision = asset_exchange_info['baseAssetPrecision']
+        self.precision_qty = asset_exchange_info['quantityPrecision']
         # Check the amount needed in order to place a minimum order
         self.required_amount = float(round(float([ i for i in asset_exchange_info['filters'] if i['filterType'] == 'MIN_NOTIONAL'][0]['notional']), self.precision))
         # Get the asset names
@@ -80,19 +79,23 @@ class Futures(Trading):
             self.bot.chat(f"UNABLE TO SET MARGIN TYPE {self.bot.config.margin_type} FOR {symbol}")
             return False
         self.bot.chat(f"MARGIN HAS BEEN SET FOR {symbol} - {self.bot.config.margin_type} {selected_leverage}X")
+
+        # Enable hedge mode
+        pynance.futures.change_hedge_mode(True)
         return True
 
     def start(self):
         open_orders = pynance.futures.orders.open(self.symbol)
-        if open_orders.json: self.bot.chat(f"FOUND OPEN ORDER FOR {self.symbol} - SKIPPING")
+        if open_orders.json: 
+            self.bot.chat(f"FOUND OPEN ORDER FOR {self.symbol} - SKIPPING")
+            # TODO check open orders and position to check if the order has been processed. if so disable order and update profit
         else:
             if self.quote_balance < self.required_amount: self.bot.chat(f"NOT ENOUGH {self.quote_asset} TO PLACE A {self.position} - {self.quote_balance} {self.quote_asset} AVAILABLE NEED MINIMUM OF {self.required_amount} {self.quote_asset}")
             else:
-                if self._average_check and \
-                    self._volume_check:
+                if self._average_check \
+                    and self._volume_check:
                     self.place_order()
-                else:
-                    print("SKIP")
+                else: self.bot.chat(f"SYMBOL {self.symbol} DID NOT MEET THE TRADE REQUIREMENTS - SKIPPING")
     
     @property
     def _average_check(self):
@@ -117,3 +120,33 @@ class Futures(Trading):
 
     def place_order(self):
         self.bot.chat(f"OPENED A {self.position} POSITION ON {self.symbol}")
+        quantity = float(round(float(float(float(self.quote_balance / self.current_price) / 100) * float(self.bot.config.wallet_amount)), self.precision_qty))
+        activation_price = self.current_price - float(float(self.current_price / 100) * self.bot.config.activation_price) if self.position == 'LONG' else self.current_price + float(float(self.current_price / 100) * self.bot.config.activation_price)
+        if self.bot.config.sandbox:
+                brought_price = float(round(float(activation_price)* quantity, self.precision))
+                self.order.update_data({
+                    'brought_price': brought_price,
+                    'quantity': quantity,
+                    'buying': False
+                })
+                self.bot.chat(f"BROUGHT IN SANDBOX ({float(round(float(self.order.quantity), self.precision))}) {self.symbol} {self.position} FOR AN AMAZING ({float(round(float(brought_price), self.precision))}) {self.quote_asset}")
+        else:
+            order_data = {
+                'symbol':self.symbol,
+                'market_type':"TRAILING_STOP_MARKET",
+                'side':"BUY" if self.position == 'LONG' else "SELL",
+                'quantity':quantity,
+                'position':self.position,
+                'callbackRate':self.bot.config.in_green
+            }
+            if self.bot.config.activation_price != 0: order_data['activationPrice'] = activation_price
+            order = pynance.futures.orders.create(**order_data)
+            if 'orderId' in order.json:
+                brought_price = float(round(float(activation_price)* quantity, self.precision))
+                self.order.update_data({
+                    'brought_price': brought_price,
+                    'quantity': quantity,
+                    'buying': False
+                })
+                self.bot.chat(f"BROUGHT ({float(round(float(self.order.quantity), self.precision))}) {self.symbol} {self.position} FOR AN AMAZING ({float(round(float(brought_price), self.precision))}) {self.quote_asset}")
+            else: self.bot.chat(f"UNABLE TO PLACE A {'BUY' if self.position == 'LONG' else 'SELL'}/{self.position} ORDER FOR ({float(round(float(quantity), self.precision))}) {self.base_asset}")

@@ -9,6 +9,12 @@
                     :titleTxt="title"
                     :class="isVisible?'visible':'collapse'"
                 ></trading-vue>
+                <!-- <GChart
+                    :settings="{ packages: ['corechart'] }"
+                    type="CandlestickChart"
+                    :data="chartData"
+                    :options="chartOptions"
+                /> -->
             </v-col>
             <v-col cols="2">
                 <v-card
@@ -144,7 +150,7 @@
             TradingVue,
         },
         data: () => ({
-            title: "LTCUSDT",
+            title: "BTCUSDT",
             chart: {   // Mandatory
                 type: "Spline", // "<Candles|Spline>",
                 data: [],
@@ -168,6 +174,27 @@
             status: {},
             polling: null,
             orders: {},
+            // chartData: [
+            // ],
+            // chartOptions: {
+            //     chart: {
+            //         title: 'Loading',
+            //         subtitle: '...',
+            //     },
+            //     series: {
+            //         0:{color: 'black', visibleInLegend: false},
+            //         1:{visibleInLegend: true},
+            //         2:{visibleInLegend: false},
+            //         3:{type: 'line', color: 'red', visibleInLegend: false},
+            //         4:{type: 'line', color: 'red', visibleInLegend: false},
+            //         5:{type: 'line', color: 'red', visibleInLegend: false}
+            //     },
+            //     bar: { groupWidth: '100%' }, // Remove space between bars.
+            //     candlestick: {
+            //         fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
+            //         risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
+            //     }
+            // }
         }),
         created () {
             this.$store.dispatch('getGraphInterval');
@@ -190,13 +217,21 @@
         methods: {
             updateKlines() {
                 axios.get(`/api/v1/klines`, {headers: {'token': this.$store.getters.token}}).then(response => {
-                    // this.$data.ohlcv = response.data.klines;
-                    this.$data.chart.data = response.data.klines;
-                    this.$data.onchart[0].data = response.data.klines.map(x => [x[0], response.data.current_target] );
-                    this.$data.title = response.data.target;
-                    this.$data.onchart[0].name = response.data.target_type;
-                    this.$data.status = response.data.status;
-                    this.$data.spot = response.data.spot;
+                    this.$data.title = response.data.symbol
+                    if(response.data.order) {
+                        this.$data.chart.data = response.data.klines;
+                        this.$data.onchart[0].data = response.data.klines.map(x => [x[0], response.data.price_target] );
+                        this.$data.onchart[0].name = response.data.target_type;
+                        this.$data.status = {
+                            'target': response.data.symbol, 
+                            'current_target': response.data.price_target, 
+                            'trade_type': response.data.trade_type,
+                            'target_type': response.data.target_type,
+                        }
+                        // this.$data.chartData = response.data.klines;
+                        // this.$data.chartOptions.chart.title = response.data.symbol;
+                        // this.$data.chartOptions.chart.subtitle = response.data.target_type;
+                    }
                 });
             },
             updateOrders() {

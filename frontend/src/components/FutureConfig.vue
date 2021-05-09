@@ -134,26 +134,26 @@
         <v-row align="center">
             <v-col cols="6">
                 <v-subheader>
-                    When {{$store.getters.defaultStopLoss}}% in the red, cancel order
+                    Activate trailing stop order {{$store.getters.activatePrice}}% from buy-entry
                 </v-subheader>
             </v-col>
 
             <v-col cols="6">
                 <v-slider
-                    v-model="defaultStopLoss"
-                    label="Default Stop-Loss"
+                    v-model="activatePrice"
+                    label="Activation Price"
                     thumb-color="accent"
                     thumb-label="always"
-                    :thumb-size="24"
-                    :hint="`Max 1% - Currently ${$store.getters.defaultStopLoss}%`"
-                    max="1"
-                    min="0.02"
-                    step=0.01
+                    :thumb-size="16"
+                    :hint="`Currently ${$store.getters.activatePrice}%`"
+                    max="2"
+                    min="0"
+                    step=0.1
                     persistent-hint
                 >
                     <template v-slot:append>
                         <v-text-field
-                            v-model="defaultStopLoss"
+                            v-model="activatePrice"
                             class="mt-0 pt-0"
                             type="number"
                             style="width: 60px"
@@ -168,7 +168,7 @@
         <v-row align="center">
             <v-col cols="6">
                 <v-subheader>
-                    When {{$store.getters.inGreen}}% in profit move stop-loss {{$store.getters.moveStopLoss}}% to increase profit
+                    When {{$store.getters.inGreen}}% in profit move stop-loss to increase secured profit
                 </v-subheader>
             </v-col>
 
@@ -188,103 +188,6 @@
                     <template v-slot:append>
                         <v-text-field
                             v-model="inGreen"
-                            class="mt-0 pt-0"
-                            type="number"
-                            style="width: 60px"
-                        ></v-text-field>
-                    </template>
-                </v-slider>
-            </v-col>
-        </v-row>
-
-        <v-divider inset class="cdiv"></v-divider>
-        <v-row align="center">
-            <v-col cols="6">
-                <v-subheader>
-                    Moves the stop-loss {{$store.getters.moveStopLoss}}% when the order is {{$store.getters.inGreen}}% in profit
-                </v-subheader>
-            </v-col>
-
-            <v-col cols="6">
-                <v-slider
-                    v-model="moveStopLoss"
-                    label="Move stop-loss"
-                    thumb-color="accent"
-                    thumb-label="always"
-                    :thumb-size="24"
-                    :hint="`Max ${$store.getters.inGreen + 0.01}% - Currently ${$store.getters.moveStopLoss}%`"
-                    :max="$store.getters.inGreen + 0.01"
-                    min="0.01"
-                    step=0.01
-                    persistent-hint
-                >
-                    <template v-slot:append>
-                        <v-text-field
-                            v-model="moveStopLoss"
-                            class="mt-0 pt-0"
-                            type="number"
-                            style="width: 60px"
-                        ></v-text-field>
-                    </template>
-                </v-slider>
-            </v-col>
-        </v-row>
-
-        <v-divider inset class="cdiv"></v-divider>
-        <v-row align="center">
-            <v-col cols="6">
-                <v-subheader>
-                    Total amount of take profit {{$store.getters.totalTP}} * {{$store.getters.takeProfit}}% == {{$store.getters.totalTP * $store.getters.takeProfit}}% (total) In steps (of {{$store.getters.totalTP}}), finally sell all leftovers
-                </v-subheader>
-            </v-col>
-
-            <v-col cols="6">
-                <v-slider
-                    v-model="totalTP"
-                    label="Total amount of Take Profits"
-                    thumb-color="accent"
-                    thumb-label="always"
-                    :thumb-size="24"
-                    :hint="`Max 10 - Currently ${$store.getters.totalTP}`"
-                    max="10"
-                    min="1"
-                    persistent-hint
-                >
-                    <template v-slot:append>
-                        <v-text-field
-                            v-model="totalTP"
-                            class="mt-0 pt-0"
-                            type="number"
-                            style="width: 60px"
-                        ></v-text-field>
-                    </template>
-                </v-slider>
-            </v-col>
-        </v-row>
-
-        <v-divider inset class="cdiv"></v-divider>
-        <v-row align="center">
-            <v-col cols="6">
-                <v-subheader>
-                    Total % to sell for each Take Profit ({{$store.getters.totalTP}}). The final blow will sell all leftovers
-                </v-subheader>
-            </v-col>
-
-            <v-col cols="6">
-                <v-slider
-                    v-model="takeProfit"
-                    label="Total amount to Take Profit"
-                    thumb-color="accent"
-                    thumb-label="always"
-                    :thumb-size="24"
-                    :hint="`Max 50% - Currently ${$store.getters.takeProfit}%`"
-                    max="50"
-                    min="1"
-                    persistent-hint
-                >
-                    <template v-slot:append>
-                        <v-text-field
-                            v-model="takeProfit"
                             class="mt-0 pt-0"
                             type="number"
                             style="width: 60px"
@@ -473,9 +376,9 @@
                 get() { return this.$store.getters.totalVolume },
                 set(value) { this.$store.commit('SET_TOTAL_VOLUME', value); }
             },
-            defaultStopLoss: {
-                get() { return this.$store.getters.defaultStopLoss },
-                set(value) { this.$store.commit('SET_DEFAULT_STOP_LOSS', value); }
+            activatePrice: {
+                get() { return this.$store.getters.activatePrice },
+                set(value) { this.$store.commit('SET_ACTIVATE_PRICE', value); }
             },
             inGreen: {
                 get() { return this.$store.getters.inGreen },
