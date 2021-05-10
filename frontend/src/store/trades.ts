@@ -69,6 +69,7 @@ const tradesModule: Module<any, any> = {
                 state.commit('SET_VOLUME_TIME_FRAME', response.data["volume-timeframe"]);
                 state.commit('SET_TOTAL_VOLUME', response.data["total-volume"]);
                 state.commit('SET_MARGIN_TYPE', response.data["margin-type"]);
+                state.commit('SET_ALLOW_MULTIPLE_ORDERS', response.data["allow-multiple-orders"]);
                 console.log(response.data);
             });
         },
@@ -90,6 +91,7 @@ const tradesModule: Module<any, any> = {
                 volume_timeframe: state.getters.volumeTimeFrame,
                 total_volume: state.getters.totalVolume,
                 margin_type: state.getters.marginType,
+                allow_multiple_orders: state.getters.allowMultipleOrders
             },{headers: {'token': state.getters.token}});
         }
     }

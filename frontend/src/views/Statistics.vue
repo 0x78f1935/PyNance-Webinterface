@@ -110,7 +110,7 @@
                                         thumb-label="always"
                                         :thumb-size="24"
                                         :hint="`Max 5000 - Currently ${$store.getters.graph_interval}`"
-                                        max="5000"
+                                        max="1000"
                                         min="2"
                                         persistent-hint
                                     >

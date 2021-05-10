@@ -23,6 +23,9 @@ class OrdersModel(db.Model):
     sandbox = db.Column(db.Boolean, default=False)
     active = db.Column(db.Boolean, default=True)
 
+    order_id = db.Column(db.Integer)
+    client_order_id = db.Column(db.Text)
+
     def update_data(self, data: dict):
         """"Just throw in a json object, each key that can be mapped will be updated"
 

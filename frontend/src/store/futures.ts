@@ -11,7 +11,8 @@ const futuresModule: Module<any, any> = {
         volumeTimeFrameSelection: ["5m","15m","30m","1h","2h","4h","6h","12h","1d"],
         totalVolume: 0,
         marginType: '',
-        marginTypeChoices: ['ISOLATED', 'CROSSED']
+        marginTypeChoices: ['ISOLATED', 'CROSSED'],
+        allowMultipleOrders: false,
     },
 
     getters: {
@@ -24,6 +25,7 @@ const futuresModule: Module<any, any> = {
         totalVolume: state => state.totalVolume,
         marginType: state => state.marginType,
         marginTypeChoices: state => state.marginTypeChoices,
+        allowMultipleOrders: state => state.allowMultipleOrders,
     },
 
     mutations: {
@@ -34,6 +36,7 @@ const futuresModule: Module<any, any> = {
         SET_VOLUME_TIME_FRAME(state, value) { state.volumeTimeFrame = value; },
         SET_TOTAL_VOLUME(state, value) { state.totalVolume = value; },
         SET_MARGIN_TYPE(state, value) { state.marginType = value; },
+        SET_ALLOW_MULTIPLE_ORDERS(state, value) { state.allowMultipleOrders = value; },
     },
 
     actions: {

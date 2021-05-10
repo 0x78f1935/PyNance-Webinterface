@@ -181,8 +181,8 @@
                     :thumb-size="24"
                     :hint="`${$store.getters.inGreen}% profit to move SL`"
                     max="5"
-                    min="0.02"
-                    step=0.01
+                    min="0.1"
+                    step=0.1
                     persistent-hint
                 >
                     <template v-slot:append>
@@ -335,17 +335,24 @@
                 </v-btn>
             </v-col>
 
-            <v-col cols="3">
+            <v-col cols="2">
                 <v-switch
                     v-model="spot"
                     :label="$store.getters.spot ? 'Trading in Spot!' : 'Trading USDT-M futures!'"
                 ></v-switch>
             </v-col>
 
-            <v-col cols="3">
+            <v-col cols="2">
                 <v-checkbox
                     v-model="sandbox"
                     :label="$store.getters.sandbox ? 'Sandbox-Mode enabled' : 'Sandbox-Mode disabled'"
+                ></v-checkbox>
+            </v-col>
+
+            <v-col cols="2">
+                <v-checkbox
+                    v-model="multipleOrders"
+                    :label="$store.getters.allowMultipleOrders ? 'Multiple positions allowed' : 'Multiple positions disallowed'"
                 ></v-checkbox>
             </v-col>
         </v-row>
@@ -439,6 +446,10 @@
             sandbox: {
                 get() { return this.$store.getters.sandbox },
                 set(value) { this.$store.commit('SET_SANDBOX', value); }
+            },
+            multipleOrders: {
+                get() { return this.$store.getters.allowMultipleOrders },
+                set(value) { this.$store.commit('SET_ALLOW_MULTIPLE_ORDERS', value); }
             },
         }
     }

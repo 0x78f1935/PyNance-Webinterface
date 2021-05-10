@@ -33,6 +33,7 @@ class ConfigModel(db.Model):
     activation_price = db.Column(db.Float, default=0.02)
     in_green = db.Column(db.Float, default=2)
 
+    allow_multiple_orders = db.Column(db.Boolean, default=False)
     use_average = db.Column(db.Boolean, default=False)
 
     def update_data(self, data: dict):

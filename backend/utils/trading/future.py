@@ -85,17 +85,36 @@ class Futures(Trading):
         return True
 
     def start(self):
+        # Check if we have an order active
         open_orders = pynance.futures.orders.open(self.symbol)
-        if open_orders.json: 
+        _ = str(float(round(self.order.quantity, self.precision_qty))).endswith('.0')
+        check = str(int(round(self.order.quantity, self.precision_qty))) if _ else str(float(round(self.order.quantity, self.precision_qty)))
+        if [i for i in open_orders.json if i['symbol'] == self.symbol and i['origQty'] == check]:
+            self.bot.update_average(float(open_orders.json[0]['activatePrice']))
             self.bot.chat(f"FOUND OPEN ORDER FOR {self.symbol} - SKIPPING")
-            # TODO check open orders and position to check if the order has been processed. if so disable order and update profit
-        else:
-            if self.quote_balance < self.required_amount: self.bot.chat(f"NOT ENOUGH {self.quote_asset} TO PLACE A {self.position} - {self.quote_balance} {self.quote_asset} AVAILABLE NEED MINIMUM OF {self.required_amount} {self.quote_asset}")
+        # Check if we have a position open
+        elif self.order.client_order_id is not None:
+            order_data = pynance.futures.orders.open(self.symbol, self.order.client_order_id)
+            self.bot.update_average(float(order_data.json['stopPrice']))
+            if order_data.json['status'] == 'FILLED' and order_data.json['price'] == "0":
+                # TODO if canceled update order_data
+                if self.bot.config.allow_multiple_orders: self.engine()
+                else: self.bot.chat(f'NOT ALLOWED TO PLACE MULTIPLE POSITIONS FOR {self.symbol} - SKIPPING')
             else:
-                if self._average_check \
-                    and self._volume_check:
-                    self.place_order()
-                else: self.bot.chat(f"SYMBOL {self.symbol} DID NOT MEET THE TRADE REQUIREMENTS - SKIPPING")
+                self.order.update_data({
+                    'active': False,
+                    'sold_for': float(order_data.json['price'])
+                })
+        else: self.engine()
+
+    def engine(self):
+        if self.quote_balance < self.required_amount: self.bot.chat(f"NOT ENOUGH {self.quote_asset} TO PLACE A {self.position} - {self.quote_balance} {self.quote_asset} AVAILABLE NEED MINIMUM OF {self.required_amount} {self.quote_asset}")
+        else:
+            if self._average_check \
+                and self._volume_check:
+                self.place_order()
+            else: self.bot.chat(f"SYMBOL {self.symbol} DID NOT MEET THE TRADE REQUIREMENTS - SKIPPING")
+
     
     @property
     def _average_check(self):
@@ -137,15 +156,19 @@ class Futures(Trading):
                 'side':"BUY" if self.position == 'LONG' else "SELL",
                 'quantity':quantity,
                 'position':self.position,
-                'callbackRate':self.bot.config.in_green
+                'callbackRate':self.bot.config.in_green,
+                'workingType': 'MARK_PRICE'
             }
             if self.bot.config.activation_price != 0: order_data['activationPrice'] = activation_price
             order = pynance.futures.orders.create(**order_data)
-            if 'orderId' in order.json:
+            if order.code == -4003: self.bot.chat(f"NOT ENOUGH BALANCE TO PLACE ORDER FOR {self.symbol}")
+            elif 'orderId' in order.json:
                 brought_price = float(round(float(activation_price)* quantity, self.precision))
                 self.order.update_data({
                     'brought_price': brought_price,
                     'quantity': quantity,
+                    'order_id': order.json['orderId'],
+                    'client_order_id': order.json['clientOrderId'],
                     'buying': False
                 })
                 self.bot.chat(f"BROUGHT ({float(round(float(self.order.quantity), self.precision))}) {self.symbol} {self.position} FOR AN AMAZING ({float(round(float(brought_price), self.precision))}) {self.quote_asset}")
