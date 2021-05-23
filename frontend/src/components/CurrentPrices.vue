@@ -26,6 +26,7 @@
             </v-text-field>
 
             <v-text-field
+                :disabled="isLoading"
                 v-model="quantity"
                 label="Quantity"
                 type="number"
