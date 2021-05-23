@@ -7,6 +7,7 @@ from datetime import datetime
 from flask import Flask
 import requests
 import time
+from json.decoder import JSONDecodeError
 
 class Listener(Flask):
     def __init__(self):
@@ -46,8 +47,13 @@ while True:
                 'token': _token
             }
         )
-        j = req.json()
-        print(f"{datetime.utcnow()} [{req.status_code}] -> Execution time: {j['execution_time']} | Online: {j['online']}")
+        try:
+            j = req.json()
+            print(f"{datetime.utcnow()} [{req.status_code}] -> Execution time: {j['execution_time']} | Online: {j['online']}")
+        except JSONDecodeError as e:
+            print(e)
+            print(req)
+            print(req.data)
     else:
         print('Trying to obtain token')            
         _token = get_token(database_uri)

@@ -3,9 +3,9 @@ import axios from 'axios';
 
 const futuresModule: Module<any, any> = { 
     state: {
-        expectedLeverage: 0,
-        activatePrice: 0,
-        inGreen: 0,
+        expectedLeverage: 5,
+        activatePrice: 0.1,
+        inGreen: 0.2,
         useAverage: false,
         volumeTimeFrame: "",
         volumeTimeFrameSelection: ["5m","15m","30m","1h","2h","4h","6h","12h","1d"],

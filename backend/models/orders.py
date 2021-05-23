@@ -18,6 +18,7 @@ class OrdersModel(db.Model):
     brought_price = db.Column(db.Float, default=0.0)
     quantity = db.Column(db.Float, default=0.0)
     sold_for = db.Column(db.Float, default=0.0)
+    stop_loss = db.Column(db.Float, default=0.0)
     buying = db.Column(db.Boolean, default=True)
     spot = db.Column(db.Boolean, default=True)
     sandbox = db.Column(db.Boolean, default=False)

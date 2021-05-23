@@ -178,6 +178,7 @@ class Futures(Trading):
                 self.order.update_data({
                     'brought_price': brought_price,
                     'quantity': quantity,
+                    'stop_loss': float(round(stop_loss, self.precision)),
                     'buying': False
                 })
                 self.bot.chat(f"BROUGHT IN SANDBOX ({float(round(float(self.order.quantity), self.precision))}) {self.symbol} {self.position} FOR AN AMAZING ({float(round(float(brought_price), self.precision))}) {self.quote_asset}")
@@ -210,6 +211,7 @@ class Futures(Trading):
                     'quantity': quantity,
                     'order_id': order.json['orderId'],
                     'client_order_id': order.json['clientOrderId'],
+                    'stop_loss': float(round(stop_loss, self.precision)),
                     'buying': False
                 })
                 self.bot.chat(f"BROUGHT ({float(round(float(self.order.quantity), self.precision))}) {self.symbol} {self.position} FOR AN AMAZING ({float(round(float(brought_price), self.precision))}) {self.quote_asset}")

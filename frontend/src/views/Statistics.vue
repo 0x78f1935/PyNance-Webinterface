@@ -65,7 +65,13 @@
                                     <td>
                                         <v-slider min="0" max="50" value="50" readonly dense color="#ff4081"></v-slider>
                                     </td>
-                                    <td>Order target</td>
+                                    <td>Order placement</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <v-slider min="0" max="50" value="50" readonly dense color="#00FFFF"></v-slider>
+                                    </td>
+                                    <td>Stop loss</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -160,11 +166,19 @@
             },
             onchart: [
                 {
-                    name: "BUY TARGET",
+                    name: "ORDER PLACEMENT",
                     type: "EMA",
                     data: [ ],
                     settings: {
                         color: "#ff4081"
+                    }
+                },
+                {
+                    name: "STOP LOSS",
+                    type: "EMA",
+                    data: [ ],
+                    settings: {
+                        color: "#00FFFF"
                     }
                 }
             ],
@@ -206,7 +220,6 @@
             this.updateKlines();
             this.updateOrders();
             this.polling = setInterval(() => {
-                console.log('Fetching data');
                 this.updateKlines();
                 this.updateOrders();
             }, 1000)
@@ -219,14 +232,15 @@
                 axios.get(`/api/v1/klines`, {headers: {'token': this.$store.getters.token}}).then(response => {
                     this.$data.title = response.data.symbol
                     if(response.data.order) {
-                        this.$data.chart.data = response.data.klines;
-                        this.$data.onchart[0].data = response.data.klines.map(x => [x[0], response.data.price_target] );
-                        this.$data.onchart[0].name = response.data.target_type;
+                        this.$data.chart.data = response.data.klines.slice(1);
+                        this.$data.onchart[0].data = response.data.klines.map(x => [x[0], response.data.price_target] ).slice(1);
+                        this.$data.onchart[1].data = response.data.klines.map(x => [x[0], response.data.stop_loss] ).slice(1);
                         this.$data.status = {
-                            'target': response.data.symbol, 
+                            'target': response.data.symbol,
                             'current_target': response.data.price_target, 
                             'trade_type': response.data.trade_type,
                             'target_type': response.data.target_type,
+                            'stop_loss': response.data.stop_loss,
                         }
                         // this.$data.chartData = response.data.klines;
                         // this.$data.chartOptions.chart.title = response.data.symbol;

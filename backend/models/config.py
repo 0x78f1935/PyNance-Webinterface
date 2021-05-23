@@ -30,8 +30,8 @@ class ConfigModel(db.Model):
     volume_timeframe = db.Column(db.Text, default="5m")
     total_volume = db.Column(db.Integer, default=30)
     margin_type = db.Column(db.Text, default="ISOLATED")
-    activation_price = db.Column(db.Float, default=0.02)
-    in_green = db.Column(db.Float, default=2)
+    activation_price = db.Column(db.Float, default=0.1)
+    in_green = db.Column(db.Float, default=0.2)
 
     allow_multiple_orders = db.Column(db.Boolean, default=False)
     use_average = db.Column(db.Boolean, default=False)

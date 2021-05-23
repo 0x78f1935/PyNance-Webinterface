@@ -40,9 +40,11 @@ class KlinesApiView(FlaskView):
                 ))
                 klines_data.insert(0, kline_headers)
                 response_data['klines'] = klines_data
+                response_data['stop_loss'] = 0
             else:
                 response_data['trade_type'] = 'FUTURES'
                 response_data['target_type'] = 'BUYING' if order.buying else 'PROCESSING'
+                response_data['stop_loss'] = order.stop_loss
                 klines_data = list(sorted(
                     pynance.futures.assets.klines(order.symbol, timeframe=bot.graph_type, total_candles=bot.graph_interval),
                     key=lambda x: x[0]
