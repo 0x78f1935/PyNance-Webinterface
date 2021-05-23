@@ -93,14 +93,15 @@ class Futures(Trading):
         if [i for i in open_orders.json if i['symbol'] == self.symbol and i['origQty'] == check]:
             self.bot.update_average(float([i for i in open_orders.json if 'activatePrice' in i.keys()][0]['activatePrice']))
             self.bot.chat(f"FOUND OPEN ORDER FOR {self.symbol} - SKIPPING")
-            self._cancel_orders(open_orders) # Check if we still have a close position, if not cancel all
+            if not self.bot.config.sandbox:
+                self._cancel_orders(open_orders) # Check if we still have a close position, if not cancel all
         # Check if we have a position open
         elif self.order.client_order_id is not None:
             order_data = pynance.futures.orders.open(self.symbol, self.order.client_order_id)
             self.bot.update_average(float(order_data.json['stopPrice']))
             if order_data.json['status'] == 'FILLED' and order_data.json['price'] == "0":
-                # TODO if canceled update order_data
-                self._cancel_orders(open_orders)
+                if not self.bot.config.sandbox:
+                    self._cancel_orders(open_orders)
                 if self.bot.config.allow_multiple_orders: self.engine()
                 else: self.bot.chat(f'NOT ALLOWED TO PLACE MULTIPLE POSITIONS FOR {self.symbol} - SKIPPING')
             else:
