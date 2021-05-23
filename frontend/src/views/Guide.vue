@@ -287,6 +287,7 @@
                                 <li>Places a <a href="https://www.binance.com/en/support/faq/360042299292">trailing-stop-loss</a> and a <a href="https://academy.binance.com/en/articles/what-is-a-stop-limit-order">stop limit</a> at the same time.</li>
                                 <li>If the stop limit is hit before the trailing-stop-loss or the stop limit is canceled PyNance will close all related orders and starts over</li>
                                 <li>If the trailing-stop-loss is hit PyNance will start locking-in profit</li>
+                                <li>You also have to configure a take profit margin, this is used to guarentee profit on a placed order</li>
                             </ul>
                         </v-card-text>
 
@@ -309,6 +310,15 @@
                                 Please do keep in mind when trading SPOT the bot will move funds around. <br>
                                 Once you accidentally sell bot holdings the bot will notice and put its own order on hold. <br>
                                 After it will continue with what it was doing.
+                            </p>
+                            <p>
+                                This tool is not a money printing tool and contains risks. <br>
+                                You are responsible for your own money and actions.
+                            </p>
+                            <p>
+                                By using this tool you agree to take FULL responsibility of your own money. <br>
+                                Even if this would mean missed opportunities caused by the algorithm of this bot or worse; losses. <br>
+                                Be responsible, Only trade with money you can afford to lose.
                             </p>
                         </v-card-text>
                     </v-card>

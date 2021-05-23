@@ -158,7 +158,7 @@ Once inside the container, execute the following command to remove the master pa
 
 I want you all to be safe,. Please make sure to untrack your `.env.production` file.
 
-    git update-index --assume-unchanged .env.production 
+    git update-index --assume-unchanged .env.production
 
 
 # <a name="dev-build"></a>Development Build (localhost)

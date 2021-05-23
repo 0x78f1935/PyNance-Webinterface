@@ -58,7 +58,6 @@
                         }
                     }).catch(resp => {
                         alert('The provided API-Key seems to be invalid, please check your API key.');
-                        console.log(resp);
                     });
                 }
             }

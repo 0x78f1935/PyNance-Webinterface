@@ -84,20 +84,13 @@
         mounted () {
             this.$store.dispatch('fetchPrices');
             this.polling = setInterval(() => {
-                console.log('Fetching prices');
                 this.$store.dispatch('fetchPrices');
-                // this.test();
             }, 5000)
         },
         beforeDestroy () {
             clearInterval(this.polling);
         },
         methods: {
-            test() {
-                if(this.$store.getters.prices.length > 0) {
-                    debugger;
-                }
-            },
             precise(x) {
                 return Number.parseFloat(x).toPrecision(8);
             }

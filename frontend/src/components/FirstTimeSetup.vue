@@ -210,7 +210,6 @@
                         this.$data.step += 1;
                     }
                 }
-                console.log(this.$data.step)
             },
             skipPage() {
                 this.$data.step += 1;

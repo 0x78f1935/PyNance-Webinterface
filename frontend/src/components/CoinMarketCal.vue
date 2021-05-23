@@ -196,7 +196,7 @@
         },
         methods: {
             isCollapsed(event, s) {
-                console.log(event.title.toUpperCase().includes(s.toUpperCase()));
+                // console.log(event.title.toUpperCase().includes(s.toUpperCase()));
                 if (event.coins.map(x => x.name).join('|').toString().toUpperCase().includes(s.toUpperCase()) ||
                     event.title.toUpperCase().includes(s.toUpperCase())
                 ) {

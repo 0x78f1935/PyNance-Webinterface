@@ -50,27 +50,31 @@ const tradesModule: Module<any, any> = {
     actions: {
         loadTrades(state) {
             axios.get(`/api/v1/trades/`, {headers: {'token': localStorage['sk']}}).then(response => {
-                state.commit('SET_SANDBOX', response.data.sandbox);
-                state.commit('SET_ASSETS', response.data.assets);
-                state.commit('SET_SYMBOLS', response.data.symbols);
-                state.commit('SET_SYMBOLS_CHOICES', response.data["symbols-choices"]);                
-                state.commit('SET_TIMEFRAME_CHOICES', response.data["timeframe-choices"]);
-                state.commit('SET_TIMEFRAME', response.data["timeframe"]);
-                state.commit('SET_CANDLE_INTERVAL', response.data["candle-interval"]);
-                state.commit('SET_WALLET_AMOUNT', response.data["wallet-amount"]);
-                state.commit('SET_BELOW_AVERAGE', response.data["below-average"]);
-                state.commit('SET_PROFIT_MARGIN', response.data["profit-margin"]);
-                state.commit('SET_PROFIT_AS', response.data["profit-as"]);
-                state.commit('SET_SPOT', response.data["spot"]);
-                state.commit('SET_EXPECTED_LEVERAGE', response.data["expected-leverage"]);
-                state.commit('SET_ACTIVATE_PRICE', response.data["activation-price"]);
-                state.commit('SET_IN_GREEN', response.data["in-green"]);
-                state.commit('SET_USE_AVERAGE', response.data["use-average"]);
-                state.commit('SET_VOLUME_TIME_FRAME', response.data["volume-timeframe"]);
-                state.commit('SET_TOTAL_VOLUME', response.data["total-volume"]);
-                state.commit('SET_MARGIN_TYPE', response.data["margin-type"]);
-                state.commit('SET_ALLOW_MULTIPLE_ORDERS', response.data["allow-multiple-orders"]);
-                console.log(response.data);
+                if(Object.keys(response.data).includes('status')) {
+                    alert(response.data.status);
+                    console.log(response.data.status);
+                } else {
+                    state.commit('SET_SANDBOX', response.data.sandbox);
+                    state.commit('SET_ASSETS', response.data.assets);
+                    state.commit('SET_SYMBOLS', response.data.symbols);
+                    state.commit('SET_SYMBOLS_CHOICES', response.data["symbols-choices"]);                
+                    state.commit('SET_TIMEFRAME_CHOICES', response.data["timeframe-choices"]);
+                    state.commit('SET_TIMEFRAME', response.data["timeframe"]);
+                    state.commit('SET_CANDLE_INTERVAL', response.data["candle-interval"]);
+                    state.commit('SET_WALLET_AMOUNT', response.data["wallet-amount"]);
+                    state.commit('SET_BELOW_AVERAGE', response.data["below-average"]);
+                    state.commit('SET_PROFIT_MARGIN', response.data["profit-margin"]);
+                    state.commit('SET_PROFIT_AS', response.data["profit-as"]);
+                    state.commit('SET_SPOT', response.data["spot"]);
+                    state.commit('SET_EXPECTED_LEVERAGE', response.data["expected-leverage"]);
+                    state.commit('SET_ACTIVATE_PRICE', response.data["activation-price"]);
+                    state.commit('SET_IN_GREEN', response.data["in-green"]);
+                    state.commit('SET_USE_AVERAGE', response.data["use-average"]);
+                    state.commit('SET_VOLUME_TIME_FRAME', response.data["volume-timeframe"]);
+                    state.commit('SET_TOTAL_VOLUME', response.data["total-volume"]);
+                    state.commit('SET_MARGIN_TYPE', response.data["margin-type"]);
+                    state.commit('SET_ALLOW_MULTIPLE_ORDERS', response.data["allow-multiple-orders"]);
+                }
             });
         },
         saveTradeConfig(state) {

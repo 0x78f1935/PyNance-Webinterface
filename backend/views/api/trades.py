@@ -27,7 +27,10 @@ class TradesApiView(FlaskView):
             }
         """
         symbols = [i['symbol'] for i in pynance.assets.symbols().json]
-        assets = [i['coin'] for i in pynance.wallet.balance().json]
+        try:
+            assets = [i['coin'] for i in pynance.wallet.balance().json]
+        except TypeError:
+            return jsonify({'status': 'Invalid Binance API key provided'}), 200
         from backend.models.config import ConfigModel
         config = ConfigModel.query.first()
         return jsonify({
