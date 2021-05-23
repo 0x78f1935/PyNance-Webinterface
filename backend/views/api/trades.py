@@ -53,7 +53,11 @@ class TradesApiView(FlaskView):
             'volume-timeframe': config.volume_timeframe,
             'total-volume': config.total_volume,
             'margin-type': config.margin_type,
-            'allow-multiple-orders': config.allow_multiple_orders
+            'allow-multiple-orders': config.allow_multiple_orders,
+            'take_profit_1': config.take_profit_1,
+            'take_profit_2': config.take_profit_2,
+            'take_profit_3': config.take_profit_3,
+            'take_profit_4': config.take_profit_4,
         }), 200
 
     def post(self):

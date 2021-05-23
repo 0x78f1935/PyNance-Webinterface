@@ -233,7 +233,139 @@
         <v-row align="center">
             <v-col cols="6">
                 <v-subheader>
-                    Use SPOT strategy when deciding to place a buy order
+                    The first take profit margin. BuyPrice including {{$store.getters.takeProfit1}}%
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-slider
+                    v-model="takeProfit1"
+                    label="Take Profit 1"
+                    thumb-color="accent"
+                    thumb-label="always"
+                    :thumb-size="24"
+                    :hint="`Max 100% - Currently ${$store.getters.takeProfit1}%`"
+                    max="100"
+                    min="0.1"
+                    step=0.1
+                    persistent-hint
+                >
+                    <template v-slot:append>
+                        <v-text-field
+                            v-model="takeProfit1"
+                            class="mt-0 pt-0"
+                            type="number"
+                            style="width: 60px"
+                        ></v-text-field>
+                    </template>
+                </v-slider>
+            </v-col>
+        </v-row>
+
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
+            <v-col cols="6">
+                <v-subheader>
+                    The second take profit margin. BuyPrice including {{$store.getters.takeProfit2}}%
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-slider
+                    v-model="takeProfit2"
+                    label="Take Profit 2"
+                    thumb-color="accent"
+                    thumb-label="always"
+                    :thumb-size="24"
+                    :hint="`Max 100% - Currently ${$store.getters.takeProfit2}%`"
+                    max="100"
+                    min="0.1"
+                    step=0.1
+                    persistent-hint
+                >
+                    <template v-slot:append>
+                        <v-text-field
+                            v-model="takeProfit2"
+                            class="mt-0 pt-0"
+                            type="number"
+                            style="width: 60px"
+                        ></v-text-field>
+                    </template>
+                </v-slider>
+            </v-col>
+        </v-row>
+
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
+            <v-col cols="6">
+                <v-subheader>
+                    The third take profit margin. BuyPrice including {{$store.getters.takeProfit3}}%
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-slider
+                    v-model="takeProfit3"
+                    label="Take Profit 3"
+                    thumb-color="accent"
+                    thumb-label="always"
+                    :thumb-size="24"
+                    :hint="`Max 100% - Currently ${$store.getters.takeProfit3}%`"
+                    max="100"
+                    min="0.1"
+                    step=0.1
+                    persistent-hint
+                >
+                    <template v-slot:append>
+                        <v-text-field
+                            v-model="takeProfit3"
+                            class="mt-0 pt-0"
+                            type="number"
+                            style="width: 60px"
+                        ></v-text-field>
+                    </template>
+                </v-slider>
+            </v-col>
+        </v-row>
+
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
+            <v-col cols="6">
+                <v-subheader>
+                    The fourth take profit margin. BuyPrice including {{$store.getters.takeProfit4}}%
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-slider
+                    v-model="takeProfit4"
+                    label="Take Profit 4"
+                    thumb-color="accent"
+                    thumb-label="always"
+                    :thumb-size="24"
+                    :hint="`Max 100% - Currently ${$store.getters.takeProfit4}%`"
+                    max="100"
+                    min="0.1"
+                    step=0.1
+                    persistent-hint
+                >
+                    <template v-slot:append>
+                        <v-text-field
+                            v-model="takeProfit4"
+                            class="mt-0 pt-0"
+                            type="number"
+                            style="width: 60px"
+                        ></v-text-field>
+                    </template>
+                </v-slider>
+            </v-col>
+        </v-row>
+
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
+            <v-col cols="6">
+                <v-subheader>
+                    Apply SPOT strategy on-top of the futures stratagy
                 </v-subheader>
             </v-col>
 
@@ -426,6 +558,22 @@
             walletAmount: {
                 get() { return this.$store.getters.walletAmount },
                 set(value) { this.$store.commit('SET_WALLET_AMOUNT', value); }
+            },
+            takeProfit1: {
+                get() { return this.$store.getters.takeProfit1 },
+                set(value) { this.$store.commit('SET_TAKE_PROFIT_1', value); }
+            },
+            takeProfit2: {
+                get() { return this.$store.getters.takeProfit2 },
+                set(value) { this.$store.commit('SET_TAKE_PROFIT_2', value); }
+            },
+            takeProfit3: {
+                get() { return this.$store.getters.takeProfit3 },
+                set(value) { this.$store.commit('SET_TAKE_PROFIT_3', value); }
+            },
+            takeProfit4: {
+                get() { return this.$store.getters.takeProfit4 },
+                set(value) { this.$store.commit('SET_TAKE_PROFIT_4', value); }
             },
             belowAverage: {
                 get() { return this.$store.getters.belowAverage },
