@@ -267,9 +267,9 @@
                             </p>
                             <ul>
                                 <li>Get buy entry based on (lowest average - suppression)</li>
-                                <li>Waits until buy entry requirements met</li>
-                                <li>Holds until Sell entry requirements met</li>
-                                <li>Sell entry when price meets expected profit margin</li>
+                                <li>Waits until buy entry requirements met then buys</li>
+                                <li>Holds until all Sell requirements are met</li>
+                                <li>Sells when price meets expected profit margin</li>
                                 <li>Repeat</li>
                             </ul>
                         </v-card-text>
@@ -280,13 +280,13 @@
                                 The bot will trade small longs and shorts based on the configuration provided. <br>
                             </p>
                             <p>
-                                Future is still under development #TODO
+                                Depending on your configuration this might variate more, the general idea is:
                             </p>
                             <ul>
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                                <li></li>
+                                <li><a href="https://www.binance.com/en/futures/funding-history/4" target="_blank">Checks Long/Short ratio</a> to determine position</li>
+                                <li>Places a <a href="https://www.binance.com/en/support/faq/360042299292">trailing-stop-loss</a> and a <a href="https://academy.binance.com/en/articles/what-is-a-stop-limit-order">stop limit</a> at the same time.</li>
+                                <li>If the stop limit is hit before the trailing-stop-loss or the stop limit is canceled PyNance will close all related orders and starts over</li>
+                                <li>If the trailing-stop-loss is hit PyNance will start locking-in profit</li>
                             </ul>
                         </v-card-text>
 
