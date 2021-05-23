@@ -289,6 +289,21 @@
                                 <li>If the trailing-stop-loss is hit PyNance will start locking-in profit</li>
                                 <li>You also have to configure a take profit margin, this is used to guarentee profit on a placed order</li>
                             </ul>
+
+                            <img src="@/assets/future_orders.png"/>
+                            <p>
+                                With the default configuration future orders will be a collection of 6 different orders.<br>
+                                Four of wich are take profit margins, One of them is a stop loss and the other one is the trailing-stop-loss.<br>
+                                The four take profit margins have access over 80% of the total available assets in your position.<br>
+                                When all take profits are hit, you end up with 20% of the total order still in your position.<br>
+                                The other 80% is already secured.
+                            </p>
+                            <p>
+                                Keep in mind that manual trading on the same asset on which PyNance is running might be intriguing but it is strongly not-recommended.<br>
+                                PyNance cannot close open positions, So when a trailing-stop-loss is an open-position be carefull when you are about to manual trade.<br>
+                                It's a smart idea to keep the stop-loss open at all time. If you close the stop-loss all open-orders related to the trade will be canceld by PyNance.
+                            </p>
+
                         </v-card-text>
 
                         <v-card-title>Current Prices</v-card-title>
