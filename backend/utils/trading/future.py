@@ -1,3 +1,4 @@
+from sqlalchemy import and_
 from backend.utils.trading import Trading
 from backend import pynance
 import math
@@ -38,7 +39,7 @@ class Futures(Trading):
         # Fetch exchange information
         asset_exchange_info = pynance.futures.assets.exchange_info(symbol).json['symbols'].pop(0)
         # Calculate the precision size of the symbol
-        self.precision = asset_exchange_info['baseAssetPrecision']
+        self.precision = asset_exchange_info['pricePrecision']
         self.precision_qty = asset_exchange_info['quantityPrecision']
         # Check the amount needed in order to place a minimum order
         self.required_amount = float(round(float([ i for i in asset_exchange_info['filters'] if i['filterType'] == 'MIN_NOTIONAL'][0]['notional']), self.precision))
@@ -90,14 +91,16 @@ class Futures(Trading):
         _ = str(float(round(self.order.quantity, self.precision_qty))).endswith('.0')
         check = str(int(round(self.order.quantity, self.precision_qty))) if _ else str(float(round(self.order.quantity, self.precision_qty)))
         if [i for i in open_orders.json if i['symbol'] == self.symbol and i['origQty'] == check]:
-            self.bot.update_average(float(open_orders.json[0]['activatePrice']))
+            self.bot.update_average(float([i for i in open_orders.json if 'activatePrice' in i.keys()][0]['activatePrice']))
             self.bot.chat(f"FOUND OPEN ORDER FOR {self.symbol} - SKIPPING")
+            self._cancel_orders(open_orders) # Check if we still have a close position, if not cancel all
         # Check if we have a position open
         elif self.order.client_order_id is not None:
             order_data = pynance.futures.orders.open(self.symbol, self.order.client_order_id)
             self.bot.update_average(float(order_data.json['stopPrice']))
             if order_data.json['status'] == 'FILLED' and order_data.json['price'] == "0":
                 # TODO if canceled update order_data
+                self._cancel_orders(open_orders)
                 if self.bot.config.allow_multiple_orders: self.engine()
                 else: self.bot.chat(f'NOT ALLOWED TO PLACE MULTIPLE POSITIONS FOR {self.symbol} - SKIPPING')
             else:
@@ -137,10 +140,38 @@ class Futures(Trading):
             self.bot.chat(f"UNCERTAIN ABOUT {self.position} POSITION ON {self.symbol} - SKIPPING")
         return False
 
+    def _cancel_orders(self, open_orders):
+        """Checks if we have open orders of the current symbol, if so check if we atleast a close order.
+        If not cancel all orders and prepare for a new order
+
+        open_orders
+            A list of openorders related to the symbol
+
+        Returns:
+            Boolean: True when we had to cancel orders, otherwise false
+        """
+        hasStopLimit = False
+        for order in open_orders.json:
+            if order['type'] == 'STOP_MARKET': hasStopLimit = True
+        if not hasStopLimit:
+            from backend.models.orders import OrdersModel
+            order = OrdersModel.query.filter(and_(OrdersModel.symbol == self.symbol, OrdersModel.active == True)).first()
+            if order is not None:
+                pynance.futures.orders.cancel_by_order_id(self.symbol, order.order_id, order.client_order_id)
+                order.update_data({
+                    'active': False
+                })
+            pynance.futures.orders.cancel_all(self.symbol)
+            self.bot.chat(f'ORDERS FOR {self.symbol} HAVE BEEN STRATEGICALLY REMOVED - SKIPPING')
+            return True # Has to be True when done TODO change this
+        return False
+
     def place_order(self):
         self.bot.chat(f"OPENED A {self.position} POSITION ON {self.symbol}")
         quantity = float(round(float(float(float(self.quote_balance / self.current_price) / 100) * float(self.bot.config.wallet_amount)), self.precision_qty))
         activation_price = self.current_price - float(float(self.current_price / 100) * self.bot.config.activation_price) if self.position == 'LONG' else self.current_price + float(float(self.current_price / 100) * self.bot.config.activation_price)
+        _sl = self.current_price - float(float(self.current_price / 100) * 0.01) if self.position == 'LONG' else self.current_price + float(float(self.current_price / 100) * 0.01)
+        stop_loss = self.current_price - float(float(self.current_price / 100) * _sl) if self.position == 'LONG' else self.current_price + float(float(self.current_price / 100) * _sl)
         if self.bot.config.sandbox:
                 brought_price = float(round(float(activation_price)* quantity, self.precision))
                 self.order.update_data({
@@ -150,7 +181,7 @@ class Futures(Trading):
                 })
                 self.bot.chat(f"BROUGHT IN SANDBOX ({float(round(float(self.order.quantity), self.precision))}) {self.symbol} {self.position} FOR AN AMAZING ({float(round(float(brought_price), self.precision))}) {self.quote_asset}")
         else:
-            order_data = {
+            TRAILING_STOP_MARKET = {
                 'symbol':self.symbol,
                 'market_type':"TRAILING_STOP_MARKET",
                 'side':"BUY" if self.position == 'LONG' else "SELL",
@@ -159,10 +190,19 @@ class Futures(Trading):
                 'callbackRate':self.bot.config.in_green,
                 'workingType': 'MARK_PRICE'
             }
-            if self.bot.config.activation_price != 0: order_data['activationPrice'] = activation_price
-            order = pynance.futures.orders.create(**order_data)
+            if self.bot.config.activation_price != 0: TRAILING_STOP_MARKET['activationPrice'] = activation_price
+            order = pynance.futures.orders.create(**TRAILING_STOP_MARKET)
             if order.code == -4003: self.bot.chat(f"NOT ENOUGH BALANCE TO PLACE ORDER FOR {self.symbol}")
             elif 'orderId' in order.json:
+                STOP_LOSS = {
+                    'symbol':self.symbol,
+                    'market_type':"STOP_MARKET",
+                    'side':"BUY" if self.position == 'SHORT' else "SELL",
+                    'position':self.position,
+                    'stopPrice': float(round(stop_loss, self.precision)),
+                    'closePosition': True,
+                }
+                stop = pynance.futures.orders.create(**STOP_LOSS)
                 brought_price = float(round(float(activation_price)* quantity, self.precision))
                 self.order.update_data({
                     'brought_price': brought_price,

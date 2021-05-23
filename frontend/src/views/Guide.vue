@@ -289,6 +289,19 @@
                                 <li></li>
                             </ul>
                         </v-card-text>
+
+                        <v-card-title>Current Prices</v-card-title>
+                        <img src="@/assets/prices.png"/>
+                        <v-card-text>
+                            <p class="mb-0">
+                                Current prices can be seen when configuring PyNance.<br>
+                                You can use the search bar to filter out unwanted symbols. <br>
+                                Use the quantity input to change the <code>cost(s)</code> of a symbol.<br>
+                                If we look at <code>ADABTC</code>, <code>1</code> <strong>ADA</strong> is <code>0.00003506</code> <strong>BTC</strong> worth.<br>
+                                If you would buy <code>120</code><strong>ADA</strong> you would need <code>0.0042072000</code><strong>BTC</strong>.
+                            </p>
+                        </v-card-text>
+
                         <v-card-title>Additional information</v-card-title>
                         <v-card-text>
                             <p class="mb-0">

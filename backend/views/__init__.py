@@ -53,3 +53,6 @@ class ViewManager(object):
 
         from backend.views.api.backup import BackupAPIView
         BackupAPIView.register(self.server, route_base=f'{self.prefix+self.version}/backup')
+
+        from backend.views.api.prices import PricesApiView
+        PricesApiView.register(self.server, route_base=f'{self.prefix+self.version}/prices')

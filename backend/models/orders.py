@@ -23,7 +23,7 @@ class OrdersModel(db.Model):
     sandbox = db.Column(db.Boolean, default=False)
     active = db.Column(db.Boolean, default=True)
 
-    order_id = db.Column(db.Integer)
+    order_id = db.Column(db.BigInteger)
     client_order_id = db.Column(db.Text)
 
     def update_data(self, data: dict):

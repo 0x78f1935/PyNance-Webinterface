@@ -7,6 +7,7 @@ import system from './system';
 import trades from './trades';
 import backup from './backup';
 import futures from './futures';
+import prices from './prices';
 
 Vue.use(Vuex)
 
@@ -17,6 +18,7 @@ export default new Vuex.Store({
     system,
     trades,
     backup,
-    futures
+    futures,
+    prices
   },
 })

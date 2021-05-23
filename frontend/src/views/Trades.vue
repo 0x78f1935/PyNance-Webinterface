@@ -1,21 +1,33 @@
 <template>
     <v-container fluid>
         <v-row align="center" v-if="spot">
-            <spot-config></spot-config>
+            <v-col class="customwidth">
+                <current-prices></current-prices>
+            </v-col>
+            <v-col class="moveToTop">
+                <spot-config></spot-config>
+            </v-col>
         </v-row>
         <v-row align="center" v-else>
-            <future-config></future-config>
+            <v-col class="customwidth">
+                <current-prices></current-prices>
+            </v-col>
+            <v-col class="moveToTop">
+                <future-config></future-config>
+            </v-col>
         </v-row>
     </v-container>
 </template>
 
 <script>
-import FutureConfig from '../components/FutureConfig.vue';
+    import FutureConfig from '../components/FutureConfig.vue';
     import SpotConfig from '../components/SpotConfig.vue';
+    import CurrentPrices from '../components/CurrentPrices';
     export default {
         components: { 
             SpotConfig,
-            FutureConfig
+            FutureConfig,
+            CurrentPrices
         },
         computed: {
             spot: { 
@@ -33,3 +45,12 @@ import FutureConfig from '../components/FutureConfig.vue';
         }
     }
 </script>
+
+<style scoped>
+.moveToTop{
+    align-self: start;
+}
+.customwidth{
+    max-width: 500px;
+}
+</style>
