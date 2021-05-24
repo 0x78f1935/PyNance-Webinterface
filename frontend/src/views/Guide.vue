@@ -353,6 +353,8 @@
                                 Each TakeProfit correspond to 20% of your total wallet input.<br>
                             </p>
 
+                            <p>Note: The four take-profit have been merged into one take-profit to be more efficient</p>
+
                             <v-img src="@/assets/stat_2.png"/>
                             <p>
                                 A moment later the price dropped and all the take-profit margins have been hit.<br>
@@ -377,6 +379,7 @@
                                 Based on this information you can change your bot stratagy accordingly. 
                             </p>
 
+                            <p>Note: The four take-profit have been merged into one take-profit to be more efficient</p>
                             <v-img src="@/assets/stat_1.png"/>
 
                             <p>
@@ -416,20 +419,8 @@
                                             <td>Shows the date of this symbol of when this symbol got processed for the first time by PyNance</td>
                                         </tr>
                                         <tr>
-                                            <td>Profit 1 Target</td>
+                                            <td>Profit Target</td>
                                             <td>The target price for the first TakeProfit order.</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Profit 2 Target</td>
-                                            <td>The target price for the second TakeProfit order.</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Profit 3 Target</td>
-                                            <td>The target price for the third TakeProfit order.</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Profit 4 Target</td>
-                                            <td>The target price for the fourth TakeProfit order.</td>
                                         </tr>
                                         <tr>
                                             <td>Quantity</td>

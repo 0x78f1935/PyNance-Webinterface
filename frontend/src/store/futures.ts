@@ -13,10 +13,7 @@ const futuresModule: Module<any, any> = {
         marginType: '',
         marginTypeChoices: ['ISOLATED', 'CROSSED'],
         allowMultipleOrders: false,
-        takeProfit1: 0,
-        takeProfit2: 0,
-        takeProfit3: 0,
-        takeProfit4: 0,
+        takeProfit: 0
     },
 
     getters: {
@@ -30,11 +27,7 @@ const futuresModule: Module<any, any> = {
         marginType: state => state.marginType,
         marginTypeChoices: state => state.marginTypeChoices,
         allowMultipleOrders: state => state.allowMultipleOrders,
-        takeProfit1: state => state.takeProfit1,
-        takeProfit2: state => state.takeProfit2,
-        takeProfit3: state => state.takeProfit3,
-        takeProfit4: state => state.takeProfit4,
-
+        takeProfit: state => state.takeProfit
     },
 
     mutations: {
@@ -46,10 +39,7 @@ const futuresModule: Module<any, any> = {
         SET_TOTAL_VOLUME(state, value) { state.totalVolume = value; },
         SET_MARGIN_TYPE(state, value) { state.marginType = value; },
         SET_ALLOW_MULTIPLE_ORDERS(state, value) { state.allowMultipleOrders = value; },
-        SET_TAKE_PROFIT_1(state, value) { state.takeProfit1 = value; },
-        SET_TAKE_PROFIT_2(state, value) { state.takeProfit2 = value; },
-        SET_TAKE_PROFIT_3(state, value) { state.takeProfit3 = value; },
-        SET_TAKE_PROFIT_4(state, value) { state.takeProfit4 = value; },
+        SET_TAKE_PROFIT(state, value) { state.takeProfit = value; }
     },
 
     actions: {

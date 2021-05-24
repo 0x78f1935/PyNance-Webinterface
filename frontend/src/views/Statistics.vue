@@ -69,27 +69,9 @@
                                 </tr>
                                 <tr v-if="isFuture">
                                     <td>
-                                        <v-slider min="0" max="50" value="50" readonly dense color="#006400"></v-slider>
-                                    </td>
-                                    <td>Take Profit 1</td>
-                                </tr>
-                                <tr v-if="isFuture">
-                                    <td>
-                                        <v-slider min="0" max="50" value="50" readonly dense color="#008000"></v-slider>
-                                    </td>
-                                    <td>Take Profit 2</td>
-                                </tr>
-                                <tr v-if="isFuture">
-                                    <td>
-                                        <v-slider min="0" max="50" value="50" readonly dense color="#228B22"></v-slider>
-                                    </td>
-                                    <td>Take Profit 3</td>
-                                </tr>
-                                <tr v-if="isFuture">
-                                    <td>
                                         <v-slider min="0" max="50" value="50" readonly dense color="#00FF00"></v-slider>
                                     </td>
-                                    <td>Take Profit 4</td>
+                                    <td>Take Profit</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -200,37 +182,13 @@
                     }
                 },
                 {
-                    name: "TAKE PROFIT 1",
-                    type: "EMA",
-                    data: [ ],
-                    settings: {
-                        color: "#006400"
-                    }
-                },
-                {
-                    name: "TAKE PROFIT 2",
-                    type: "EMA",
-                    data: [ ],
-                    settings: {
-                        color: "#008000"
-                    }
-                },
-                {
-                    name: "TAKE PROFIT 3",
-                    type: "EMA",
-                    data: [ ],
-                    settings: {
-                        color: "#228B22"
-                    }
-                },
-                {
-                    name: "TAKE PROFIT 4",
+                    name: "TAKE PROFIT",
                     type: "EMA",
                     data: [ ],
                     settings: {
                         color: "#00FF00"
                     }
-                }
+                },
             ],
             tool: "Cursor",
             drawingMode: false,
@@ -251,7 +209,7 @@
             this.polling = setInterval(() => {
                 this.updateKlines();
                 this.updateOrders();
-            }, 1000)
+            }, 5000)
         },
         beforeDestroy () {
             clearInterval(this.polling);
@@ -270,20 +228,21 @@
                             'target_type': response.data.target_type,
                         }
                         if(response.data.trade_type == 'FUTURES') {
-                            this.$data.onchart[1].data = response.data.klines.map(x => [x[0], response.data.stop_loss] ).slice(1);
-                            this.$data.onchart[2].data = response.data.klines.map(x => [x[0], response.data.tp_1] ).slice(1);
-                            this.$data.onchart[3].data = response.data.klines.map(x => [x[0], response.data.tp_2] ).slice(1);
-                            this.$data.onchart[4].data = response.data.klines.map(x => [x[0], response.data.tp_3] ).slice(1);
-                            this.$data.onchart[5].data = response.data.klines.map(x => [x[0], response.data.tp_4] ).slice(1);
                             this.$data.status['position'] = response.data.position;
-                            this.$data.status['stop_loss'] = response.data.stop_loss;
-                            this.$data.status['tp_1'] = response.data.tp_1;
-                            this.$data.status['tp_2'] = response.data.tp_2;
-                            this.$data.status['tp_3'] = response.data.tp_3;
-                            this.$data.status['tp_4'] = response.data.tp_4;
+                            if(response.data.position == "LONG") {
+                                this.$data.onchart[1].data = response.data.klines.map(x => [x[0], response.data.stop_loss] ).slice(1);
+                                this.$data.onchart[2].data = response.data.klines.map(x => [x[0], response.data.take_profit] ).slice(1);
+                                this.$data.status['stop_loss'] = response.data.stop_loss;
+                                this.$data.status['take_profit'] = response.data.take_profit;
+                            } else {
+                                this.$data.onchart[1].data = response.data.klines.map(x => [x[0], response.data.take_profit] ).slice(1);
+                                this.$data.onchart[2].data = response.data.klines.map(x => [x[0], response.data.stop_loss] ).slice(1);                                
+                                this.$data.status['stop_loss'] = response.data.take_profit;
+                                this.$data.status['take_profit'] = response.data.stop_loss;
+                            }
                         }
                     }
-                });
+                }).catch(e => console.log(e));
             },
             updateOrders() {
                 axios.get(`/api/v1/history/orders`, {headers: {'token': this.$store.getters.token}}).then(response => {

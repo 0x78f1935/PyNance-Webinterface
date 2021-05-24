@@ -32,10 +32,7 @@ class ConfigModel(db.Model):
     margin_type = db.Column(db.Text, default="ISOLATED")
     activation_price = db.Column(db.Float, default=0.1)
     in_green = db.Column(db.Float, default=0.2)
-    take_profit_1 = db.Column(db.Float, default=2)
-    take_profit_2 = db.Column(db.Float, default=4)
-    take_profit_3 = db.Column(db.Float, default=8)
-    take_profit_4 = db.Column(db.Float, default=16)
+    take_profit = db.Column(db.Float, default=2)
 
     allow_multiple_orders = db.Column(db.Boolean, default=False)
     use_average = db.Column(db.Boolean, default=False)

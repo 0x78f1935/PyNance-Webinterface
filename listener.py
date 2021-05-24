@@ -53,7 +53,6 @@ while True:
         except JSONDecodeError as e:
             print(e)
             print(req)
-            print(req.data)
     else:
         print('Trying to obtain token')            
         _token = get_token(database_uri)

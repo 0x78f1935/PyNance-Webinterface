@@ -152,9 +152,11 @@ class Futures(Trading):
             Boolean: True when we had to cancel orders, otherwise false
         """
         hasStopLimit = False
+        hasTakeProfit = False
         for order in open_orders.json:
             if order['type'] == 'STOP_MARKET': hasStopLimit = True
-        if not hasStopLimit:
+            elif order['type'] == 'TAKE_PROFIT_MARKET': hasTakeProfit = True
+        if not hasStopLimit or not hasTakeProfit:
             from backend.models.orders import OrdersModel
             order = OrdersModel.query.filter(and_(OrdersModel.symbol == self.symbol, OrdersModel.active == True)).first()
             if order is not None:
@@ -173,21 +175,16 @@ class Futures(Trading):
         activation_price = self.current_price - float(float(self.current_price / 100) * self.bot.config.activation_price) if self.position == 'LONG' else self.current_price + float(float(self.current_price / 100) * self.bot.config.activation_price)
         _sl = self.current_price - float(float(self.current_price / 100) * 0.01) if self.position == 'LONG' else self.current_price + float(float(self.current_price / 100) * 0.01)
         stop_loss = self.current_price - float(float(self.current_price / 100) * _sl) if self.position == 'LONG' else self.current_price + float(float(self.current_price / 100) * _sl)
-        _tp1 = self.current_price + float(float(self.current_price / 100) * self.bot.config.take_profit_1) if self.position == 'LONG' else self.current_price - float(float(self.current_price / 100) * self.bot.config.take_profit_1)
-        take_profit_1 = self.current_price + float(float(self.current_price / 100) * _tp1) if self.position == 'LONG' else self.current_price - float(float(self.current_price / 100) * _tp1)
-        _tp2 = self.current_price + float(float(self.current_price / 100) * self.bot.config.take_profit_2) if self.position == 'LONG' else self.current_price - float(float(self.current_price / 100) * self.bot.config.take_profit_2)
-        take_profit_2 = self.current_price + float(float(self.current_price / 100) * _tp2) if self.position == 'LONG' else self.current_price - float(float(self.current_price / 100) * _tp2)
-        _tp3 = self.current_price + float(float(self.current_price / 100) * self.bot.config.take_profit_3) if self.position == 'LONG' else self.current_price - float(float(self.current_price / 100) * self.bot.config.take_profit_3)
-        take_profit_3 = self.current_price + float(float(self.current_price / 100) * _tp3) if self.position == 'LONG' else self.current_price - float(float(self.current_price / 100) * _tp3)
-        _tp4 = self.current_price + float(float(self.current_price / 100) * self.bot.config.take_profit_4) if self.position == 'LONG' else self.current_price - float(float(self.current_price / 100) * self.bot.config.take_profit_4)
-        take_profit_4 = self.current_price + float(float(self.current_price / 100) * _tp4) if self.position == 'LONG' else self.current_price - float(float(self.current_price / 100) * _tp4)
-
+        _tp1 = self.current_price + float(float(self.current_price / 100) * self.bot.config.take_profit) if self.position == 'LONG' else self.current_price - float(float(self.current_price / 100) * self.bot.config.take_profit)
+        take_profit = self.current_price + float(float(self.current_price / 100) * _tp1) if self.position == 'LONG' else self.current_price - float(float(self.current_price / 100) * _tp1)
+       
         if self.bot.config.sandbox:
                 brought_price = float(round(float(activation_price)* quantity, self.precision))
                 self.order.update_data({
                     'brought_price': brought_price,
                     'quantity': quantity,
                     'stop_loss': float(round(stop_loss, self.precision)),
+                    'profit_target': float(round(take_profit, self.precision)),
                     'buying': False
                 })
                 self.bot.chat(f"BROUGHT IN SANDBOX ({float(round(float(self.order.quantity), self.precision))}) {self.symbol} {self.position} FOR AN AMAZING ({float(round(float(brought_price), self.precision))}) {self.quote_asset}")
@@ -221,43 +218,10 @@ class Futures(Trading):
                     'side':"BUY" if self.position == 'SHORT' else "SELL",
                     'position':self.position,
                     'quantity':tp_quantities[0],
-                    'stopPrice': float(round(take_profit_1, self.precision)),
-                    'closePosition': False,
+                    'stopPrice': float(round(take_profit, self.precision)),
+                    'closePosition': True,
                 }
                 tp1 = pynance.futures.orders.create(**TP1)
-
-                TP2 = {
-                    'symbol':self.symbol,
-                    'market_type':"TAKE_PROFIT_MARKET",
-                    'side':"BUY" if self.position == 'SHORT' else "SELL",
-                    'position':self.position,
-                    'quantity':tp_quantities[1],
-                    'stopPrice': float(round(take_profit_2, self.precision)),
-                    'closePosition': False,
-                }
-                tp2 = pynance.futures.orders.create(**TP2)
-
-                TP3 = {
-                    'symbol':self.symbol,
-                    'market_type':"TAKE_PROFIT_MARKET",
-                    'side':"BUY" if self.position == 'SHORT' else "SELL",
-                    'position':self.position,
-                    'quantity':tp_quantities[2],
-                    'stopPrice': float(round(take_profit_3, self.precision)),
-                    'closePosition': False,
-                }
-                tp3 = pynance.futures.orders.create(**TP3)
-
-                TP4 = {
-                    'symbol':self.symbol,
-                    'market_type':"TAKE_PROFIT_MARKET",
-                    'side':"BUY" if self.position == 'SHORT' else "SELL",
-                    'position':self.position,
-                    'quantity':tp_quantities[3],
-                    'stopPrice': float(round(take_profit_4, self.precision)),
-                    'closePosition': False,
-                }
-                tp4 = pynance.futures.orders.create(**TP4)
 
                 brought_price = float(round(float(activation_price)* quantity, self.precision))
                 self.order.update_data({
@@ -265,11 +229,8 @@ class Futures(Trading):
                     'quantity': quantity,
                     'order_id': order.json['orderId'],
                     'client_order_id': order.json['clientOrderId'],
-                    'stop_loss': float(round(stop_loss, self.precision)),
-                    'profit_1_target': float(round(take_profit_1, self.precision)),
-                    'profit_2_target': float(round(take_profit_2, self.precision)),
-                    'profit_3_target': float(round(take_profit_3, self.precision)),
-                    'profit_4_target': float(round(take_profit_4, self.precision)),
+                    'stop_loss': float(stop.json['stopPrice']),
+                    'profit_target': float(tp1.json['stopPrice']),
                     'buying': False if self.position == 'SHORT' else True
                 })
 

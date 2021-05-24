@@ -74,10 +74,7 @@ const tradesModule: Module<any, any> = {
                     state.commit('SET_TOTAL_VOLUME', response.data["total-volume"]);
                     state.commit('SET_MARGIN_TYPE', response.data["margin-type"]);
                     state.commit('SET_ALLOW_MULTIPLE_ORDERS', response.data["allow-multiple-orders"]);
-                    state.commit('SET_TAKE_PROFIT_1', response.data["take_profit_1"]);
-                    state.commit('SET_TAKE_PROFIT_2', response.data["take_profit_2"]);
-                    state.commit('SET_TAKE_PROFIT_3', response.data["take_profit_3"]);
-                    state.commit('SET_TAKE_PROFIT_4', response.data["take_profit_4"]);
+                    state.commit('SET_TAKE_PROFIT', response.data["take_profit"]);
                 }
             });
         },
@@ -100,10 +97,7 @@ const tradesModule: Module<any, any> = {
                 total_volume: state.getters.totalVolume,
                 margin_type: state.getters.marginType,
                 allow_multiple_orders: state.getters.allowMultipleOrders,
-                take_profit_1: state.getters.takeProfit1,
-                take_profit_2: state.getters.takeProfit2,
-                take_profit_3: state.getters.takeProfit3,
-                take_profit_4: state.getters.takeProfit4,
+                take_profit: state.getters.takeProfit,
             },{headers: {'token': state.getters.token}});
         }
     }

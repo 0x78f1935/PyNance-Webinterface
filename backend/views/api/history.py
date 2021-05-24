@@ -13,4 +13,7 @@ class HistoryApiView(FlaskView):
     def get(self):
         from backend.models.bot import BotModel
         bot = BotModel.query.first()
-        return jsonify([i.to_dict(['bot_id', 'id', 'buying', 'order_id']) for i in bot.orders if i.spot == bot.config.spot])
+        if bot.config.spot:
+            return jsonify(list(sorted([i.to_dict(['bot_id', 'id', 'order_id', 'stop_loss', 'profit_target']) for i in bot.orders if i.spot == bot.config.spot], key=lambda x: x['updated']))[::-1])
+        else:
+            return jsonify(list(sorted([i.to_dict(['bot_id', 'id', 'buying', 'order_id', 'sold_for']) for i in bot.orders if i.spot == bot.config.spot], key=lambda x: x['updated']))[::-1])
