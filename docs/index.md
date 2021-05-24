@@ -73,7 +73,7 @@ Open a terminal and navigate to the root directory of this project. Double check
 
     docker-compose up --build -d
 
->> NOTE: If for some reason the docker build fails, makes sure app/docker/entrypoint_webserver.sh is in (LF Mode)[https://stackoverflow.com/questions/27810758/how-to-replace-crlf-with-lf-in-a-single-file]
+>> NOTE: If for some reason the docker build fails, makes sure app/docker/entrypoint_webserver.sh is in [LF Mode](https://stackoverflow.com/questions/27810758/how-to-replace-crlf-with-lf-in-a-single-file)
 
 Once docker-compose is building PyNance, check if your API-Key has the correct restrictions. Open up Binance and go to the API-Manager.
 
