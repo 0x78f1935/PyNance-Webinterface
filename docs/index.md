@@ -73,6 +73,8 @@ Open a terminal and navigate to the root directory of this project. Double check
 
     docker-compose up --build -d
 
+>> NOTE: If for some reason the docker build fails, makes sure app/docker/entrypoint_webserver.sh is in (LF Mode)[https://stackoverflow.com/questions/27810758/how-to-replace-crlf-with-lf-in-a-single-file]
+
 Once docker-compose is building PyNance, check if your API-Key has the correct restrictions. Open up Binance and go to the API-Manager.
 
 - Enable Reading
@@ -156,7 +158,7 @@ Once inside the container, execute the following command to remove the master pa
 
 I want you all to be safe,. Please make sure to untrack your `.env.production` file.
 
-    git update-index --assume-unchanged .env.production 
+    git update-index --assume-unchanged .env.production
 
 
 # <a name="dev-build"></a>Development Build (localhost)
