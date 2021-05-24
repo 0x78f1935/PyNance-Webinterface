@@ -1,5 +1,3 @@
-# Some information might be incorrect since this branch is under development
-
 ## PyNance
 
 | PyNance      	| Status 	| Branch 	| Reference 	|
