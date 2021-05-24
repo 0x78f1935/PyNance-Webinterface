@@ -290,7 +290,7 @@
                                 <li>You also have to configure a take profit margin, this is used to guarentee profit on a placed order</li>
                             </ul>
 
-                            <img src="@/assets/future_orders.png"/>
+                            <v-img src="@/assets/future_orders.png"/>
                             <p>
                                 With the default configuration future orders will be a collection of 6 different orders.<br>
                                 Four of wich are take profit margins, One of them is a stop loss and the other one is the trailing-stop-loss.<br>
@@ -336,6 +336,31 @@
                                 Be responsible, Only trade with money you can afford to lose.
                             </p>
                         </v-card-text>
+
+                        <v-card-title>Futures example</v-card-title>
+                        <v-card-text>
+                            <p>Imagine the following situation</p>
+                            
+                            <v-img src="@/assets/stat_1.png"/>
+                            <p>Note: The colors where different beforing making those images. They have been color corrected as best to my ability.</p>
+                            <p>
+                                PyNance decided to place a position in FUTURES.<br>
+                                The symbol configured is ADAUSDT and the current price lays around 1.323.<br>
+                                The trailing-stop-loss has an activation price of 1.3269.<br>
+                                There is also a stop-loss which has been placed along side the trailing-stop-loss.<br>
+                                If this triggers the position will be closed to prevent major losses.<br>
+                                You can also see that PyNance placed 4 take-profit orders.<br>
+                                Each TakeProfit correspond to 20% of your total wallet input.<br>
+                            </p>
+
+                            <v-img src="@/assets/stat_2.png"/>
+                            <p>
+                                A moment later the price dropped and all the take-profit margins have been hit.<br>
+                                We have locked in 4 times profit each on a more wealthy price level.<br>
+                                The position is still open with a remaining 20% of the total wallet amount input for this position.<br>
+                                The trailing-stop-loss should take over from this point.
+                            </p>
+                        </v-card-text>
                     </v-card>
                 </v-tab-item>            
 
@@ -350,6 +375,14 @@
                                 To the right of the graph you can find the legend of the graph but also additional information on the symbol PyNance is processing at that moment. <br>
                                 The data which is being processed is rendered into the graph to give a better representation on what the bot is doing and looking at. <br>
                                 Based on this information you can change your bot stratagy accordingly. 
+                            </p>
+
+                            <v-img src="@/assets/stat_1.png"/>
+
+                            <p>
+                                On this image you can see the bot decided to place a FUTURE SHORT position.<br>
+                                All the information related to this trade is available in the tables on the right side.<br>
+                                The rest of the information is rendered into the graph.<br>
                             </p>
 
                             <p>
@@ -375,12 +408,36 @@
                                             <td>Shows 0 if nothing has been brought yet, otherwise it shows the price it costed to buy this order</td>
                                         </tr>
                                         <tr>
+                                            <td>Client order ID</td>
+                                            <td>The ID related to this order within Binance</td>
+                                        </tr>
+                                        <tr>
                                             <td>Created</td>
                                             <td>Shows the date of this symbol of when this symbol got processed for the first time by PyNance</td>
                                         </tr>
                                         <tr>
+                                            <td>Profit 1 Target</td>
+                                            <td>The target price for the first TakeProfit order.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Profit 2 Target</td>
+                                            <td>The target price for the second TakeProfit order.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Profit 3 Target</td>
+                                            <td>The target price for the third TakeProfit order.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Profit 4 Target</td>
+                                            <td>The target price for the fourth TakeProfit order.</td>
+                                        </tr>
+                                        <tr>
                                             <td>Quantity</td>
                                             <td>Shows 0 if nothing has been brought yet, otherwise it shows the total amount of the symbol brought by PyNance.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sandbox</td>
+                                            <td>Shows 0 if this order is a production order, otherwise shows 1 if this order is a test order. Testorders will not be placed in Binance.</td>
                                         </tr>
                                         <tr>
                                             <td>Sold For</td>
@@ -388,7 +445,11 @@
                                         </tr>
                                         <tr>
                                             <td>Spot</td>
-                                            <td>True if this order is a SPOT order, otherwise False</td>
+                                            <td>True if this order is a SPOT order, otherwise this order is a FUTURE order and will show False</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Stop loss</td>
+                                            <td>The target price for a stop loss order if it was placed for this order.</td>
                                         </tr>
                                         <tr>
                                             <td>Symbol</td>

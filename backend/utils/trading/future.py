@@ -270,7 +270,7 @@ class Futures(Trading):
                     'profit_2_target': float(round(take_profit_2, self.precision)),
                     'profit_3_target': float(round(take_profit_3, self.precision)),
                     'profit_4_target': float(round(take_profit_4, self.precision)),
-                    'buying': False
+                    'buying': False if self.position == 'SHORT' else True
                 })
 
                 self.bot.chat(f"BROUGHT ({float(round(float(self.order.quantity), self.precision))}) {self.symbol} {self.position} FOR AN AMAZING ({float(round(float(brought_price), self.precision))}) {self.quote_asset}")

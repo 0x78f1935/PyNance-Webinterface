@@ -9,12 +9,6 @@
                     :titleTxt="title"
                     :class="isVisible?'visible':'collapse'"
                 ></trading-vue>
-                <!-- <GChart
-                    :settings="{ packages: ['corechart'] }"
-                    type="CandlestickChart"
-                    :data="chartData"
-                    :options="chartOptions"
-                /> -->
             </v-col>
             <v-col cols="2">
                 <v-card
@@ -63,15 +57,39 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <v-slider min="0" max="50" value="50" readonly dense color="#ff4081"></v-slider>
+                                        <v-slider min="0" max="50" value="50" readonly dense color="#00FFFF"></v-slider>
                                     </td>
                                     <td>Order placement</td>
                                 </tr>
-                                <tr>
+                                <tr v-if="isFuture">
                                     <td>
-                                        <v-slider min="0" max="50" value="50" readonly dense color="#00FFFF"></v-slider>
+                                        <v-slider min="0" max="50" value="50" readonly dense color="#ff4081"></v-slider>
                                     </td>
                                     <td>Stop loss</td>
+                                </tr>
+                                <tr v-if="isFuture">
+                                    <td>
+                                        <v-slider min="0" max="50" value="50" readonly dense color="#006400"></v-slider>
+                                    </td>
+                                    <td>Take Profit 1</td>
+                                </tr>
+                                <tr v-if="isFuture">
+                                    <td>
+                                        <v-slider min="0" max="50" value="50" readonly dense color="#008000"></v-slider>
+                                    </td>
+                                    <td>Take Profit 2</td>
+                                </tr>
+                                <tr v-if="isFuture">
+                                    <td>
+                                        <v-slider min="0" max="50" value="50" readonly dense color="#228B22"></v-slider>
+                                    </td>
+                                    <td>Take Profit 3</td>
+                                </tr>
+                                <tr v-if="isFuture">
+                                    <td>
+                                        <v-slider min="0" max="50" value="50" readonly dense color="#00FF00"></v-slider>
+                                    </td>
+                                    <td>Take Profit 4</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -170,7 +188,7 @@
                     type: "EMA",
                     data: [ ],
                     settings: {
-                        color: "#ff4081"
+                        color: "#00FFFF"
                     }
                 },
                 {
@@ -178,7 +196,39 @@
                     type: "EMA",
                     data: [ ],
                     settings: {
-                        color: "#00FFFF"
+                        color: "#ff4081"
+                    }
+                },
+                {
+                    name: "TAKE PROFIT 1",
+                    type: "EMA",
+                    data: [ ],
+                    settings: {
+                        color: "#006400"
+                    }
+                },
+                {
+                    name: "TAKE PROFIT 2",
+                    type: "EMA",
+                    data: [ ],
+                    settings: {
+                        color: "#008000"
+                    }
+                },
+                {
+                    name: "TAKE PROFIT 3",
+                    type: "EMA",
+                    data: [ ],
+                    settings: {
+                        color: "#228B22"
+                    }
+                },
+                {
+                    name: "TAKE PROFIT 4",
+                    type: "EMA",
+                    data: [ ],
+                    settings: {
+                        color: "#00FF00"
                     }
                 }
             ],
@@ -188,27 +238,6 @@
             status: {},
             polling: null,
             orders: {},
-            // chartData: [
-            // ],
-            // chartOptions: {
-            //     chart: {
-            //         title: 'Loading',
-            //         subtitle: '...',
-            //     },
-            //     series: {
-            //         0:{color: 'black', visibleInLegend: false},
-            //         1:{visibleInLegend: true},
-            //         2:{visibleInLegend: false},
-            //         3:{type: 'line', color: 'red', visibleInLegend: false},
-            //         4:{type: 'line', color: 'red', visibleInLegend: false},
-            //         5:{type: 'line', color: 'red', visibleInLegend: false}
-            //     },
-            //     bar: { groupWidth: '100%' }, // Remove space between bars.
-            //     candlestick: {
-            //         fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
-            //         risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
-            //     }
-            // }
         }),
         created () {
             this.$store.dispatch('getGraphInterval');
@@ -234,17 +263,25 @@
                     if(response.data.order) {
                         this.$data.chart.data = response.data.klines.slice(1);
                         this.$data.onchart[0].data = response.data.klines.map(x => [x[0], response.data.price_target] ).slice(1);
-                        this.$data.onchart[1].data = response.data.klines.map(x => [x[0], response.data.stop_loss] ).slice(1);
                         this.$data.status = {
                             'target': response.data.symbol,
                             'current_target': response.data.price_target, 
                             'trade_type': response.data.trade_type,
                             'target_type': response.data.target_type,
-                            'stop_loss': response.data.stop_loss,
                         }
-                        // this.$data.chartData = response.data.klines;
-                        // this.$data.chartOptions.chart.title = response.data.symbol;
-                        // this.$data.chartOptions.chart.subtitle = response.data.target_type;
+                        if(response.data.trade_type == 'FUTURES') {
+                            this.$data.onchart[1].data = response.data.klines.map(x => [x[0], response.data.stop_loss] ).slice(1);
+                            this.$data.onchart[2].data = response.data.klines.map(x => [x[0], response.data.tp_1] ).slice(1);
+                            this.$data.onchart[3].data = response.data.klines.map(x => [x[0], response.data.tp_2] ).slice(1);
+                            this.$data.onchart[4].data = response.data.klines.map(x => [x[0], response.data.tp_3] ).slice(1);
+                            this.$data.onchart[5].data = response.data.klines.map(x => [x[0], response.data.tp_4] ).slice(1);
+                            this.$data.status['position'] = response.data.position;
+                            this.$data.status['stop_loss'] = response.data.stop_loss;
+                            this.$data.status['tp_1'] = response.data.tp_1;
+                            this.$data.status['tp_2'] = response.data.tp_2;
+                            this.$data.status['tp_3'] = response.data.tp_3;
+                            this.$data.status['tp_4'] = response.data.tp_4;
+                        }
                     }
                 });
             },
@@ -283,6 +320,10 @@
                     }); 
                 }
             },
+            isFuture() {
+                if(this.$data.status.trade_type == 'FUTURES') { return true; }
+                else { return false; }
+            }
         }
     }
 </script>
