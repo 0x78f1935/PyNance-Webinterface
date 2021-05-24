@@ -1,53 +1,51 @@
 <template>
-  <v-app id="inspire">
-    <nav-header></nav-header>
-    <drawer class="laden"></drawer>
+  <v-app>
+    <v-container class="mb-1" v-if="this.$store.getters.authenticated">
+      <system-bar></system-bar>
+    </v-container>
+    <drawer-menu></drawer-menu>
 
-    <v-main app>
-      <systembar></systembar>
+    <v-main v-if="this.$store.getters.authenticated">
       <v-container fluid>
-        <router-view></router-view>
+        <router-view/>
       </v-container>
     </v-main>
 
-    <v-footer app>
-      <b-col cols="11"></b-col>
-      <b-col class="mr-auro to_the_right" cols="1" md="1">
-        {{ $t('version') }}{{ $store.getters.version }}
-      </b-col>
+    <v-footer app v-if="this.$store.getters.authenticated">
+      Version: {{ $store.getters.version }}
     </v-footer>
 
-    <masterPasswordInput :show="!$store.getters.authenticated" @reset="$store.commit('SET_AUTHENTICATED', true)"></masterPasswordInput>
+    <first-time-setup v-if="!this.$store.getters.authentication"></first-time-setup>
+    <login v-else></login>
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import Drawer from '@/layout/navigation_drawer.vue';
-import NavHeader from '@/layout/navigation_header.vue';
-import Systembar from '@/layout/navigation_system.vue';
-import MasterPasswordInput from '@/models/authenticate.vue';
+import SystemBar from './layout/SystemBar.vue';
+import drawerMenu from './layout/DrawerMenu.vue';
+import FirstTimeSetup from './components/FirstTimeSetup.vue';
+import Login from './components/Login.vue';
 
 export default Vue.extend({
+  components: { 
+    drawerMenu,
+    SystemBar,
+    FirstTimeSetup,
+    Login,
+  },
   name: 'App',
 
-  components: {
-    Drawer,
-    NavHeader,
-    Systembar,
-    MasterPasswordInput
-  },
-
-  created: async function() {
-    await this.$store.dispatch('initApp');
-    this.$vuetify.theme.dark = this.$store.getters.darkmode;
-  },
-
   data: () => ({
-    drawer: true,
   }),
+
+  mounted () {
+    this.$store.dispatch('loadDashboard');
+    this.$store.commit('SET_BACKUPPING', false);
+  },
 });
 </script>
+
 
 <style scoped>
   .laden {

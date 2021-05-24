@@ -1,19 +1,32 @@
 from datetime import datetime
 from backend import db
-
+from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import inspect
+from uuid import uuid4
 
 
 class SystemModel(db.Model):
-    __tablename__ = "system"
+    """System model for PyNance contains variables that will be loaded when the dashbord
+    is visited for the first time. The content is created when the flask server starts.
+    The content however gets only created if it doesn't exists already.
+    """
+    __tablename__ = "System"
     id = db.Column(db.Integer, primary_key=True)
     updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    online = db.Column(db.Boolean, default=False, onupdate=False)
+    version = db.Column(db.Text, default="x.x.x")
+    language = db.Column(db.Text, default="en")
+    tos = db.Column(db.Boolean, default=False)
+    authentication = db.Column(db.Boolean, default=False)
+    password = db.Column(db.Text, default='')
+    token = db.Column(db.Text, default='')
 
-    tos_agreement = db.Column(db.Boolean, default=False)
-
-    currency_1 = db.Column(db.Text, default="BTC")
-    currency_2 = db.Column(db.Text, default="USDT")
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+        self.token = str(uuid4()).replace('-', '')
+        db.session.commit()
+    
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
 
     def update_data(self, data: dict):
         """"Just throw in a json object, each key that can be mapped will be updated"

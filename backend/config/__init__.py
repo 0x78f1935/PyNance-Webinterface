@@ -11,21 +11,20 @@ class Config(System):
     """
     def __init__(self) -> None:
         self.DEBUG = False
-        self.VERSION = "2.0.0"
+        self.VERSION = "3.0.0"
         self.PROJECT_NAME = "PyNance - Webinterface"
+        self.TESTING = True if self.DEBUG else False
 
         self.ENVIRONMENT = None
         self.SERVER_BACKEND = None
         self.LOCALE = None
         self.FALLBACK_LOCALE = None
-        self.SERVER_DOCKER = None
 
         self.SQLALCHEMY_DATABASE_URI = None
         self.SQLALCHEMY_TRACK_MODIFICATIONS = None
 
         self.BINANCE_API_KEY = None
         self.BINANCE_API_SECRET = None
-        self.BINANCE_ENDPOINT = None
 
         # Load system configuration
         System.__init__(self)

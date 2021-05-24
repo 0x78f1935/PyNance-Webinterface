@@ -27,23 +27,32 @@ class ViewManager(object):
         from backend.views.homepage import HomePageView
         HomePageView.register(self.server, route_base='/')
 
-        from backend.views.api.preference import PreferenceAPIView
-        PreferenceAPIView.register(self.server, route_base=f'{self.prefix+self.version}/preference')
+        from backend.views.api.system import SystemApiView
+        SystemApiView.register(self.server, route_base=f'{self.prefix+self.version}/system')
 
-        from backend.views.api.system import SystemAPIView
-        SystemAPIView.register(self.server, route_base=f'{self.prefix+self.version}/system')
+        from backend.views.api.keys import KeysApiView
+        KeysApiView.register(self.server, route_base=f'{self.prefix+self.version}/keys')
 
-        from backend.views.api.settings import SettingsAPIView
-        SettingsAPIView.register(self.server, route_base=f'{self.prefix+self.version}/settings')
+        from backend.views.api.coinmarketcal import CoinMarketApiView
+        CoinMarketApiView.register(self.server, route_base=f'{self.prefix+self.version}/coinmarketcal')
 
-        from backend.views.api.bot import BotAPIView
-        BotAPIView.register(self.server, route_base=f'{self.prefix+self.version}/bot')
+        from backend.views.api.wallet import WalletApiView
+        WalletApiView.register(self.server, route_base=f'{self.prefix+self.version}/wallet')
 
-        from backend.views.api.orders import OrdersAPIView
-        OrdersAPIView.register(self.server, route_base=f'{self.prefix+self.version}/orders')
+        from backend.views.api.trades import TradesApiView
+        TradesApiView.register(self.server, route_base=f'{self.prefix+self.version}/trades')
+
+        from backend.views.api.klines import KlinesApiView
+        KlinesApiView.register(self.server, route_base=f'{self.prefix+self.version}/klines')
+
+        from backend.views.api.history import HistoryApiView
+        HistoryApiView.register(self.server, route_base=f'{self.prefix+self.version}/history')
+
+        from backend.views.api.logic import LogicApiView
+        LogicApiView.register(self.server, route_base=f'{self.prefix+self.version}/logic')
 
         from backend.views.api.backup import BackupAPIView
         BackupAPIView.register(self.server, route_base=f'{self.prefix+self.version}/backup')
 
-        from backend.views.api.auth import AuthAPIView
-        AuthAPIView.register(self.server, route_base=f'{self.prefix+self.version}/auth')
+        from backend.views.api.prices import PricesApiView
+        PricesApiView.register(self.server, route_base=f'{self.prefix+self.version}/prices')

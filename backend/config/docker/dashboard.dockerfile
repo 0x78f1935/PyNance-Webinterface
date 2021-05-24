@@ -12,7 +12,7 @@ RUN apt-get install git -y && apt-get install curl -y
 ## PYTHON
 RUN pip install -r requirements.txt
 # Install gunicorn
-RUN pip install gunicorn
+RUN pip install gunicorn==20.0.4
 ## NPM
 # Install npm / node
 RUN apt-get install -y nodejs npm

@@ -1,45 +1,45 @@
+from flask import render_template, jsonify, current_app, request
 from flask_classful import FlaskView, route
-from flask import jsonify, request
-from backend import db, pynance
+
 from backend.utils.auth import login_required
+from backend import db, pynance
 
-
-class SystemAPIView(FlaskView):
+class SystemApiView(FlaskView):
     
-    decorators = [ login_required ]
+    decorators = [ ]
 
-    @route('/all', methods=['GET'])
-    def all(self):
-        from backend.models.system import SystemModel
-        system = SystemModel.query.first()
-        data = {
-            **system.to_dict(['id']),
-            'symbols': [i['asset'] for i in  pynance.wallet.balance()],
-            'symbol': system.currency_1 + system.currency_2,
-        }
-        return jsonify(data), 200
-    
     def get(self):
+        """Returns system details
+
+        Returns:
+            {
+                "authentication": false, 
+                "language": "en", 
+                "token": "", 
+                "version": "3.0.0"
+            }
+        """
+        from backend.models.system import SystemModel
+        from backend.models.bot import BotModel
+        system = SystemModel.query.first()
+        bot = BotModel.query.first()
+        return jsonify(system.to_dict(['id', 'updated', 'password'])), 200
+
+    @route('/create', methods=['POST'])
+    def create(self):
         from backend.models.system import SystemModel
         system = SystemModel.query.first()
-        return jsonify(system.to_dict(['id'])), 200
-   
+        if request.headers['sk'] == current_app.config['SECRET_KEY']:
+            system.set_password(request.json['pwd'])
+            system.update_data({'authentication': True, 'tos': True})
+        return jsonify(system.to_dict(['id', 'updated', 'password'])), 200
+
+    @login_required
     def post(self):
         from backend.models.system import SystemModel
         system = SystemModel.query.first()
-        system.update_data(request.json)
-        return jsonify(system.to_dict(['id'])), 200
-
-    @route('/profit', methods=['POST'])
-    def profit(self):
-        from backend.models.orders import OrderModel
-        color = 'red'
-        symbol = request.json['symbol']
-        total_wasted = sum([float(i.brought_price) for i in OrderModel.query.filter(OrderModel.currency_2 == symbol).all()])
-        total_profit = sum([float(i.sold_for) for i in OrderModel.query.filter(OrderModel.currency_2 == symbol).all()])
-        profit = total_profit-total_wasted
-        if profit < 0: color = 'red'
-        elif profit > 0: color = 'green'
-        else: color='gray'
-        return jsonify({'profit': profit, 'symbol': symbol, 'color': color}), 200
-   
+        if 'pwd' in request.json.keys():
+            pwd = request.json['pwd']
+            if system.check_password(pwd):
+                return jsonify({current_app.config['SECRET_KEY']: True}), 200
+        return jsonify({'succes': False}), 200

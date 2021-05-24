@@ -15,14 +15,15 @@ def register(app):
         """
         Reset master password
         """
-        from backend.models.preference import PreferenceModel
+        from backend.models.system import SystemModel
         from backend import db
-        preference = PreferenceModel.query.first()
-        if preference is not None:
-            preference.authentication = False
-            preference.password = ''
-            preference.token = ''
-            db.session.add(preference)
+        system = SystemModel.query.first()
+        if system is not None:
+            system.authentication = False
+            system.tos=False
+            system.password = ''
+            system.token = ''
+            db.session.add(system)
             db.session.commit()
             print('[PyNance] Master password has been reset')
         else: print('[PyNance] Could not reset master password')

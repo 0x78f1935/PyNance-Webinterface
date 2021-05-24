@@ -1,28 +1,32 @@
 from datetime import datetime
 from backend import db
-
+from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import inspect
+from uuid import uuid4
 
 
-class OrderModel(db.Model):
-    __tablename__ = "orders"
+class OrdersModel(db.Model):
+    """KeysModel keeps track of API keys which can extend features within PyNance"""
+    __tablename__ = "Orders"
     id = db.Column(db.Integer, primary_key=True)
-    brought = db.Column(db.DateTime, default=datetime.utcnow)
+    created = db.Column(db.DateTime, default=datetime.utcnow)
     updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    symbol = db.Column(db.Text, nullable=False)
-    currency_1 = db.Column(db.Text, nullable=False)
-    currency_2 = db.Column(db.Text, nullable=False)
-
-    quantity = db.Column(db.Text, nullable=False)
-    brought_price = db.Column(db.Text, nullable=False)
-
-    sold_for = db.Column(db.Text, default="0")
+    bot_id = db.Column(db.Integer, db.ForeignKey('Bot.id'))
     
-    fee_maker = db.Column(db.Text, nullable=False)
-    fee_taker = db.Column(db.Text, nullable=False)
+    symbol = db.Column(db.Text, nullable=False)
+    brought_price = db.Column(db.Float, default=0.0)
+    quantity = db.Column(db.Float, default=0.0)
+    sold_for = db.Column(db.Float, default=0.0)
+    stop_loss = db.Column(db.Float, default=0.0)
+    profit_target = db.Column(db.Float, default=0.0)
+    buying = db.Column(db.Boolean, default=True)
+    spot = db.Column(db.Boolean, default=True)
+    sandbox = db.Column(db.Boolean, default=False)
+    active = db.Column(db.Boolean, default=True)
 
-    current = db.Column(db.Boolean, default=True)
+    order_id = db.Column(db.BigInteger)
+    client_order_id = db.Column(db.Text)
 
     def update_data(self, data: dict):
         """"Just throw in a json object, each key that can be mapped will be updated"
@@ -44,3 +48,7 @@ class OrderModel(db.Model):
             blacklist ([list]): [Columns you don't want to include in the dict]
         """
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs if c.key not in blacklist}
+    
+    def set_active(self, value: bool):
+        self.active = value
+        db.session.commit()
