@@ -21,6 +21,7 @@ class OrdersModel(db.Model):
     stop_loss = db.Column(db.Float, default=0.0)
     profit_target = db.Column(db.Float, default=0.0)
     buying = db.Column(db.Boolean, default=True)
+    status = db.Column(db.Text, default="UNKNOWN")
     spot = db.Column(db.Boolean, default=True)
     sandbox = db.Column(db.Boolean, default=False)
     active = db.Column(db.Boolean, default=True)

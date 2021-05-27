@@ -18,7 +18,7 @@ class KlinesApiView(FlaskView):
             OrdersModel.symbol==bot.status.target,
             OrdersModel.spot==bot.config.spot,
             OrdersModel.sandbox==bot.config.sandbox,
-            OrdersModel.active==True
+            OrdersModel.active==True,
         )).first()
 
         response_data = {

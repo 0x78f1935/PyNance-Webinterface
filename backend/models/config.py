@@ -18,7 +18,7 @@ class ConfigModel(db.Model):
     symbols = db.Column(MutableList.as_mutable(PickleType), default=[])
     timeframe = db.Column(db.Text, default="1h")
     candle_interval = db.Column(db.Integer, default=100)
-    wallet_amount = db.Column(db.Float, default=100)
+    wallet_amount = db.Column(db.Float, default=99)
     below_average = db.Column(db.Float, default=5)
     profit_margin = db.Column(db.Float, default=35)
     profit_as = db.Column(db.Text, default="USDT")
@@ -30,8 +30,8 @@ class ConfigModel(db.Model):
     volume_timeframe = db.Column(db.Text, default="5m")
     total_volume = db.Column(db.Integer, default=30)
     margin_type = db.Column(db.Text, default="ISOLATED")
-    activation_price = db.Column(db.Float, default=0.1)
     in_green = db.Column(db.Float, default=0.2)
+    in_red = db.Column(db.Float, default=2)
     take_profit = db.Column(db.Float, default=2)
 
     allow_multiple_orders = db.Column(db.Boolean, default=False)

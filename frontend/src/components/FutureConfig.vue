@@ -134,40 +134,6 @@
         <v-row align="center">
             <v-col cols="6">
                 <v-subheader>
-                    Activate trailing stop order {{$store.getters.activatePrice}}% from buy-entry
-                </v-subheader>
-            </v-col>
-
-            <v-col cols="6">
-                <v-slider
-                    v-model="activatePrice"
-                    label="Activation Price"
-                    thumb-color="accent"
-                    thumb-label="always"
-                    :thumb-size="16"
-                    :hint="`Currently ${$store.getters.activatePrice}%`"
-                    max="2"
-                    min="0"
-                    step=0.1
-                    persistent-hint
-                >
-                    <template v-slot:append>
-                        <v-text-field
-                            v-model="activatePrice"
-                            class="mt-0 pt-0"
-                            type="number"
-                            style="width: 60px"
-                        ></v-text-field>
-                    </template>
-                </v-slider>
-            </v-col>
-        </v-row>
-
-
-        <v-divider inset class="cdiv"></v-divider>
-        <v-row align="center">
-            <v-col cols="6">
-                <v-subheader>
                     When {{$store.getters.inGreen}}% in profit move stop-loss to increase secured profit
                 </v-subheader>
             </v-col>
@@ -201,6 +167,39 @@
         <v-row align="center">
             <v-col cols="6">
                 <v-subheader>
+                    Allow going into negative numbers for {{$store.getters.inRed}}% (STOP-LOSS representation)
+                </v-subheader>
+            </v-col>
+
+            <v-col cols="6">
+                <v-slider
+                    v-model="inRed"
+                    label="Negative tolerance"
+                    thumb-color="accent"
+                    thumb-label="always"
+                    :thumb-size="24"
+                    :hint="`${$store.getters.inRed}% negative tolerance, when 0% place stop-loss on buy entry`"
+                    max="25"
+                    min="0"
+                    step=0.001
+                    persistent-hint
+                >
+                    <template v-slot:append>
+                        <v-text-field
+                            v-model="inRed"
+                            class="mt-0 pt-0"
+                            type="number"
+                            style="width: 60px"
+                        ></v-text-field>
+                    </template>
+                </v-slider>
+            </v-col>
+        </v-row>
+
+        <v-divider inset class="cdiv"></v-divider>
+        <v-row align="center">
+            <v-col cols="6">
+                <v-subheader>
                     The total amount of your wallet used on the selected symbol when placing a buy order
                 </v-subheader>
             </v-col>
@@ -213,7 +212,7 @@
                     thumb-label="always"
                     :thumb-size="24"
                     :hint="`Max 100% - Currently ${$store.getters.walletAmount}%`"
-                    max="100"
+                    max="99"
                     min="1"
                     persistent-hint
                 >
@@ -423,6 +422,10 @@
             inGreen: {
                 get() { return this.$store.getters.inGreen },
                 set(value) { this.$store.commit('SET_IN_GREEN', value); }
+            },
+            inRed: {
+                get() { return this.$store.getters.inRed },
+                set(value) { this.$store.commit('SET_IN_RED', value); }
             },
             moveStopLoss: {
                 get() { return this.$store.getters.moveStopLoss },

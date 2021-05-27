@@ -92,7 +92,8 @@ class BotModel(db.Model):
                 bot_id=self.id,
                 symbol=symbol,
                 spot=self.config.spot,
-                sandbox=self.config.sandbox
+                sandbox=self.config.sandbox,
+                status="PROCESSING"
             )
             db.session.add(order)
             db.session.commit()

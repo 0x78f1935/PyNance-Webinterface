@@ -89,7 +89,7 @@
                     thumb-label="always"
                     :thumb-size="24"
                     :hint="`Max 100% - Currently ${$store.getters.walletAmount}%`"
-                    max="100"
+                    max="99"
                     min="1"
                     persistent-hint
                 >

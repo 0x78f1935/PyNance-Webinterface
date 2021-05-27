@@ -92,7 +92,7 @@ class Spot(Trading):
             # closes the open order where there is no quantity for and starts over with buying if possible.
             if self.base_balance < self.order.quantity and not self.bot.config.sandbox:
                 self.bot.chat(f"NOT ENOUGH {self.base_asset} TO SELL - {self.base_balance} {self.base_asset} AVAILABLE NEED MINIMUM OF {self.order.quantity} {self.base_asset} DISABLING ORDER")
-                self.order.update_data({'active': False})
+                self.order.update_data({'active': False, 'status': 'EXPIRED'})
             else:
                 brought_price = self.order.brought_price
                 minimal_profit = self.bot.config.profit_margin
@@ -107,7 +107,8 @@ class Spot(Trading):
                         sold_price = float(round(float(self.current_price) * self.order.quantity, self.precision))
                         self.order.update_data({
                             'active': False,
-                            'sold_for': sold_price
+                            'sold_for': sold_price,
+                            'status': 'PROFIT'
                         })
                         self.bot.chat(f"SOLD IN SANDBOX ({float(round(float(self.order.quantity), self.precision))}) {self.base_asset} FOR AN AMAZING ({float(round(float(sold_price), self.precision))}) {self.quote_asset}")
                     else:
@@ -116,7 +117,8 @@ class Spot(Trading):
                             sold_price = float(round(float(self.current_price) * self.order.quantity, self.precision))
                             self.order.update_data({
                                 'active': False,
-                                'sold_for': sold_price
+                                'sold_for': sold_price,
+                                'status': 'PROFIT'
                             })
                             self.bot.chat(f"SOLD ({float(round(float(self.order.quantity), self.precision))}) {self.base_asset} FOR AN AMAZING ({float(round(float(sold_price), self.precision))}) {self.quote_asset}")
                         else: self.bot.chat(f"UNABLE TO PLACE A SELL ORDER FOR ({float(round(float(self.order.quantity), self.precision))}) {self.base_asset}")

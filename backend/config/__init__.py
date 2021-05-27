@@ -11,7 +11,7 @@ class Config(System):
     """
     def __init__(self) -> None:
         self.DEBUG = False
-        self.VERSION = "3.0.0"
+        self.VERSION = "3.1.0"
         self.PROJECT_NAME = "PyNance - Webinterface"
         self.TESTING = True if self.DEBUG else False
 

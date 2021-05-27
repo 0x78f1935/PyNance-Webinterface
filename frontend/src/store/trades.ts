@@ -67,8 +67,8 @@ const tradesModule: Module<any, any> = {
                     state.commit('SET_PROFIT_AS', response.data["profit-as"]);
                     state.commit('SET_SPOT', response.data["spot"]);
                     state.commit('SET_EXPECTED_LEVERAGE', response.data["expected-leverage"]);
-                    state.commit('SET_ACTIVATE_PRICE', response.data["activation-price"]);
                     state.commit('SET_IN_GREEN', response.data["in-green"]);
+                    state.commit('SET_IN_RED', response.data["in-red"]);
                     state.commit('SET_USE_AVERAGE', response.data["use-average"]);
                     state.commit('SET_VOLUME_TIME_FRAME', response.data["volume-timeframe"]);
                     state.commit('SET_TOTAL_VOLUME', response.data["total-volume"]);
@@ -89,8 +89,8 @@ const tradesModule: Module<any, any> = {
                 profit_margin: state.getters.profitMargin,
                 profit_as: state.getters.profitAs,
                 spot: state.getters.spot,
-                activation_price: state.getters.activatePrice,
                 in_green: state.getters.inGreen,
+                in_red: state.getters.inRed,
                 use_average: state.getters.useAverage,
                 expected_leverage: state.getters.expectedLeverage,
                 volume_timeframe: state.getters.volumeTimeFrame,
